@@ -1,0 +1,3183 @@
+{
+  "product": "Resiliscore",
+  "model": "lite_v1",
+  "version": "v1.0",
+  "domains": [
+    {
+      "code": "GOV",
+      "name": "Governance",
+      "order": 1
+    },
+    {
+      "code": "TECH",
+      "name": "Technical Security",
+      "order": 2
+    },
+    {
+      "code": "OPS",
+      "name": "Operational Security",
+      "order": 3
+    },
+    {
+      "code": "DATA",
+      "name": "Asset & Data Protection",
+      "order": 4
+    },
+    {
+      "code": "VEND",
+      "name": "Vendor & Third-Party Risk",
+      "order": 5
+    },
+    {
+      "code": "CULT",
+      "name": "Culture & Awareness",
+      "order": 6
+    },
+    {
+      "code": "HUM",
+      "name": "Human Risk & Behaviour",
+      "order": 7
+    },
+    {
+      "code": "RES",
+      "name": "Resilience & Recovery",
+      "order": 8
+    }
+  ],
+  "questions": [
+    {
+      "id": "GOV_01",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 1,
+      "text": "Does the organisation have formally assigned responsibility for cyber and information risk?",
+      "help_text": "What this is checking: The organisation have formally assigned responsibility for cyber and information risk.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- RACI or responsibilities list for key security activities\n- Named owner for risk decisions and exceptions\n- Job titles or org chart showing ownership\nQuick improvement if this is weak:\n- Assign a single owner per area (even if part‑time)\n- Add responsibilities to job descriptions\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: assigned, cyber, formally, information, organisation, responsibility.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.3"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Board Duties"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_02",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 2,
+      "text": "Are cyber policies documented, approved, and communicated to staff?",
+      "help_text": "What this is checking: Cyber policies documented, approved, and communicated to staff.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- A written policy (1–2 pages) approved by leadership\n- Policy version/date and owner named\n- Evidence it is shared (intranet, handbook)\nQuick improvement if this is weak:\n- Write a one-page policy and assign an owner\n- Set a 6–12 month review date in the document\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: approved, communicated, cyber, documented, policies, staff.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.2"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Governance Requirements"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_03",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 3,
+      "text": "Is cyber risk discussed at leadership or board level?",
+      "help_text": "What this is checking: Cyber risk discussed at leadership or board level.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: board, cyber, discussed, leadership, level, risk.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Accountability"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_04",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 4,
+      "text": "Is there a defined risk management framework or methodology?",
+      "help_text": "What this is checking: There a defined risk management framework or methodology.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: defined, framework, management, methodology, risk.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Risk Management"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_05",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 5,
+      "text": "Are key roles (IT, security, data owners) clearly defined?",
+      "help_text": "What this is checking: Key roles (IT, security, data owners) clearly defined.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- RACI or responsibilities list for key security activities\n- Named owner for risk decisions and exceptions\n- Job titles or org chart showing ownership\nQuick improvement if this is weak:\n- Assign a single owner per area (even if part‑time)\n- Add responsibilities to job descriptions\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: clearly, data, defined, owners, roles, security.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.3"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Governance"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_06",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 6,
+      "text": "Are regulatory and compliance obligations understood and monitored?",
+      "help_text": "What this is checking: Regulatory and compliance obligations understood and monitored.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: compliance, monitored, obligations, regulatory, understood.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Legal Duty"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_07",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 7,
+      "text": "Are internal policies reviewed at least annually?",
+      "help_text": "What this is checking: Internal policies reviewed at least annually.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- A written policy (1–2 pages) approved by leadership\n- Policy version/date and owner named\n- Evidence it is shared (intranet, handbook)\nQuick improvement if this is weak:\n- Write a one-page policy and assign an owner\n- Set a 6–12 month review date in the document\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: annually, internal, least, policies, reviewed.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Minimum Standards"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_08",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 8,
+      "text": "Is there a defined process for approving new technologies or systems?",
+      "help_text": "What this is checking: There a defined process for approving new technologies or systems.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: approving, defined, process, systems, technologies.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.AM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Risk Oversight"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_09",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 9,
+      "text": "Is governance aligned with recognised frameworks (NIST/ISO)?",
+      "help_text": "What this is checking: Governance aligned with recognised frameworks (NIST/ISO).\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: aligned, frameworks, governance, nist, recognised.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Governance"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_10",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 10,
+      "text": "Does leadership receive cyber maturity updates?",
+      "help_text": "What this is checking: Leadership receive cyber maturity updates.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Patch schedule (e.g., weekly/monthly)\n- Asset list showing update status\n- Vulnerability scan results and remediation tickets\nQuick improvement if this is weak:\n- Set a monthly patch day and track completion\n- Patch internet-facing systems within 14 days\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: cyber, leadership, maturity, receive, updates.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Reporting Duty"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_11",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 11,
+      "text": "Are decision-makers aware of key cyber threats?",
+      "help_text": "What this is checking: Decision-makers aware of key cyber threats.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: aware, cyber, decision, makers, threats.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Board Awareness"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "GOV_12",
+      "domain_code": "GOV",
+      "domain_name": "Governance",
+      "domain_order": 1,
+      "question_number": 12,
+      "text": "Is cyber risk integrated into business planning or strategy?",
+      "help_text": "What this is checking: Cyber risk integrated into business planning or strategy.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: business, cyber, integrated, planning, risk, strategy.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Accountability"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_01",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 1,
+      "text": "Are systems routinely patched and updated?",
+      "help_text": "What this is checking: Systems routinely patched and updated.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: patched, routinely, systems, updated.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.MA"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.8"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Basic Hygiene"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_02",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 2,
+      "text": "Is MFA enabled across key systems?",
+      "help_text": "What this is checking: MFA enabled across key systems.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- MFA enabled on email, admin accounts, and remote access\n- List of systems with MFA status\n- Conditional access / MFA policy screenshots\nQuick improvement if this is weak:\n- Turn on MFA for email and all admin accounts first\n- Block legacy/basic authentication\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: across, enabled, systems.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AC"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.2"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Minimum Controls"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_03",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 3,
+      "text": "Is anti-malware/EDR deployed and monitored?",
+      "help_text": "What this is checking: Anti-malware/EDR deployed and monitored.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: anti, deployed, malware, monitored.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.PT"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.7"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Technical Controls"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_04",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 4,
+      "text": "Are access rights based on least privilege?",
+      "help_text": "What this is checking: Access rights based on least privilege.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Access request/approval trail\n- Leaver checklist with account removal\n- Periodic access reviews (e.g., quarterly)\nQuick improvement if this is weak:\n- Create a simple joiner/leaver checklist\n- Review admin access once a quarter\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: access, least, privilege, rights.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AC"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.2"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Access Control"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_05",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 5,
+      "text": "Are admin accounts restricted and monitored?",
+      "help_text": "What this is checking: Admin accounts restricted and monitored.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: accounts, admin, monitored, restricted.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AC"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.2"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Minimum Standards"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_06",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 6,
+      "text": "Is logging enabled for critical systems?",
+      "help_text": "What this is checking: Logging enabled for critical systems.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Central log source list (email, endpoints, firewall)\n- Alert rules for key events\n- Review evidence (weekly/monthly)\nQuick improvement if this is weak:\n- Turn on logging for email/admin actions\n- Review security alerts weekly for 15 minutes\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: critical, enabled, logging, systems.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: DE.CM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.15"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Incident Preparedness"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_07",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 7,
+      "text": "Are backups performed and protected?",
+      "help_text": "What this is checking: Backups performed and protected.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Backup schedule and retention (e.g., 30/90 days)\n- Proof of restore test (screenshots/log)\n- Offsite/immutable copy (3-2-1)\nQuick improvement if this is weak:\n- Test one restore this week and record it\n- Ensure at least one backup copy is offsite or immutable\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: backups, performed, protected.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.13"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Resilience"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_08",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 8,
+      "text": "Are vulnerabilities scanned regularly?",
+      "help_text": "What this is checking: Vulnerabilities scanned regularly.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: regularly, scanned, vulnerabilities.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: DE.CM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.8"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Technical Hygiene"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_09",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 9,
+      "text": "Is encryption used for sensitive data?",
+      "help_text": "What this is checking: Encryption used for sensitive data.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Simple data classification labels (Public/Internal/Confidential)\n- Examples of labelled documents or shares\n- Rules for storing/sharing sensitive data\nQuick improvement if this is weak:\n- Create 3 labels and a one-page guide\n- Mark customer/HR files as Confidential\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: data, encryption, sensitive, used.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.DS"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.24"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Data Protection"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_10",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 10,
+      "text": "Are email security controls implemented?",
+      "help_text": "What this is checking: Email security controls implemented.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: controls, email, implemented, security.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.PT"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.7"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Basic Hygiene"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_11",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 11,
+      "text": "Are firewalls configured and reviewed?",
+      "help_text": "What this is checking: Firewalls configured and reviewed.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: configured, firewalls, reviewed.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.PT"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.7"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Technical Controls"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "TECH_12",
+      "domain_code": "TECH",
+      "domain_name": "Technical Security",
+      "domain_order": 2,
+      "question_number": 12,
+      "text": "Are devices protected when used remotely?",
+      "help_text": "What this is checking: Devices protected when used remotely.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Inventory of laptops, servers, mobiles, cloud accounts\n- Owner and purpose for each asset\n- Lifecycle status (active/retired)\nQuick improvement if this is weak:\n- Start a simple asset list: device, owner, location\n- Tag and record all admin/cloud accounts\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: devices, protected, remotely, used, when.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AC"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Minimum Standards"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_01",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 1,
+      "text": "Are daily operational processes documented?",
+      "help_text": "What this is checking: Daily operational processes documented.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: daily, documented, operational, processes.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_02",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 2,
+      "text": "Is change management formalised?",
+      "help_text": "What this is checking: Change management formalised.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: change, formalised, management.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.32"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_03",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 3,
+      "text": "Is onboarding/offboarding consistently managed?",
+      "help_text": "What this is checking: Onboarding/offboarding consistently managed.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: consistently, managed, offboarding, onboarding.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.23"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_04",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 4,
+      "text": "Is evidence kept of completed operational tasks?",
+      "help_text": "What this is checking: Evidence kept of completed operational tasks.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: completed, evidence, kept, operational, tasks.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.29"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_05",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 5,
+      "text": "Is asset maintenance tracked?",
+      "help_text": "What this is checking: Asset maintenance tracked.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Inventory of laptops, servers, mobiles, cloud accounts\n- Owner and purpose for each asset\n- Lifecycle status (active/retired)\nQuick improvement if this is weak:\n- Start a simple asset list: device, owner, location\n- Tag and record all admin/cloud accounts\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: asset, maintenance, tracked.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.AM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.1"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_06",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 6,
+      "text": "Are security responsibilities included in job roles?",
+      "help_text": "What this is checking: Security responsibilities included in job roles.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- RACI or responsibilities list for key security activities\n- Named owner for risk decisions and exceptions\n- Job titles or org chart showing ownership\nQuick improvement if this is weak:\n- Assign a single owner per area (even if part‑time)\n- Add responsibilities to job descriptions\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: included, responsibilities, roles, security.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_07",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 7,
+      "text": "Are operational tasks resourced appropriately?",
+      "help_text": "What this is checking: Operational tasks resourced appropriately.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: appropriately, operational, resourced, tasks.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_08",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 8,
+      "text": "Is there separation of duties for critical tasks?",
+      "help_text": "What this is checking: There separation of duties for critical tasks.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: critical, duties, separation, tasks.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.20"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_09",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 9,
+      "text": "Are operational logs reviewed?",
+      "help_text": "What this is checking: Operational logs reviewed.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: logs, operational, reviewed.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: DE.CM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.15"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_10",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 10,
+      "text": "Are system baselines defined and enforced?",
+      "help_text": "What this is checking: System baselines defined and enforced.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: baselines, defined, enforced, system.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.9"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_11",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 11,
+      "text": "Are critical procedures tested periodically?",
+      "help_text": "What this is checking: Critical procedures tested periodically.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: critical, periodically, procedures, tested.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.35"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "OPS_12",
+      "domain_code": "OPS",
+      "domain_name": "Operational Security",
+      "domain_order": 3,
+      "question_number": 12,
+      "text": "Is operational security measured or monitored?",
+      "help_text": "What this is checking: Operational security measured or monitored.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: measured, monitored, operational, security.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.36"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_01",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 1,
+      "text": "Is there a complete asset inventory?",
+      "help_text": "What this is checking: There a complete asset inventory.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Inventory of laptops, servers, mobiles, cloud accounts\n- Owner and purpose for each asset\n- Lifecycle status (active/retired)\nQuick improvement if this is weak:\n- Start a simple asset list: device, owner, location\n- Tag and record all admin/cloud accounts\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: asset, complete, inventory.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.AM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.1"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Asset Hygiene"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_02",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 2,
+      "text": "Is data classified according to sensitivity?",
+      "help_text": "What this is checking: Data classified according to sensitivity.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Simple data classification labels (Public/Internal/Confidential)\n- Examples of labelled documents or shares\n- Rules for storing/sharing sensitive data\nQuick improvement if this is weak:\n- Create 3 labels and a one-page guide\n- Mark customer/HR files as Confidential\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: according, classified, data, sensitivity.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.DS"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.12"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Data Protection"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_03",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 3,
+      "text": "Are physical locations secured?",
+      "help_text": "What this is checking: Physical locations secured.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: locations, physical, secured.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.PH"
+        ],
+        "iso27001_2022": [
+          "ISO: 7.4"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_04",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 4,
+      "text": "Is removable media controlled?",
+      "help_text": "What this is checking: Removable media controlled.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: controlled, media, removable.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.PT"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.11"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_05",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 5,
+      "text": "Is sensitive data encrypted at rest?",
+      "help_text": "What this is checking: Sensitive data encrypted at rest.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Simple data classification labels (Public/Internal/Confidential)\n- Examples of labelled documents or shares\n- Rules for storing/sharing sensitive data\nQuick improvement if this is weak:\n- Create 3 labels and a one-page guide\n- Mark customer/HR files as Confidential\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: data, encrypted, rest, sensitive.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.DS"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.24"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_06",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 6,
+      "text": "Is sensitive data encrypted in transit?",
+      "help_text": "What this is checking: Sensitive data encrypted in transit.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Simple data classification labels (Public/Internal/Confidential)\n- Examples of labelled documents or shares\n- Rules for storing/sharing sensitive data\nQuick improvement if this is weak:\n- Create 3 labels and a one-page guide\n- Mark customer/HR files as Confidential\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: data, encrypted, sensitive, transit.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.DS"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.24"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_07",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 7,
+      "text": "Are data retention practices defined?",
+      "help_text": "What this is checking: Data retention practices defined.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Simple data classification labels (Public/Internal/Confidential)\n- Examples of labelled documents or shares\n- Rules for storing/sharing sensitive data\nQuick improvement if this is weak:\n- Create 3 labels and a one-page guide\n- Mark customer/HR files as Confidential\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: data, defined, practices, retention.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.33"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_08",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 8,
+      "text": "Is data securely destroyed?",
+      "help_text": "What this is checking: Data securely destroyed.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Simple data classification labels (Public/Internal/Confidential)\n- Examples of labelled documents or shares\n- Rules for storing/sharing sensitive data\nQuick improvement if this is weak:\n- Create 3 labels and a one-page guide\n- Mark customer/HR files as Confidential\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: data, destroyed, securely.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.32"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_09",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 9,
+      "text": "Are cloud assets tracked and protected?",
+      "help_text": "What this is checking: Cloud assets tracked and protected.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: assets, cloud, protected, tracked.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.AM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.1"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_10",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 10,
+      "text": "Is physical access logged?",
+      "help_text": "What this is checking: Physical access logged.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Access request/approval trail\n- Leaver checklist with account removal\n- Periodic access reviews (e.g., quarterly)\nQuick improvement if this is weak:\n- Create a simple joiner/leaver checklist\n- Review admin access once a quarter\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: access, logged, physical.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.PH"
+        ],
+        "iso27001_2022": [
+          "ISO: 7.9"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_11",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 11,
+      "text": "Are critical assets clearly owned?",
+      "help_text": "What this is checking: Critical assets clearly owned.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: assets, clearly, critical, owned.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.AM"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.9"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "DATA_12",
+      "domain_code": "DATA",
+      "domain_name": "Asset & Data Protection",
+      "domain_order": 4,
+      "question_number": 12,
+      "text": "Are storage locations protected?",
+      "help_text": "What this is checking: Storage locations protected.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: locations, protected, storage.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.DS"
+        ],
+        "iso27001_2022": [
+          "ISO: 7.4"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_01",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 1,
+      "text": "Are key suppliers identified and documented?",
+      "help_text": "What this is checking: Key suppliers identified and documented.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: documented, identified, suppliers.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.SC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.19"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Supply Chain Duty"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_02",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 2,
+      "text": "Is due diligence conducted before onboarding vendors?",
+      "help_text": "What this is checking: Due diligence conducted before onboarding vendors.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: before, conducted, diligence, onboarding, vendors.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.SC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.19"
+        ],
+        "uk_cyber_bill": [
+          "Bill: MSP Oversight"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_03",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 3,
+      "text": "Are supplier risks assessed periodically?",
+      "help_text": "What this is checking: Supplier risks assessed periodically.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- List of key suppliers and what data they access\n- Due diligence questions answered for critical suppliers\n- Contract clauses (security, breach notification)\nQuick improvement if this is weak:\n- List your top 10 suppliers and classify by criticality\n- Add breach notification clause to new contracts\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: assessed, periodically, risks, supplier.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.SC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.21"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_04",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 4,
+      "text": "Are security clauses included in contracts?",
+      "help_text": "What this is checking: Security clauses included in contracts.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: clauses, contracts, included, security.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.SC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.20"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_05",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 5,
+      "text": "Is access granted to suppliers managed and reviewed?",
+      "help_text": "What this is checking: Access granted to suppliers managed and reviewed.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Access request/approval trail\n- Leaver checklist with account removal\n- Periodic access reviews (e.g., quarterly)\nQuick improvement if this is weak:\n- Create a simple joiner/leaver checklist\n- Review admin access once a quarter\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: access, granted, managed, reviewed, suppliers.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.23"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_06",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 6,
+      "text": "Are outsourced services monitored?",
+      "help_text": "What this is checking: Outsourced services monitored.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: monitored, outsourced, services.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.SC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.22"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_07",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 7,
+      "text": "Is supplier incident reporting defined?",
+      "help_text": "What this is checking: Supplier incident reporting defined.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Incident response plan (who/what/when)\n- Contact list and escalation steps\n- Table-top exercise notes\nQuick improvement if this is weak:\n- Write a 2‑page incident plan and share it\n- Run a 30‑minute table-top exercise\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: defined, incident, reporting, supplier.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RS.CO"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.30"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_08",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 8,
+      "text": "Are MSPs required to meet minimum controls?",
+      "help_text": "What this is checking: MSPs required to meet minimum controls.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: controls, meet, minimum, msps, required.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.19"
+        ],
+        "uk_cyber_bill": [
+          "Bill: MSP Requirements"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_09",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 9,
+      "text": "Are software dependencies understood?",
+      "help_text": "What this is checking: Software dependencies understood.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: dependencies, software, understood.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.AM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.1"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_10",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 10,
+      "text": "Is shadow IT managed?",
+      "help_text": "What this is checking: Shadow IT managed.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: managed, shadow.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.AM"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.10"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_11",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 11,
+      "text": "Are critical vendors reviewed annually?",
+      "help_text": "What this is checking: Critical vendors reviewed annually.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: annually, critical, reviewed, vendors.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.SC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.21"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "VEND_12",
+      "domain_code": "VEND",
+      "domain_name": "Vendor & Third-Party Risk",
+      "domain_order": 5,
+      "question_number": 12,
+      "text": "Is supply chain concentration risk considered?",
+      "help_text": "What this is checking: Supply chain concentration risk considered.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: chain, concentration, considered, risk, supply.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.SC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.20"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_01",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 1,
+      "text": "Is security awareness training delivered to all staff?",
+      "help_text": "What this is checking: Security awareness training delivered to all staff.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Annual security awareness completion records\n- Phishing simulation results (optional)\n- Induction training for new starters\nQuick improvement if this is weak:\n- Run a short 15‑minute annual awareness session\n- Add security to onboarding checklist\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: awareness, delivered, security, staff, training.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AT"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Staff Duties"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_02",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 2,
+      "text": "Is phishing or behavioural testing performed?",
+      "help_text": "What this is checking: Phishing or behavioural testing performed.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Annual security awareness completion records\n- Phishing simulation results (optional)\n- Induction training for new starters\nQuick improvement if this is weak:\n- Run a short 15‑minute annual awareness session\n- Add security to onboarding checklist\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: behavioural, performed, phishing, testing.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AT"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_03",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 3,
+      "text": "Is leadership supportive of security messaging?",
+      "help_text": "What this is checking: Leadership supportive of security messaging.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: leadership, messaging, security, supportive.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_04",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 4,
+      "text": "Is there a culture of reporting issues?",
+      "help_text": "What this is checking: There a culture of reporting issues.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: culture, issues, reporting.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: DE.AE"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_05",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 5,
+      "text": "Are staff reminded of policies regularly?",
+      "help_text": "What this is checking: Staff reminded of policies regularly.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- A written policy (1–2 pages) approved by leadership\n- Policy version/date and owner named\n- Evidence it is shared (intranet, handbook)\nQuick improvement if this is weak:\n- Write a one-page policy and assign an owner\n- Set a 6–12 month review date in the document\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: policies, regularly, reminded, staff.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AT"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.2"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_06",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 6,
+      "text": "Does staff understand data protection requirements?",
+      "help_text": "What this is checking: Staff understand data protection requirements.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Simple data classification labels (Public/Internal/Confidential)\n- Examples of labelled documents or shares\n- Rules for storing/sharing sensitive data\nQuick improvement if this is weak:\n- Create 3 labels and a one-page guide\n- Mark customer/HR files as Confidential\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: data, protection, requirements, staff, understand.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.DS"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.12"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_07",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 7,
+      "text": "Are specific roles given tailored training?",
+      "help_text": "What this is checking: Specific roles given tailored training.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- RACI or responsibilities list for key security activities\n- Named owner for risk decisions and exceptions\n- Job titles or org chart showing ownership\nQuick improvement if this is weak:\n- Assign a single owner per area (even if part‑time)\n- Add responsibilities to job descriptions\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: given, roles, specific, tailored, training.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AT"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_08",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 8,
+      "text": "Is good cyber behaviour recognised?",
+      "help_text": "What this is checking: Good cyber behaviour recognised.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: behaviour, cyber, good, recognised.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AT"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_09",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 9,
+      "text": "Do staff understand incident reporting steps?",
+      "help_text": "What this is checking: Staff understand incident reporting steps.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Incident response plan (who/what/when)\n- Contact list and escalation steps\n- Table-top exercise notes\nQuick improvement if this is weak:\n- Write a 2‑page incident plan and share it\n- Run a 30‑minute table-top exercise\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: incident, reporting, staff, steps, understand.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RS.CO"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.30"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_10",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 10,
+      "text": "Is there low resistance to security processes?",
+      "help_text": "What this is checking: There low resistance to security processes.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: processes, resistance, security.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_11",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 11,
+      "text": "Are HR processes aligned with security?",
+      "help_text": "What this is checking: HR processes aligned with security.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: aligned, processes, security.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "CULT_12",
+      "domain_code": "CULT",
+      "domain_name": "Culture & Awareness",
+      "domain_order": 6,
+      "question_number": 12,
+      "text": "Is cultural maturity measured in any way?",
+      "help_text": "What this is checking: Cultural maturity measured in any way.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: cultural, maturity, measured.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_01",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 1,
+      "text": "Are human errors tracked or measured?",
+      "help_text": "What this is checking: Human errors tracked or measured.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: errors, human, measured, tracked.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: DE.AE"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_02",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 2,
+      "text": "Are risky behaviours identified?",
+      "help_text": "What this is checking: Risky behaviours identified.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: behaviours, identified, risky.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_03",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 3,
+      "text": "Are processes designed to reduce human error?",
+      "help_text": "What this is checking: Processes designed to reduce human error.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: designed, error, human, processes, reduce.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.35"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_04",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 4,
+      "text": "Are staff aware of social engineering threats?",
+      "help_text": "What this is checking: Staff aware of social engineering threats.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: aware, engineering, social, staff, threats.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AT"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_05",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 5,
+      "text": "Is high-risk behaviour investigated?",
+      "help_text": "What this is checking: High-risk behaviour investigated.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: behaviour, high, investigated, risk.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: DE.AE"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_06",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 6,
+      "text": "Are incentives aligned to secure behaviour?",
+      "help_text": "What this is checking: Incentives aligned to secure behaviour.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: aligned, behaviour, incentives, secure.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_07",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 7,
+      "text": "Are stress or workload factors considered?",
+      "help_text": "What this is checking: Stress or workload factors considered.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: considered, factors, stress, workload.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.BE"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_08",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 8,
+      "text": "Are privileged users monitored?",
+      "help_text": "What this is checking: Privileged users monitored.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: monitored, privileged, users.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.23"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_09",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 9,
+      "text": "Are repeated offenders given training?",
+      "help_text": "What this is checking: Repeated offenders given training.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Annual security awareness completion records\n- Phishing simulation results (optional)\n- Induction training for new starters\nQuick improvement if this is weak:\n- Run a short 15‑minute annual awareness session\n- Add security to onboarding checklist\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: given, offenders, repeated, training.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.AT"
+        ],
+        "iso27001_2022": [
+          "ISO: 6.3"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_10",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 10,
+      "text": "Are staff confident in handling sensitive data?",
+      "help_text": "What this is checking: Staff confident in handling sensitive data.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Simple data classification labels (Public/Internal/Confidential)\n- Examples of labelled documents or shares\n- Rules for storing/sharing sensitive data\nQuick improvement if this is weak:\n- Create 3 labels and a one-page guide\n- Mark customer/HR files as Confidential\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: confident, data, handling, sensitive, staff.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.DS"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.12"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_11",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 11,
+      "text": "Is behavioural risk included in reporting?",
+      "help_text": "What this is checking: Behavioural risk included in reporting.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: behavioural, included, reporting, risk.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.36"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "HUM_12",
+      "domain_code": "HUM",
+      "domain_name": "Human Risk & Behaviour",
+      "domain_order": 7,
+      "question_number": 12,
+      "text": "Are human risk trends analysed?",
+      "help_text": "What this is checking: Human risk trends analysed.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: analysed, human, risk, trends.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.36"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_01",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 1,
+      "text": "Is there an incident response plan?",
+      "help_text": "What this is checking: There an incident response plan.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Incident response plan (who/what/when)\n- Contact list and escalation steps\n- Table-top exercise notes\nQuick improvement if this is weak:\n- Write a 2‑page incident plan and share it\n- Run a 30‑minute table-top exercise\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: incident, plan, response.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RS.RP"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.30"
+        ],
+        "uk_cyber_bill": [
+          "Bill: Resilience Duty"
+        ]
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_02",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 2,
+      "text": "Is the IR plan tested?",
+      "help_text": "What this is checking: The IR plan tested.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Incident response plan (who/what/when)\n- Contact list and escalation steps\n- Table-top exercise notes\nQuick improvement if this is weak:\n- Write a 2‑page incident plan and share it\n- Run a 30‑minute table-top exercise\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: plan, tested.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RS.IM"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.31"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_03",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 3,
+      "text": "Is there a business continuity plan?",
+      "help_text": "What this is checking: There a business continuity plan.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- BC/DR plan for critical services\n- RTO/RPO documented\n- Test/exercise evidence\nQuick improvement if this is weak:\n- Document top 5 critical services and recovery steps\n- Do a basic DR test for one system\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: business, continuity, plan.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.29"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_04",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 4,
+      "text": "Are backups tested for restoration?",
+      "help_text": "What this is checking: Backups tested for restoration.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Backup schedule and retention (e.g., 30/90 days)\n- Proof of restore test (screenshots/log)\n- Offsite/immutable copy (3-2-1)\nQuick improvement if this is weak:\n- Test one restore this week and record it\n- Ensure at least one backup copy is offsite or immutable\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: backups, restoration, tested.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: PR.IP"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.13"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_05",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 5,
+      "text": "Is there a disaster recovery plan?",
+      "help_text": "What this is checking: There a disaster recovery plan.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Backup schedule and retention (e.g., 30/90 days)\n- Proof of restore test (screenshots/log)\n- Offsite/immutable copy (3-2-1)\nQuick improvement if this is weak:\n- Test one restore this week and record it\n- Ensure at least one backup copy is offsite or immutable\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: disaster, plan, recovery.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.33"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_06",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 6,
+      "text": "Are critical processes identified?",
+      "help_text": "What this is checking: Critical processes identified.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: critical, identified, processes.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: ID.BE"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.29"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_07",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 7,
+      "text": "Are RTO/RPO targets defined?",
+      "help_text": "What this is checking: RTO/RPO targets defined.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: defined, targets.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RC"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.33"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_08",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 8,
+      "text": "Are crises communicated effectively?",
+      "help_text": "What this is checking: Crises communicated effectively.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: communicated, crises, effectively.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RS.CO"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.30"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_09",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 9,
+      "text": "Are lessons learned captured after incidents?",
+      "help_text": "What this is checking: Lessons learned captured after incidents.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: after, captured, incidents, learned, lessons.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RS.IM"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.31"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_10",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 10,
+      "text": "Are resilience resources funded?",
+      "help_text": "What this is checking: Resilience resources funded.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: funded, resilience, resources.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: GV"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.1"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_11",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 11,
+      "text": "Are key systems monitored for availability?",
+      "help_text": "What this is checking: Key systems monitored for availability.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- Any document/process evidence relevant to the question\n- A named owner or team responsible\n- A recent example showing it is actually used\nQuick improvement if this is weak:\n- Document the current approach in one page\n- Assign an owner and review date\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: availability, monitored, systems.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: DE.CM"
+        ],
+        "iso27001_2022": [
+          "ISO: 8.15"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    },
+    {
+      "id": "RES_12",
+      "domain_code": "RES",
+      "domain_name": "Resilience & Recovery",
+      "domain_order": 8,
+      "question_number": 12,
+      "text": "Are staff aware of their emergency roles?",
+      "help_text": "What this is checking: Staff aware of their emergency roles.\nWhat good looks like: you can show clear evidence, not just informal knowledge.\nEvidence you can use (examples):\n- RACI or responsibilities list for key security activities\n- Named owner for risk decisions and exceptions\n- Job titles or org chart showing ownership\nQuick improvement if this is weak:\n- Assign a single owner per area (even if part‑time)\n- Add responsibilities to job descriptions\nHow to score it simply:\n- 0–1: no clear evidence / ad-hoc.\n- 2–3: partly in place and used, but inconsistent.\n- 4–5: consistent, reviewed, and improving.\nKey words for this question: aware, emergency, roles, staff, their.",
+      "active": true,
+      "scale": {
+        "min": 0,
+        "max": 5,
+        "labels": {
+          "0": "Non-existent",
+          "1": "Initial",
+          "2": "Repeatable",
+          "3": "Defined",
+          "4": "Managed",
+          "5": "Optimised"
+        }
+      },
+      "mapping": {
+        "nist": [
+          "NIST: RS.CO"
+        ],
+        "iso27001_2022": [
+          "ISO: 5.30"
+        ],
+        "uk_cyber_bill": []
+      },
+      "version": "v1.0"
+    }
+  ]
+}

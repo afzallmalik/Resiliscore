@@ -1,0 +1,24 @@
+:root { color-scheme: light; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: #ffffff;
+  color: #0b0b0b;
+}
+a { color: inherit; }
+.container { max-width: 980px; margin: 0 auto; padding: 24px; }
+.nav { display:flex; gap:16px; padding: 12px 0; border-bottom: 1px solid #e6e6e6; margin-bottom: 24px; }
+.card { border: 1px solid #e6e6e6; border-radius: 12px; padding: 16px; margin: 12px 0; }
+.btn { display:inline-block; border:1px solid #111; padding:10px 14px; border-radius:10px; text-decoration:none; background:#111; color:#fff; }
+.btn.secondary { background:#fff; color:#111; }
+.muted { color:#444; }
+.grid { display:grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 860px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+.table { width:100%; border-collapse: collapse; }
+.table th, .table td { border-bottom: 1px solid #eee; padding: 10px; text-align:left; vertical-align: top; }
+.pill { display:inline-block; padding: 3px 10px; border-radius: 999px; border:1px solid #ddd; font-size: 12px; }
+.score { font-size: 36px; font-weight: 700; }
+.grade { font-size: 28px; font-weight: 700; }
+select, textarea, input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; font-size: 14px; }
+textarea { min-height: 60px; }
+.domainHeader { font-weight: 700; font-size: 16px; padding: 10px 0; }

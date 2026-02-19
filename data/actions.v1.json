@@ -1,0 +1,69 @@
+{
+  "version": "v1",
+  "rules": [
+    {
+      "domain_code": "GOV",
+      "actions": [
+        "Name a security owner and define responsibilities (a simple RACI is enough).",
+        "Create a basic risk register and review the top risks monthly.",
+        "Approve and publish core security policies (acceptable use, access control, incident response)."
+      ]
+    },
+    {
+      "domain_code": "TECH",
+      "actions": [
+        "Enable MFA for email, admin accounts, and remote access first.",
+        "Set a monthly patch cycle and track completion for critical systems.",
+        "Harden endpoints: disk encryption, EDR/AV, and secure configuration baselines."
+      ]
+    },
+    {
+      "domain_code": "OPS",
+      "actions": [
+        "Document and test an incident response plan (who to call, what to do, when).",
+        "Turn on key logs (email/admin, endpoints, firewall) and review alerts weekly.",
+        "Run regular vulnerability scans and track remediation."
+      ]
+    },
+    {
+      "domain_code": "DATA",
+      "actions": [
+        "Create a simple asset inventory (devices, cloud accounts, key services).",
+        "Classify data into 3 labels (Public/Internal/Confidential) and apply them.",
+        "Review backups: retention, offsite copy, and perform a restore test."
+      ]
+    },
+    {
+      "domain_code": "VEND",
+      "actions": [
+        "List your critical suppliers and what data/systems they access.",
+        "Add security clauses to new contracts (breech notification, minimum controls).",
+        "Run lightweight due diligence for critical suppliers annually."
+      ]
+    },
+    {
+      "domain_code": "CULT",
+      "actions": [
+        "Deliver short awareness training and include it in onboarding.",
+        "Create an easy way to report suspicious emails or incidents.",
+        "Share one monthly security tip and make it normal to ask questions."
+      ]
+    },
+    {
+      "domain_code": "HUM",
+      "actions": [
+        "Implement joiner/mover/leaver checklists and approvals for access.",
+        "Review privileged access quarterly and remove what is not needed.",
+        "Use phishing-resistant controls where possible (MFA + training)."
+      ]
+    },
+    {
+      "domain_code": "RES",
+      "actions": [
+        "Define business continuity basics: top critical services and recovery steps.",
+        "Test backups and recovery for at least one critical system each quarter.",
+        "Set simple RTO/RPO targets and track improvements."
+      ]
+    }
+  ]
+}
