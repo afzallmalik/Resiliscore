@@ -32,3 +32,13 @@ model Response {
   @@id([assessmentId, qId])
   @@map("responses")
 }
+model Question {
+  id           String @id @default(uuid())
+  domain       String
+  order        Int
+  prompt       String
+  helpText     String
+  modelVersion String @default("v1.0")
+
+  @@unique([modelVersion, domain, order])
+}
