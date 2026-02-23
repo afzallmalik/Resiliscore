@@ -1,0 +1,343 @@
+[
+  {
+    "modelVersion": "v1.1",
+    "domain": "Governance & Leadership",
+    "order": 1,
+    "prompt": "Is someone clearly responsible for resilience and risk in your organisation?",
+    "helpText": "This means a named person at leadership level who owns oversight of governance, cyber and operational risk."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Governance & Leadership",
+    "order": 2,
+    "prompt": "Are resilience responsibilities clearly defined and understood across leadership?",
+    "helpText": "Do leaders know what they are accountable for when it comes to managing risk?"
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Governance & Leadership",
+    "order": 3,
+    "prompt": "Are key governance and control policies written down and accessible?",
+    "helpText": "Policies should not live only in people’s heads — they should be documented and shared."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Governance & Leadership",
+    "order": 4,
+    "prompt": "Does leadership regularly review resilience and risk matters?",
+    "helpText": "This includes structured discussions, not just informal conversations."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Governance & Leadership",
+    "order": 5,
+    "prompt": "Is there a clear process for raising and escalating risk concerns?",
+    "helpText": "Staff should know who to inform if something goes wrong or looks risky."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Governance & Leadership",
+    "order": 6,
+    "prompt": "Are resilience considerations included in important business decisions?",
+    "helpText": "For example, when taking on new clients, systems or suppliers."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Governance & Leadership",
+    "order": 7,
+    "prompt": "Are governance and risk decisions recorded and tracked?",
+    "helpText": "This shows that oversight is structured rather than informal."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Governance & Leadership",
+    "order": 8,
+    "prompt": "Is your governance structure reviewed and improved over time?",
+    "helpText": "Resilience should evolve as your organisation grows."
+  },
+
+  {
+    "modelVersion": "v1.1",
+    "domain": "Risk Management Process",
+    "order": 1,
+    "prompt": "Do you actively identify and record risks across your organisation?",
+    "helpText": "Risks should be written down and not just discussed when problems arise."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Risk Management Process",
+    "order": 2,
+    "prompt": "Do you maintain a structured list of key risks?",
+    "helpText": "This could be a simple document or system that tracks known risks."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Risk Management Process",
+    "order": 3,
+    "prompt": "Are risks reviewed regularly rather than only when issues occur?",
+    "helpText": "Reviewing risks on a schedule shows structured oversight."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Risk Management Process",
+    "order": 4,
+    "prompt": "Is each key risk assigned to a responsible person?",
+    "helpText": "Someone should be accountable for monitoring and managing each risk."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Risk Management Process",
+    "order": 5,
+    "prompt": "Do you assess how serious each risk could be?",
+    "helpText": "This includes considering impact, likelihood or potential disruption."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Risk Management Process",
+    "order": 6,
+    "prompt": "Is there a clear process for escalating serious risks?",
+    "helpText": "High-impact risks should be raised quickly to leadership."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Risk Management Process",
+    "order": 7,
+    "prompt": "Are decisions about risks documented?",
+    "helpText": "This creates visibility and supports accountability."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Risk Management Process",
+    "order": 8,
+    "prompt": "Are risk controls reviewed and strengthened over time?",
+    "helpText": "Managing risk should improve as the organisation matures."
+  },
+
+  {
+    "modelVersion": "v1.1",
+    "domain": "Operational Controls",
+    "order": 1,
+    "prompt": "Do you control who has access to systems and sensitive information?",
+    "helpText": "Access should be based on role and removed when no longer needed."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Operational Controls",
+    "order": 2,
+    "prompt": "Are changes to systems or processes managed in a structured way?",
+    "helpText": "Changes should be reviewed and approved before implementation."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Operational Controls",
+    "order": 3,
+    "prompt": "Are important business processes followed consistently?",
+    "helpText": "Key controls should not depend on individual memory."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Operational Controls",
+    "order": 4,
+    "prompt": "Do you monitor critical systems and processes for issues?",
+    "helpText": "Monitoring helps detect problems early rather than after impact."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Operational Controls",
+    "order": 5,
+    "prompt": "Are operational incidents recorded and tracked?",
+    "helpText": "Issues should be logged so patterns can be identified."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Operational Controls",
+    "order": 6,
+    "prompt": "Do you regularly review who has system access?",
+    "helpText": "Access rights should not remain unchecked over time."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Operational Controls",
+    "order": 7,
+    "prompt": "Are operational procedures documented?",
+    "helpText": "Clear procedures reduce reliance on informal knowledge."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Operational Controls",
+    "order": 8,
+    "prompt": "Are operational controls reviewed and improved periodically?",
+    "helpText": "Strong organisations refine processes as they grow."
+  },
+
+  {
+    "modelVersion": "v1.1",
+    "domain": "Cyber & Information Security",
+    "order": 1,
+    "prompt": "Do you know what systems and data your organisation relies on?",
+    "helpText": "You should have visibility of key systems, applications and important information."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Cyber & Information Security",
+    "order": 2,
+    "prompt": "Are sensitive data and systems protected with appropriate safeguards?",
+    "helpText": "This includes password discipline, access control and basic security measures."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Cyber & Information Security",
+    "order": 3,
+    "prompt": "Do you have clear rules around acceptable use of systems and data?",
+    "helpText": "Staff should understand what is allowed and what is not."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Cyber & Information Security",
+    "order": 4,
+    "prompt": "Are staff aware of common cyber risks such as phishing?",
+    "helpText": "Basic awareness reduces avoidable incidents."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Cyber & Information Security",
+    "order": 5,
+    "prompt": "Is there a defined process for responding to a cyber incident?",
+    "helpText": "This includes knowing who to contact and what steps to take."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Cyber & Information Security",
+    "order": 6,
+    "prompt": "Do you have measures in place to detect unusual system activity?",
+    "helpText": "This helps identify potential issues early."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Cyber & Information Security",
+    "order": 7,
+    "prompt": "Are systems regularly updated and maintained?",
+    "helpText": "Keeping systems current reduces exposure to known vulnerabilities."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Cyber & Information Security",
+    "order": 8,
+    "prompt": "Is cyber security reviewed and strengthened over time?",
+    "helpText": "Security should mature as your organisation grows."
+  },
+
+  {
+    "modelVersion": "v1.1",
+    "domain": "Third-Party & Supply Chain Risk",
+    "order": 1,
+    "prompt": "Do you maintain a clear list of key suppliers and service providers?",
+    "helpText": "You should understand who supports critical parts of your business."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Third-Party & Supply Chain Risk",
+    "order": 2,
+    "prompt": "Do you assess supplier risk before engaging them?",
+    "helpText": "This includes understanding how they manage data and security."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Third-Party & Supply Chain Risk",
+    "order": 3,
+    "prompt": "Do contracts define responsibilities for data protection and resilience?",
+    "helpText": "Agreements should clarify expectations and obligations."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Third-Party & Supply Chain Risk",
+    "order": 4,
+    "prompt": "Are suppliers reviewed periodically after engagement?",
+    "helpText": "Risk does not end once a contract is signed."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Third-Party & Supply Chain Risk",
+    "order": 5,
+    "prompt": "Is third-party system access controlled and reviewed?",
+    "helpText": "Suppliers should only have access where necessary."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Third-Party & Supply Chain Risk",
+    "order": 6,
+    "prompt": "Is there a plan for managing incidents involving suppliers?",
+    "helpText": "You should know how to respond if a vendor has a disruption."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Third-Party & Supply Chain Risk",
+    "order": 7,
+    "prompt": "Do you understand how dependent you are on key suppliers?",
+    "helpText": "High dependency increases resilience risk."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Third-Party & Supply Chain Risk",
+    "order": 8,
+    "prompt": "Do you work with suppliers to strengthen resilience where needed?",
+    "helpText": "Strong relationships include improving standards over time."
+  },
+
+  {
+    "modelVersion": "v1.1",
+    "domain": "Resilience & Continuity",
+    "order": 1,
+    "prompt": "Do you have a documented plan for responding to major disruption?",
+    "helpText": "This could include cyber incidents, system failure or operational disruption."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Resilience & Continuity",
+    "order": 2,
+    "prompt": "Do you have a plan to continue critical operations during disruption?",
+    "helpText": "Key services should be able to continue even if systems fail."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Resilience & Continuity",
+    "order": 3,
+    "prompt": "Have you identified which systems or services must be restored first?",
+    "helpText": "Knowing priorities reduces confusion during incidents."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Resilience & Continuity",
+    "order": 4,
+    "prompt": "Are data and systems backed up and tested for recovery?",
+    "helpText": "Backups should not only exist — they should be tested."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Resilience & Continuity",
+    "order": 5,
+    "prompt": "Are roles and responsibilities clear during a crisis?",
+    "helpText": "People should know what to do without waiting for direction."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Resilience & Continuity",
+    "order": 6,
+    "prompt": "Is there a plan for communicating during disruption?",
+    "helpText": "This includes staff, clients and partners where necessary."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Resilience & Continuity",
+    "order": 7,
+    "prompt": "Have you tested your resilience plans?",
+    "helpText": "Practice exercises reveal weaknesses before real incidents occur."
+  },
+  {
+    "modelVersion": "v1.1",
+    "domain": "Resilience & Continuity",
+    "order": 8,
+    "prompt": "After incidents or tests, do you review and improve your plans?",
+    "helpText": "Resilience strengthens when lessons are acted upon."
+  }
+]

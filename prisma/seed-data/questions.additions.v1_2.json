@@ -1,0 +1,46 @@
+[
+  { "domain": "Governance", "prompt": "Is there a clear owner for cyber security and resilience at leadership level?", "helpText": "Someone senior is responsible and can make decisions, not just IT." },
+  { "domain": "Governance", "prompt": "Are cyber and resilience risks discussed in leadership meetings on a regular schedule?", "helpText": "For example monthly or quarterly, with actions tracked." },
+  { "domain": "Governance", "prompt": "Is there a written cyber risk appetite (what you will and won’t accept)?", "helpText": "A simple statement approved by leadership is enough." },
+  { "domain": "Governance", "prompt": "Are cyber controls reviewed for effectiveness at least once per year?", "helpText": "Not just that controls exist, but whether they actually work." },
+
+  { "domain": "Risk Management", "prompt": "Do you assess cyber risks using business impact (money, downtime, legal, reputation)?", "helpText": "Impact should be defined in plain terms and used consistently." },
+  { "domain": "Risk Management", "prompt": "Are risk treatment actions tracked to completion with owners and dates?", "helpText": "You can evidence progress and show what is still outstanding." },
+  { "domain": "Risk Management", "prompt": "Do you formally accept risks that you decide not to fix?", "helpText": "The right person signs it off, with reasons recorded." },
+
+  { "domain": "Asset & Data", "prompt": "Are your most important systems and data clearly identified and labelled as critical?", "helpText": "You know what matters most to keep the business running." },
+  { "domain": "Asset & Data", "prompt": "Do you classify data (e.g. public, internal, confidential) and handle it differently?", "helpText": "Simple labels and rules are fine." },
+  { "domain": "Asset & Data", "prompt": "Do you have rules for how long you keep data and how you dispose of it safely?", "helpText": "Includes deleting, shredding, secure wipe, and retention periods." },
+
+  { "domain": "Identity & Access", "prompt": "Do you review privileged/admin access regularly (e.g. quarterly)?", "helpText": "Check who has admin rights and remove anything unnecessary." },
+  { "domain": "Identity & Access", "prompt": "Do you remove access quickly when staff leave or change roles?", "helpText": "Includes leavers, movers, contractors, and shared accounts." },
+  { "domain": "Identity & Access", "prompt": "Is MFA used for admin accounts and remote access (email/VPN/cloud)?", "helpText": "This is one of the biggest risk reducers." },
+
+  { "domain": "Secure Operations", "prompt": "Do you collect important security logs in one place (not scattered across systems)?", "helpText": "For example central logging or a managed service." },
+  { "domain": "Secure Operations", "prompt": "Are backups monitored to confirm they complete successfully?", "helpText": "Not just scheduled—actually checked and reported." },
+  { "domain": "Secure Operations", "prompt": "Do you have patching targets (e.g. critical fixes within X days) and track performance?", "helpText": "Targets can be simple, but they must be measured." },
+  { "domain": "Secure Operations", "prompt": "Are secure configuration baselines used for key systems (PCs, servers, cloud)?", "helpText": "A standard build that reduces misconfiguration risk." },
+
+  { "domain": "Vulnerability & Change", "prompt": "Do you scan for vulnerabilities on a regular schedule?", "helpText": "For example monthly scans or continuous tooling." },
+  { "domain": "Vulnerability & Change", "prompt": "Do you fix critical vulnerabilities within defined timeframes?", "helpText": "You have clear timelines and can evidence remediation." },
+  { "domain": "Vulnerability & Change", "prompt": "Are changes to important systems risk-assessed and approved before being made?", "helpText": "Includes security impact checks for changes." },
+
+  { "domain": "Supplier & Third-Party", "prompt": "Do you identify which suppliers are critical to your operations?", "helpText": "Focus on suppliers that could stop your business if they fail." },
+  { "domain": "Supplier & Third-Party", "prompt": "Are security requirements included in supplier contracts or agreements?", "helpText": "Even simple clauses for incident notification and minimum controls." },
+  { "domain": "Supplier & Third-Party", "prompt": "Do you reassess critical suppliers regularly (not just at onboarding)?", "helpText": "For example annually, or when major changes happen." },
+
+  { "domain": "Incident Response", "prompt": "Do you have a written incident response plan that staff can follow?", "helpText": "Simple is fine: roles, steps, contacts, and escalation." },
+  { "domain": "Incident Response", "prompt": "Have you tested your incident response plan (tabletop exercise) in the last 12 months?", "helpText": "Walk through a realistic scenario and capture actions." },
+  { "domain": "Incident Response", "prompt": "Do you record lessons learned after incidents and track improvements?", "helpText": "So the same problems don’t repeat." },
+  { "domain": "Incident Response", "prompt": "Do you have a clear process for reporting incidents to customers/suppliers/regulators if needed?", "helpText": "Know who decides, what is reported, and by when." },
+
+  { "domain": "Continuity & Recovery", "prompt": "Have you identified your critical services (what must keep running)?", "helpText": "A short list is fine, but it should be agreed." },
+  { "domain": "Continuity & Recovery", "prompt": "Do you have recovery targets for critical services (how quickly you need to recover)?", "helpText": "For example RTO/RPO or simple agreed time targets." },
+  { "domain": "Continuity & Recovery", "prompt": "Do you test restoring backups (not just taking them)?", "helpText": "A restore test proves you can recover when it matters." },
+  { "domain": "Continuity & Recovery", "prompt": "Do you understand key dependencies (systems, people, suppliers) needed to recover?", "helpText": "So recovery plans are realistic." },
+
+  { "domain": "People & Culture", "prompt": "Do staff receive security training relevant to their role (not just generic training)?", "helpText": "Different roles need different training focus." },
+  { "domain": "People & Culture", "prompt": "Do you measure whether awareness is working (e.g. quizzes, phishing tests, reporting)?", "helpText": "Evidence that behaviour is improving." },
+  { "domain": "People & Culture", "prompt": "Is it easy for staff to report suspicious emails or security concerns?", "helpText": "Clear process and encouraged behaviour." },
+  { "domain": "People & Culture", "prompt": "Is security included in onboarding for new starters and contractors?", "helpText": "So good habits start from day one." }
+]

@@ -3,22 +3,23 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
 model Assessment {
-  id           String   @id @default(uuid())
-  createdAt    DateTime @default(now())
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
   completedAt  DateTime?
-  model        String   @default("lite_v1")
-  overallScore Decimal? @db.Decimal(3,2)
+  model        String    @default("lite_v1")
+  overallScore Decimal?  @db.Decimal(3, 2)
   grade        String?
   domainScores Json?
   email        String?
   feedback     Json?
 
-  responses    Response[]
+  responses Response[]
 }
 
 model Response {
@@ -27,11 +28,12 @@ model Response {
   score        Int?
   notes        String?
 
-  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
 
   @@id([assessmentId, qId])
   @@map("responses")
 }
+
 model Question {
   id           String @id @default(uuid())
   domain       String
