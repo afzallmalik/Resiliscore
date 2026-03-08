@@ -81,7 +81,7 @@ function normaliseQuestions(payload: QuestionsPayload | null): QuestionUI[] {
         help_text,
       };
     })
-    .filter((q): q is questionUI => q !== null)
+    .filter((q): q is QuestionUI => q !== null)
     .sort((a, b) => {
       if (a.domain_order !== b.domain_order) return a.domain_order - b.domain_order;
       return a.order - b.order;
