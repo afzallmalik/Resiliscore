@@ -196,7 +196,7 @@ export default function HomePage() {
                 SME cyber resilience maturity — simple, practical, evidence-led
               </div>
 
-              <h1>Resiliscore: cyber resilience maturity for SMEs</h1>
+              <h1>Resiliscore: Understand your organisation's cyber resilience in 10 minutes</h1>
 
               <p className="lead">
                 A fast, plain-English assessment that produces an executive-ready summary, ranked priorities, a 90-day plan, and an
@@ -205,7 +205,7 @@ export default function HomePage() {
 
               <div className="ctaRow">
                 <Link className="btn primary" href="/assessment">
-                  Start assessment
+                  Start free assessment
                 </Link>
                 <Link className="btn ghost" href="/methodology">
                   Methodology
@@ -302,7 +302,7 @@ export default function HomePage() {
 
             <div className="sampleActions">
               <Link className="btn primary" href="/assessment">
-                Start assessment
+                Start free assessment
               </Link>
               <a className="btn" href="/sample-report.pdf" target="_blank" rel="noreferrer">
                 View sample report
@@ -444,7 +444,7 @@ export default function HomePage() {
             </div>
             <div className="ctaBtns">
               <Link className="btn primary" href="/assessment">
-                Start assessment
+                Start free assessment
               </Link>
               <Link className="btn ghost" href="/methodology">
                 Methodology
@@ -535,7 +535,7 @@ export default function HomePage() {
               Methodology
             </Link>
             <Link className="footLink" href="/assessment">
-              Start assessment
+              Start free assessment
             </Link>
           </div>
         </footer>
