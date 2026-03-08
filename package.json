@@ -2,31 +2,39 @@
   "name": "resiliscore-v1",
   "version": "1.0.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",    
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
+    "seed": "ts-node prisma/seed.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/client": "5.18.0",
     "next": "14.2.5",
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "0.15.0",
+    "puppeteer": "^24.38.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "@prisma/client": "5.18.0",
-    "zod": "3.23.8",
-    "pdfkit": "0.15.0",
-    "pdf-lib": "^1.17.1"
+    "recharts": "^3.7.0",
+    "stripe": "^20.4.0",
+    "zod": "3.23.8"
   },
   "devDependencies": {
-    "prisma": "5.18.0",
-    "typescript": "5.5.4",
     "@types/node": "20.14.10",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "eslint": "8.57.0",
-    "eslint-config-next": "14.2.5"
+    "eslint-config-next": "14.2.5",
+    "prisma": "5.18.0",
+    "ts-node": "^10.9.2",
+    "typescript": "5.5.4"
   }
 }

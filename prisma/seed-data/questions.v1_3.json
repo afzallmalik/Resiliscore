@@ -1,0 +1,632 @@
+[
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 1,
+    "prompt": "Is cyber and resilience risk formally owned at board or senior level?",
+    "helpText": "Clear accountability should exist at executive level."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 2,
+    "prompt": "Is there an approved information security policy?",
+    "helpText": "Policies should be documented and communicated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 3,
+    "prompt": "Are security objectives defined and tracked?",
+    "helpText": "Security goals should align with business strategy."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 4,
+    "prompt": "Is cyber risk discussed regularly in leadership meetings?",
+    "helpText": "Leadership should receive regular reporting."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 5,
+    "prompt": "Are key risk indicators defined?",
+    "helpText": "Risks should be measurable."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 6,
+    "prompt": "Is regulatory compliance actively monitored?",
+    "helpText": "Legal obligations must be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 7,
+    "prompt": "Are third-party risks reported to leadership?",
+    "helpText": "Supply chain risk should be visible."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 8,
+    "prompt": "Is security performance reviewed annually?",
+    "helpText": "Formal review ensures oversight."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 9,
+    "prompt": "Is cyber budget aligned to risk exposure?",
+    "helpText": "Investment should reflect threat level."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Governance & Leadership",
+    "order": 10,
+    "prompt": "Is resilience integrated into business strategy?",
+    "helpText": "Security should support business continuity."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 1,
+    "prompt": "Is there a documented process governing this area?",
+    "helpText": "Controls should be formally defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 2,
+    "prompt": "Are responsibilities clearly assigned?",
+    "helpText": "Ownership should be defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 3,
+    "prompt": "Are controls implemented effectively?",
+    "helpText": "Controls must operate in practice."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 4,
+    "prompt": "Is monitoring in place?",
+    "helpText": "Performance should be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 5,
+    "prompt": "Are issues remediated promptly?",
+    "helpText": "Weaknesses should be fixed quickly."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 6,
+    "prompt": "Is performance reviewed regularly?",
+    "helpText": "Periodic review ensures effectiveness."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 7,
+    "prompt": "Is documentation kept up to date?",
+    "helpText": "Records should reflect current state."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 8,
+    "prompt": "Are risks assessed in this domain?",
+    "helpText": "Risk exposure should be evaluated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 9,
+    "prompt": "Is compliance considered in this area?",
+    "helpText": "Regulatory requirements must be met."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Risk & Compliance",
+    "order": 10,
+    "prompt": "Is this integrated into wider business operations?",
+    "helpText": "Controls should not operate in isolation."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 1,
+    "prompt": "Is there a documented process governing this area?",
+    "helpText": "Controls should be formally defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 2,
+    "prompt": "Are responsibilities clearly assigned?",
+    "helpText": "Ownership should be defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 3,
+    "prompt": "Are controls implemented effectively?",
+    "helpText": "Controls must operate in practice."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 4,
+    "prompt": "Is monitoring in place?",
+    "helpText": "Performance should be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 5,
+    "prompt": "Are issues remediated promptly?",
+    "helpText": "Weaknesses should be fixed quickly."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 6,
+    "prompt": "Is performance reviewed regularly?",
+    "helpText": "Periodic review ensures effectiveness."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 7,
+    "prompt": "Is documentation kept up to date?",
+    "helpText": "Records should reflect current state."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 8,
+    "prompt": "Are risks assessed in this domain?",
+    "helpText": "Risk exposure should be evaluated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 9,
+    "prompt": "Is compliance considered in this area?",
+    "helpText": "Regulatory requirements must be met."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Asset & Data Management",
+    "order": 10,
+    "prompt": "Is this integrated into wider business operations?",
+    "helpText": "Controls should not operate in isolation."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 1,
+    "prompt": "Is there a documented process governing this area?",
+    "helpText": "Controls should be formally defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 2,
+    "prompt": "Are responsibilities clearly assigned?",
+    "helpText": "Ownership should be defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 3,
+    "prompt": "Are controls implemented effectively?",
+    "helpText": "Controls must operate in practice."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 4,
+    "prompt": "Is monitoring in place?",
+    "helpText": "Performance should be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 5,
+    "prompt": "Are issues remediated promptly?",
+    "helpText": "Weaknesses should be fixed quickly."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 6,
+    "prompt": "Is performance reviewed regularly?",
+    "helpText": "Periodic review ensures effectiveness."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 7,
+    "prompt": "Is documentation kept up to date?",
+    "helpText": "Records should reflect current state."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 8,
+    "prompt": "Are risks assessed in this domain?",
+    "helpText": "Risk exposure should be evaluated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 9,
+    "prompt": "Is compliance considered in this area?",
+    "helpText": "Regulatory requirements must be met."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Identity & Access Management",
+    "order": 10,
+    "prompt": "Is this integrated into wider business operations?",
+    "helpText": "Controls should not operate in isolation."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 1,
+    "prompt": "Is there a documented process governing this area?",
+    "helpText": "Controls should be formally defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 2,
+    "prompt": "Are responsibilities clearly assigned?",
+    "helpText": "Ownership should be defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 3,
+    "prompt": "Are controls implemented effectively?",
+    "helpText": "Controls must operate in practice."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 4,
+    "prompt": "Is monitoring in place?",
+    "helpText": "Performance should be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 5,
+    "prompt": "Are issues remediated promptly?",
+    "helpText": "Weaknesses should be fixed quickly."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 6,
+    "prompt": "Is performance reviewed regularly?",
+    "helpText": "Periodic review ensures effectiveness."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 7,
+    "prompt": "Is documentation kept up to date?",
+    "helpText": "Records should reflect current state."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 8,
+    "prompt": "Are risks assessed in this domain?",
+    "helpText": "Risk exposure should be evaluated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 9,
+    "prompt": "Is compliance considered in this area?",
+    "helpText": "Regulatory requirements must be met."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Secure Operations",
+    "order": 10,
+    "prompt": "Is this integrated into wider business operations?",
+    "helpText": "Controls should not operate in isolation."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 1,
+    "prompt": "Is there a documented process governing this area?",
+    "helpText": "Controls should be formally defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 2,
+    "prompt": "Are responsibilities clearly assigned?",
+    "helpText": "Ownership should be defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 3,
+    "prompt": "Are controls implemented effectively?",
+    "helpText": "Controls must operate in practice."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 4,
+    "prompt": "Is monitoring in place?",
+    "helpText": "Performance should be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 5,
+    "prompt": "Are issues remediated promptly?",
+    "helpText": "Weaknesses should be fixed quickly."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 6,
+    "prompt": "Is performance reviewed regularly?",
+    "helpText": "Periodic review ensures effectiveness."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 7,
+    "prompt": "Is documentation kept up to date?",
+    "helpText": "Records should reflect current state."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 8,
+    "prompt": "Are risks assessed in this domain?",
+    "helpText": "Risk exposure should be evaluated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 9,
+    "prompt": "Is compliance considered in this area?",
+    "helpText": "Regulatory requirements must be met."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Threat & Vulnerability Management",
+    "order": 10,
+    "prompt": "Is this integrated into wider business operations?",
+    "helpText": "Controls should not operate in isolation."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 1,
+    "prompt": "Is there a documented process governing this area?",
+    "helpText": "Controls should be formally defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 2,
+    "prompt": "Are responsibilities clearly assigned?",
+    "helpText": "Ownership should be defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 3,
+    "prompt": "Are controls implemented effectively?",
+    "helpText": "Controls must operate in practice."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 4,
+    "prompt": "Is monitoring in place?",
+    "helpText": "Performance should be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 5,
+    "prompt": "Are issues remediated promptly?",
+    "helpText": "Weaknesses should be fixed quickly."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 6,
+    "prompt": "Is performance reviewed regularly?",
+    "helpText": "Periodic review ensures effectiveness."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 7,
+    "prompt": "Is documentation kept up to date?",
+    "helpText": "Records should reflect current state."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 8,
+    "prompt": "Are risks assessed in this domain?",
+    "helpText": "Risk exposure should be evaluated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 9,
+    "prompt": "Is compliance considered in this area?",
+    "helpText": "Regulatory requirements must be met."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Incident Detection & Response",
+    "order": 10,
+    "prompt": "Is this integrated into wider business operations?",
+    "helpText": "Controls should not operate in isolation."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 1,
+    "prompt": "Is there a documented process governing this area?",
+    "helpText": "Controls should be formally defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 2,
+    "prompt": "Are responsibilities clearly assigned?",
+    "helpText": "Ownership should be defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 3,
+    "prompt": "Are controls implemented effectively?",
+    "helpText": "Controls must operate in practice."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 4,
+    "prompt": "Is monitoring in place?",
+    "helpText": "Performance should be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 5,
+    "prompt": "Are issues remediated promptly?",
+    "helpText": "Weaknesses should be fixed quickly."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 6,
+    "prompt": "Is performance reviewed regularly?",
+    "helpText": "Periodic review ensures effectiveness."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 7,
+    "prompt": "Is documentation kept up to date?",
+    "helpText": "Records should reflect current state."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 8,
+    "prompt": "Are risks assessed in this domain?",
+    "helpText": "Risk exposure should be evaluated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 9,
+    "prompt": "Is compliance considered in this area?",
+    "helpText": "Regulatory requirements must be met."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Resilience & Recovery",
+    "order": 10,
+    "prompt": "Is this integrated into wider business operations?",
+    "helpText": "Controls should not operate in isolation."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 1,
+    "prompt": "Is there a documented process governing this area?",
+    "helpText": "Controls should be formally defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 2,
+    "prompt": "Are responsibilities clearly assigned?",
+    "helpText": "Ownership should be defined."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 3,
+    "prompt": "Are controls implemented effectively?",
+    "helpText": "Controls must operate in practice."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 4,
+    "prompt": "Is monitoring in place?",
+    "helpText": "Performance should be tracked."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 5,
+    "prompt": "Are issues remediated promptly?",
+    "helpText": "Weaknesses should be fixed quickly."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 6,
+    "prompt": "Is performance reviewed regularly?",
+    "helpText": "Periodic review ensures effectiveness."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 7,
+    "prompt": "Is documentation kept up to date?",
+    "helpText": "Records should reflect current state."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 8,
+    "prompt": "Are risks assessed in this domain?",
+    "helpText": "Risk exposure should be evaluated."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 9,
+    "prompt": "Is compliance considered in this area?",
+    "helpText": "Regulatory requirements must be met."
+  },
+  {
+    "modelVersion": "v1.3",
+    "domain": "Third-Party & Supply Chain",
+    "order": 10,
+    "prompt": "Is this integrated into wider business operations?",
+    "helpText": "Controls should not operate in isolation."
+  }
+]

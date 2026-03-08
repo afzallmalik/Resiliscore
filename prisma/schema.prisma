@@ -8,18 +8,27 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Assessment {
-  id           String    @id @default(uuid())
-  createdAt    DateTime  @default(now())
-  completedAt  DateTime?
-  model        String    @default("lite_v1")
-  overallScore Decimal?  @db.Decimal(3, 2)
-  grade        String?
-  domainScores Json?
-  email        String?
-  feedback     Json?
+enum ReportTier {
+  free
+  premium
+}
 
-  responses Response[]
+model Assessment {
+  id              String     @id @default(uuid())
+  createdAt       DateTime   @default(now())
+  completedAt     DateTime?
+  model           String     @default("lite_v1")
+  overallScore    Decimal?   @db.Decimal(3, 2)
+  grade           String?
+  domainScores    Json?
+  email           String?
+  companyName     String?
+  industry        String?
+  feedback        Json?
+  emailCapturedAt DateTime?
+  reportTier      ReportTier @default(free)
+
+  responses       Response[]
 }
 
 model Response {
@@ -41,6 +50,7 @@ model Question {
   prompt       String
   helpText     String
   modelVersion String @default("v1.0")
+  mapping      Json?
 
   @@unique([modelVersion, domain, order])
 }

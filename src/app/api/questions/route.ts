@@ -1,36 +1,13 @@
+// src/app/api/questions/route.ts
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-
-function cmpVersion(a: string, b: string) {
-  // handles "v1.0", "v1.1", "v2.0" etc
-  const pa = a.replace(/^v/i, "").split(".").map(Number);
-  const pb = b.replace(/^v/i, "").split(".").map(Number);
-  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-    const da = pa[i] ?? 0;
-    const db = pb[i] ?? 0;
-    if (da !== db) return da - db;
-  }
-  return 0;
-}
+import { ACTIVE_MODEL_VERSION, DOMAINS_V13, DOMAIN_ORDER_BY_CODE } from "@/lib/domains";
 
 export async function GET() {
-  // Find latest modelVersion present
-  const versions = await prisma.question.findMany({
-    distinct: ["modelVersion"],
-    select: { modelVersion: true },
-  });
-
-  const latest =
-    versions
-      .map((v) => v.modelVersion)
-      .sort((a, b) => cmpVersion(a, b))
-      .at(-1) ?? "v1.2";
-      where: { modelVersion: latest }
-
-  const questions = await prisma.question.findMany({
-    where: { modelVersion: latest },
+  const rows = await prisma.question.findMany({
+    where: { modelVersion: ACTIVE_MODEL_VERSION },
     orderBy: [{ domain: "asc" }, { order: "asc" }],
     select: {
       id: true,
@@ -39,30 +16,43 @@ export async function GET() {
       prompt: true,
       helpText: true,
       modelVersion: true,
+      mapping: true,
     },
   });
 
-  // Domains list for your UI (order is by first appearance)
-  const domainNames = Array.from(new Set(questions.map((q) => q.domain)));
+  if (!rows.length) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: `No questions found for modelVersion "${ACTIVE_MODEL_VERSION}".`,
+        fix: `Seed "${ACTIVE_MODEL_VERSION}" into Supabase OR change ACTIVE_MODEL_VERSION in src/lib/domains.ts to one that exists.`,
+      },
+      { status: 500 }
+    );
+  }
 
-  const domains = domainNames.map((d, idx) => ({
-    code: d,
-    name: d, // if later you add friendly names, map here
-    order: idx + 1,
+  // Use registry order (fixed), not DB-derived
+  const domains = DOMAINS_V13.map((d) => ({
+    code: d.code,
+    name: d.code,
+    order: d.order,
+  }));
+
+  const questions = rows.map((q) => ({
+    id: q.id,
+    domain_code: q.domain,
+    domain_name: q.domain,
+    domain_order: DOMAIN_ORDER_BY_CODE[q.domain] ?? 999,
+    question_number: q.order,
+    text: q.prompt,
+    help_text: q.helpText ?? "",
+    mapping: q.mapping ?? null,
   }));
 
   return NextResponse.json({
-    modelVersion: latest,
+    ok: true,
+    modelVersion: ACTIVE_MODEL_VERSION,
     domains,
-    questions: questions.map((q) => ({
-      id: q.id,
-      domain_code: q.domain,
-      domain_name: q.domain,
-      domain_order: domains.find((x) => x.code === q.domain)?.order ?? 999,
-      question_number: q.order,
-      text: q.prompt,
-      help_text: q.helpText,
-      mapping: null,
-    })),
+    questions,
   });
 }

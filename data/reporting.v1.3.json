@@ -1,0 +1,194 @@
+{
+  "modelVersion": "v1.3",
+  "brand": {
+    "productName": "Resiliscore",
+    "reportTitle": "Cyber Resilience Maturity Report",
+    "tagline": "A clear, practical view of your resilience — and what to do next."
+  },
+  "domains": [
+    {
+      "code": "Governance & Leadership",
+      "short": "Governance",
+      "why": "Sets ownership, decision-making and accountability. Without this, controls drift and risks stay unmanaged.",
+      "signals": [
+        "No named owner for resilience/cyber risk",
+        "Risk discussions are informal or only after incidents",
+        "Policies exist but are not used in practice"
+      ],
+      "goodLooksLike": [
+        "Named senior owner with authority",
+        "Monthly/quarterly risk review with actions",
+        "Simple policies people can follow",
+        "Decisions recorded and tracked"
+      ],
+      "actionsByBand": {
+        "0": ["Assign a named senior owner for cyber & resilience risk.", "Create a simple monthly risk review cadence.", "Write 3 core policies: access, backups, incident response."],
+        "1": ["Start tracking actions with owners and due dates.", "Introduce a basic risk register (top 10).", "Agree what escalation looks like and who decides."],
+        "2": ["Formalise board/leadership reporting (1-page dashboard).", "Add evidence: meeting notes, actions closed, exceptions logged.", "Review policies annually and after incidents."],
+        "3": ["Define KPIs (patch SLA, restore success, phishing reporting).", "Audit whether controls operate consistently.", "Expand governance to suppliers and key dependencies."],
+        "4": ["Run continuous improvement cycles (PDCA).", "Benchmark against ISO/NIST targets.", "Improve measurement and assurance."],
+        "5": ["Optimise for efficiency and consistency across all business change.", "Use trend analysis and assurance reporting.", "Maintain strong governance during growth/mergers."]
+      }
+    },
+    {
+      "code": "Risk & Compliance",
+      "short": "Risk",
+      "why": "Turns unknowns into a managed list with owners, priorities and evidence — and helps you show due diligence.",
+      "signals": ["No risk register", "Risks not reviewed on a schedule", "Actions not tracked to closure"],
+      "goodLooksLike": [
+        "Top risks documented and owned",
+        "Impact defined in business terms",
+        "Actions tracked with dates",
+        "High risks escalated quickly"
+      ],
+      "actionsByBand": {
+        "0": ["Create a simple risk register (top 10).", "Assign an owner for each risk.", "Define impact in plain terms (money, downtime, legal, reputation)."],
+        "1": ["Review risks monthly/quarterly.", "Track risk actions to closure.", "Record accepted risks with sign-off."],
+        "2": ["Set treatment timelines for high risks.", "Evidence progress and exceptions.", "Align key risks to compliance needs (where relevant)."],
+        "3": ["Introduce consistent scoring and reporting.", "Add internal checks (are controls operating?).", "Use risk trends to drive investment."],
+        "4": ["Improve assurance and measurement.", "Test control effectiveness regularly.", "Extend risk management to suppliers/major changes."],
+        "5": ["Optimise decision-making through metrics and forecasting.", "Embed risk into business planning.", "Continuous assurance approach."]
+      }
+    },
+    {
+      "code": "Asset & Data Management",
+      "short": "Assets",
+      "why": "You can’t protect what you don’t know you have. Assets and data clarity reduces outages, leakage and confusion during incidents.",
+      "signals": ["No inventory of critical systems/data", "Data not classified", "Retention/disposal unclear"],
+      "goodLooksLike": [
+        "Critical systems and data identified",
+        "Data classification is applied",
+        "Retention and disposal rules exist",
+        "Ownership of key assets is clear"
+      ],
+      "actionsByBand": {
+        "0": ["List your critical systems and key data sets.", "Assign owners for each critical system.", "Label data: public/internal/confidential."],
+        "1": ["Create simple handling rules for each label.", "Introduce retention periods for key data.", "Document where backups and key records live."],
+        "2": ["Review inventories quarterly.", "Make data disposal consistent (secure delete/shred).", "Reduce ‘unknown’ shadow systems."],
+        "3": ["Add monitoring for critical assets.", "Audit access to sensitive data.", "Improve configuration and ownership clarity."],
+        "4": ["Strengthen governance around data lifecycle.", "Improve evidence and audits.", "Continuous improvement approach."],
+        "5": ["Optimise automation and assurance.", "Improve classification and controls at scale.", "Maintain maturity through growth."]
+      }
+    },
+    {
+      "code": "Identity & Access Management",
+      "short": "Identity",
+      "why": "Access failures cause most breaches. Strong identity controls reduce account takeover and insider risk quickly.",
+      "signals": ["MFA missing on key accounts", "Leavers not removed fast", "Too many admin accounts"],
+      "goodLooksLike": [
+        "MFA on email/cloud/admin access",
+        "Leavers removed quickly",
+        "Admin access minimal and reviewed",
+        "No shared accounts without controls"
+      ],
+      "actionsByBand": {
+        "0": ["Enable MFA for email/cloud/admin accounts.", "Create a leavers checklist and enforce it.", "List all admin accounts and remove unnecessary ones."],
+        "1": ["Review admin access quarterly.", "Control shared accounts and document ownership.", "Use role-based access as default."],
+        "2": ["Add access reviews for sensitive systems.", "Improve logging for privileged actions.", "Separate admin accounts from daily accounts."],
+        "3": ["Introduce stronger joiners/movers/leavers controls.", "Measure time-to-remove-access for leavers.", "Test access controls periodically."],
+        "4": ["Improve assurance and continuous review.", "Advanced controls for privileged access.", "Continuous improvement."],
+        "5": ["Optimise privileged access management.", "Continuous monitoring and governance.", "Maintain maturity at scale."]
+      }
+    },
+    {
+      "code": "Secure Operations",
+      "short": "Operations",
+      "why": "This is where day-to-day resilience lives: patching, backups, logging, configuration, and change control.",
+      "signals": ["Backups not monitored/tested", "Patching inconsistent", "No central logging"],
+      "goodLooksLike": [
+        "Backups monitored + restore tested",
+        "Patching targets exist and are tracked",
+        "Logs collected for key systems",
+        "Changes reviewed before deployment"
+      ],
+      "actionsByBand": {
+        "0": ["Confirm backups run and alert on failures.", "Set patching routine (critical within X days).", "Introduce simple change approval for key systems."],
+        "1": ["Centralise key logs (or use a managed service).", "Define baseline configurations for devices.", "Track patch compliance monthly."],
+        "2": ["Restore test backups quarterly.", "Measure patch SLAs.", "Harden key systems against misconfiguration."],
+        "3": ["Improve monitoring and detection coverage.", "Create runbooks for common failures.", "Add resilience checks to changes."],
+        "4": ["Continuous improvement, audits and assurance.", "Better metrics and reporting.", "Automation where possible."],
+        "5": ["Optimised ops with strong assurance.", "Predictive monitoring/trend management.", "Maintain maturity through change."]
+      }
+    },
+    {
+      "code": "Threat & Vulnerability Management",
+      "short": "Exposure",
+      "why": "Exposure management reduces preventable incidents. It’s about finding weaknesses early and fixing them on time.",
+      "signals": ["No vulnerability scanning", "Critical fixes delayed", "Changes not risk-checked"],
+      "goodLooksLike": [
+        "Regular scanning or managed service",
+        "Critical fixes within targets",
+        "Changes security reviewed",
+        "Clear prioritisation"
+      ],
+      "actionsByBand": {
+        "0": ["Start monthly vulnerability scanning (or MSP).", "Agree critical fix timeline (e.g., 14 days).", "Risk-check changes before rollout."],
+        "1": ["Track vulnerabilities to closure.", "Prioritise internet-facing systems.", "Record exceptions with sign-off."],
+        "2": ["Measure remediation performance.", "Add basic threat awareness to planning.", "Improve patch/vuln coordination."],
+        "3": ["Continuous scanning for key assets.", "Improve prioritisation using asset criticality.", "Test change process effectiveness."],
+        "4": ["Assurance and advanced hardening.", "Trend analysis and control testing.", "Continuous improvement."],
+        "5": ["Optimised exposure management with automation.", "Proactive testing and assurance.", "Maintain maturity at scale."]
+      }
+    },
+    {
+      "code": "Incident Detection & Response",
+      "short": "Response",
+      "why": "It’s not ‘if’ but ‘when’. Faster detection and a clear response reduces cost, downtime and reputational damage.",
+      "signals": ["No plan", "No testing", "Incidents repeated with no learning"],
+      "goodLooksLike": [
+        "Clear response plan and escalation",
+        "Roles and contacts known",
+        "Incidents recorded + lessons learned",
+        "Basic detection coverage exists"
+      ],
+      "actionsByBand": {
+        "0": ["Write a one-page incident response plan.", "Define who decides and who is contacted.", "Create a simple incident log."],
+        "1": ["Run a tabletop exercise within 90 days.", "Add detection for key systems (email/cloud).", "Create a lessons-learned checklist."],
+        "2": ["Improve escalation and reporting.", "Refine runbooks for common incidents.", "Track actions from incidents to closure."],
+        "3": ["Measure response time and detection gaps.", "Improve monitoring coverage.", "Regular exercises and improvement cycles."],
+        "4": ["Assurance and continuous improvement.", "More mature detection and response metrics.", "Regular testing regime."],
+        "5": ["Optimised response with strong telemetry.", "Continuous assurance and learning.", "Maintain maturity at scale."]
+      }
+    },
+    {
+      "code": "Resilience & Recovery",
+      "short": "Recovery",
+      "why": "Recovery is what keeps you trading when something breaks. Backups without restore tests don’t count.",
+      "signals": ["Critical services not defined", "No restore tests", "Recovery targets unclear"],
+      "goodLooksLike": [
+        "Critical services identified",
+        "Recovery targets agreed",
+        "Restore tests performed",
+        "Dependencies understood"
+      ],
+      "actionsByBand": {
+        "0": ["List critical services (what must keep running).", "Set recovery targets (how fast is acceptable).", "Perform a restore test (prove backups work)."],
+        "1": ["Document dependencies (systems, people, suppliers).", "Create a simple recovery runbook.", "Run a disruption tabletop."],
+        "2": ["Test recovery quarterly.", "Improve backup coverage for critical systems.", "Measure restore success and time."],
+        "3": ["Add resilience checks to business change.", "Improve communications plan.", "Improve evidence and reporting."],
+        "4": ["Continuous improvement and assurance.", "More mature resilience testing.", "Trend performance."],
+        "5": ["Optimised resilience engineering.", "Continuous validation and assurance.", "Maintain maturity through growth."]
+      }
+    },
+    {
+      "code": "Third-Party & Supply Chain",
+      "short": "Suppliers",
+      "why": "Suppliers can create single points of failure. Clarity and contract controls reduce risk quickly.",
+      "signals": ["Critical suppliers unknown", "No security clauses", "Supplier access uncontrolled"],
+      "goodLooksLike": [
+        "Critical suppliers identified",
+        "Security expectations in contracts",
+        "Access controlled and reviewed",
+        "Suppliers reviewed regularly"
+      ],
+      "actionsByBand": {
+        "0": ["List critical suppliers and what they support.", "Add basic security clauses (incident notice, minimum controls).", "Control supplier access (least privilege)."],
+        "1": ["Review critical suppliers annually.", "Record supplier risks and owners.", "Plan for supplier incidents/disruption."],
+        "2": ["Assess suppliers on onboarding and periodically.", "Track remediation for supplier gaps.", "Reduce dependency where possible."],
+        "3": ["Improve assurance for key suppliers.", "Better governance and reporting.", "Test supplier incident paths."],
+        "4": ["Continuous improvement and assurance.", "More mature supplier metrics.", "Extend governance."],
+        "5": ["Optimised supply chain resilience.", "Continuous monitoring and assurance.", "Maintain maturity at scale."]
+      }
+    }
+  ]
+}

@@ -17,7 +17,7 @@ export type ResiliscoreQuestion = {
     uk_cyber_bill?: string[];
   };
 };
-
+export const ACTIVE_MODEL_VERSION = "v1.2";
 export function loadQuestionSet() {
   const p = path.join(process.cwd(), "data", "questions.v1.json");
   const raw = fs.readFileSync(p, "utf-8");
