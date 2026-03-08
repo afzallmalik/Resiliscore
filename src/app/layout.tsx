@@ -52,7 +52,7 @@ export default function RootLayout({
             <nav className="nav">
               <Link href="/methodology">Methodology</Link>
               <Link href="/assessment" className="cta">
-                Start assessment
+                Start free assessment
               </Link>
               <Link href="/privacy">Privacy</Link>
               <Link href="/terms">Terms</Link>

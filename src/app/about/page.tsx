@@ -178,7 +178,7 @@ export default function AboutPage() {
 
           <div style={{ marginTop: 16 }} className="row gap">
             <Link className="btn-primary" href="/assessment">
-              Start Assessment
+              Start Free Assessment
             </Link>
             <Link className="btn-secondary" href="/resources">
               SME Resources

@@ -235,7 +235,7 @@ export default function AssessmentForm() {
     return (
       <main>
         <div className="card" style={{ padding: 26 }}>
-          <h1 style={{ marginTop: 0 }}>Start Assessment</h1>
+          <h1 style={{ marginTop: 0 }}>Start Free Assessment</h1>
 
           <p className="muted" style={{ maxWidth: "80ch", marginBottom: 10 }}>
             Complete your free cyber resilience assessment to receive your dashboard results and resilience snapshot.

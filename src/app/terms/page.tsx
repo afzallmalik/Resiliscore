@@ -12,7 +12,7 @@ export default function TermsPage() {
         </p>
         <div className="actions">
           <Link className="btn" href="/">Home</Link>
-          <Link className="btn primary" href="/assessment">Start assessment</Link>
+          <Link className="btn primary" href="/assessment">Start free assessment</Link>
         </div>
       </div>
 

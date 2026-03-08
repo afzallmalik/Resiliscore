@@ -48,7 +48,7 @@ export default function MethodologyPage() {
 
             <div className="actions">
               <Link className="btn primary" href="/assessment">
-                Start assessment
+                Start free assessment
               </Link>
               <Link className="btn ghost" href="/">
                 Back to home
