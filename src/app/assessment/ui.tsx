@@ -81,11 +81,11 @@ function normaliseQuestions(payload: QuestionsPayload | null): QuestionUI[] {
         help_text,
       };
     })
-    .filter(Boolean)
-    .sort((a: QuestionUI, b: QuestionUI) => {
+    .filter((q)): q is questionUI => q !== null)
+    .sort((a, b) => {
       if (a.domain_order !== b.domain_order) return a.domain_order - b.domain_order;
       return a.order - b.order;
-    }) as QuestionUI[];
+    });
 }
 
 function isValidEmail(v: string) {
