@@ -11,7 +11,7 @@ export default function PrintPage({
 
   return (
     <div className="results-wrap">
-      <ResultsClient id={params.id} forceTier={tier} />
+      <ResultsClient id={params.id} />
     </div>
   );
 }
