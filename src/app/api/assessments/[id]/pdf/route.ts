@@ -2742,7 +2742,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
       y -= 10;
 
-      page.drawText("Optional services:", {
+      page.drawText("How to use this report:", {
         x: 50,
         y,
         size: 11,
@@ -2752,9 +2752,10 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       y -= 14;
 
       const services = [
-        "Resilience review consultation",
-        "Improvement roadmap workshops",
-        "Supplier assurance guidance",
+        "Use it to understand your current resilience posture",
+        "Use it to prioritise the next improvements that matter most",
+        "Use it to support internal planning and decision-making",
+        "Use it to respond to customer and supplier assurance questions with more confidence",
       ];
 
       for (const item of services) {
