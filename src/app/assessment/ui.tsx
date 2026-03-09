@@ -179,20 +179,24 @@ export default function AssessmentForm() {
       const unanswered = questions.filter((q) => {
        const value = answers[q.id]?.score;
        return value === null || value === undefined;
-      });
+     });
 
-      if (unanswered.length > 0) {
+     if (unanswered.length > 0) {
+       const missingIds = new Set(unanswered.map((q) => q.id));
+       setUnansweredIds(missingIds);
+       setSubmitError(
+         `Please answer all questions before submitting. ${unanswered.length} remaining.`
+       );
+
        const firstMissing = unanswered[0];
-
-      const el = document.getElementById(`question-${firstMissing.id}`);
+       const el = document.getElementById(`question-${firstMissing.id}`);
        if (el) {
          el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+       }  
 
-      setErr(`Please answer all questions before submitting. ${unanswered.length} remaining.`);
-      setSubmitting(false);
-      return;
-    }
+       setSubmitting(false);
+       return;
+     }
 
       const createRes = await fetch("/api/assessments", {
         method: "POST",
@@ -381,13 +385,21 @@ export default function AssessmentForm() {
   }
 
   if (err) {
-    return (
-      <div className="card">
-        <h2>Assessment</h2>
-        <p className="muted">{err}</p>
-      </div>
-    );
-  }
+  return (
+    <div className="card">
+      <h2>Assessment</h2>
+      <p className="muted">{err}</p>
+      <button
+        className="btn primary"
+        type="button"
+        onClick={() => setErr(null)}
+        style={{ marginTop: 12 }}
+      >
+        Return to assessment
+      </button>
+    </div>
+  );
+}
 
   if (!questions.length) {
     return (
