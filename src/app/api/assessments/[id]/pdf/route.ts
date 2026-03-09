@@ -2808,6 +2808,10 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
     const filePath = `${assessment.id}/${filename}`;
 
+    if (!supabase) {
+      throw new Error("Supabase client not configured");
+    }
+
     const uploadResult = await supabase.storage.from("reports").upload(filePath, pdfBytes, {
       contentType: "application/pdf",
       upsert: true,
