@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Resiliscore – Cyber Resilience Maturity for SMEs",
   description:
     "Cyber resilience maturity assessment for SMEs. Identify risk, prioritise improvements, and generate a clear resilience report in minutes.",
@@ -34,7 +34,6 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-
       <body>
         <header className="header">
           <div className="header-inner">
@@ -50,10 +49,10 @@ export default function RootLayout({
             </Link>
 
             <nav className="nav">
-              <Link href="/methodology">Methodology</Link>
               <Link href="/assessment" className="cta">
                 Start free assessment
               </Link>
+              <Link href="/methodology">Methodology</Link>
               <Link href="/privacy">Privacy</Link>
               <Link href="/terms">Terms</Link>
             </nav>
