@@ -659,9 +659,14 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     }
 
    if (assessment.reportUrl) {
-      const existing = await supabase.storage
-       .from("reports")
-       .download(assessment.reportUrl);
+
+  if (!supabase) {
+    throw new Error("Supabase client not configured");
+  }
+
+  const existing = await supabase.storage
+    .from("reports")
+    .download(assessment.reportUrl);
 
    if (!existing.error && existing.data) {
      const existingBytes = await existing.data.arrayBuffer();
