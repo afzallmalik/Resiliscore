@@ -4,9 +4,17 @@ import Stripe from "stripe";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+
+  if (!key) {
+    throw new Error("Missing STRIPE_SECRET_KEY");
+  }
+
+  return new Stripe(key, {
+    apiVersion: "2026-02-25.clover",
+  });
+}
 
 export async function GET(req: Request) {
   try {
@@ -23,6 +31,7 @@ export async function GET(req: Request) {
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const stripe = getStripe();
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -41,7 +50,10 @@ export async function GET(req: Request) {
     });
 
     if (!session.url) {
-      return NextResponse.json({ error: "Stripe did not return a checkout URL" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Stripe did not return a checkout URL" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.redirect(session.url, 303);
