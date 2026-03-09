@@ -176,6 +176,24 @@ export default function AssessmentForm() {
       setSubmitting(true);
       setErr(null);
 
+      const unanswered = questions.filter((q) => {
+       const value = answers[q.id]?.score;
+       return value === null || value === undefined;
+      });
+
+      if (unanswered.length > 0) {
+       const firstMissing = unanswered[0];
+
+      const el = document.getElementById(`question-${firstMissing.id}`);
+       if (el) {
+         el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+      setErr(`Please answer all questions before submitting. ${unanswered.length} remaining.`);
+      setSubmitting(false);
+      return;
+    }
+
       const createRes = await fetch("/api/assessments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -387,8 +405,7 @@ export default function AssessmentForm() {
           <div className="assess-kicker">Cyber resilience maturity assessment</div>
           <h1 className="assess-title">Resiliscore Assessment</h1>
           <p className="assess-sub">
-            Score each statement from <strong>0 to 5</strong>. Unanswered questions can be left blank — they won’t be counted
-            in scoring.
+            Score each statement from <strong>0 to 5</strong>. All questions must be answered before results can be generated.
           </p>
 
           <div className="assess-progress">
@@ -431,7 +448,7 @@ export default function AssessmentForm() {
                 const num = idx + 1;
 
                 return (
-                  <div key={q.id} className="q card">
+                  <div key={q.id} id={`question-${q.id}`} className="q card">
                     <div className="q-top">
                       <div className="q-num">Q{num}</div>
                       <div className="q-text">{q.text}</div>
