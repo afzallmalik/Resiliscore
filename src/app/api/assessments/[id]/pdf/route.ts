@@ -658,6 +658,28 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       );
     }
 
+   if (assessment.reportUrl) {
+      const existing = await supabase.storage
+       .from("reports")
+       .download(assessment.reportUrl);
+
+   if (!existing.error && existing.data) {
+     const existingBytes = await existing.data.arrayBuffer();
+
+     const existingFilename =
+       assessment.reportUrl.split("/").pop() || `resiliscore-${assessment.id}.pdf`;
+
+     return new NextResponse(existingBytes, {
+       status: 200,
+       headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${existingFilename}"`,
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+}
+
     const overall = Number(assessment.overallScore ?? 0);
     const grade = sanitizeText(String(assessment.grade ?? "-"));
     const companyName = sanitizeText(String(assessment.companyName ?? "")).trim();
