@@ -196,7 +196,7 @@ export default function HomePage() {
                 SME cyber resilience maturity — simple, practical, evidence-led
               </div>
 
-              <h1>Understand your organisation&apos;s cyber resilience in 10 minutes</h1>
+              <h1>Understand your organisation&apos;s cyber resilience in minutes</h1>
 
               <p className="lead">
                 A fast, plain-English assessment that produces an executive-ready summary, ranked priorities, a 90-day plan, and an
