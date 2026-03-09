@@ -14,19 +14,23 @@ enum ReportTier {
 }
 
 model Assessment {
-  id              String     @id @default(uuid())
-  createdAt       DateTime   @default(now())
-  completedAt     DateTime?
-  model           String     @default("lite_v1")
-  overallScore    Decimal?   @db.Decimal(3, 2)
-  grade           String?
-  domainScores    Json?
-  email           String?
-  companyName     String?
-  industry        String?
-  feedback        Json?
-  emailCapturedAt DateTime?
-  reportTier      ReportTier @default(free)
+  id                String     @id @default(uuid())
+  createdAt         DateTime   @default(now())
+  completedAt       DateTime?
+  model             String     @default("lite_v1")
+  overallScore      Decimal?   @db.Decimal(3, 2)
+  grade             String?
+  domainScores      Json?
+  email             String?
+  companyName       String?
+  industry          String?
+  feedback          Json?
+  emailCapturedAt   DateTime?
+  reportTier        ReportTier @default(free)
+  reportUrl         String?
+  reportGeneratedAt DateTime?
+  reportEmailSentAt DateTime?
+  reportEmail       String?
 
   responses       Response[]
 }

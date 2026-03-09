@@ -4,8 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
 import path from "path";
+import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "nodejs";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 /**
  * ------------------------------
@@ -2794,6 +2800,35 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     const filename = safeCompany
       ? `resiliscore-${safeCompany}-${reportRef}.pdf`
       : `resiliscore-${reportRef}.pdf`;
+
+    const filePath = `${assessment.id}/${filename}`;
+
+    const uploadResult = await supabase.storage.from("reports").upload(filePath, pdfBytes, {
+      contentType: "application/pdf",
+      upsert: true,
+    });
+
+    if (uploadResult.error) {
+      throw new Error(`Supabase upload failed: ${uploadResult.error.message}`);
+    }
+
+    await prisma.assessment.update({
+      where: { id: assessment.id },
+      data: {
+        reportUrl: filePath,
+        reportGeneratedAt: new Date(),
+        reportEmail: assessment.email ?? null,
+      },
+    });
+
+    return new NextResponse(pdfBytes, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${filename}"`,
+        "Cache-Control": "no-store",
+      },
+    });
 
     return new NextResponse(pdfBytes, {
       status: 200,
