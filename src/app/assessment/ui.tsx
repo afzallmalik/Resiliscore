@@ -110,6 +110,8 @@ export default function AssessmentForm() {
 
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [unansweredIds, setUnansweredIds] = useState<Set<string>>(new Set());;
 
   useEffect(() => {
     if (!started) return;
