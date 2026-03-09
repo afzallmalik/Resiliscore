@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import { createClient } from "@supabase/supabase-js";
 
+export const dynamic = "force-dynamic"
 export const runtime = "nodejs";
 
 const supabase = createClient(
