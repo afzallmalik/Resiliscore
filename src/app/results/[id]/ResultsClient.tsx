@@ -152,16 +152,50 @@ export default function ResultsClient({ id }: { id: string }) {
   }, [id]);
 
   useEffect(() => {
-    if (!upgraded) return;
+  if (!upgraded) return;
 
-    let cancelled = false;
-    setNotice("Payment received. Unlocking your premium report…");
+  let cancelled = false;
 
-    const delays = [800, 1400, 2200, 3200];
-    (async () => {
+  (async () => {
+    try {
+      setNotice("Payment received. Confirming your premium access…");
+
+      try {
+        await fetch(`/api/assessments/${id}/confirm-upgrade`, {
+          method: "POST",
+          cache: "no-store",
+        });
+      } catch {
+        // ignore here; polling below may still succeed if webhook lands
+      }
+
+      if (cancelled) return;
+
+      const first = await load();
+      const firstTier = (first?.report_tier ?? first?.reportTier ?? "free") as "free" | "premium";
+
+      if (firstTier === "premium") {
+        setNotice("Premium report unlocked ✅");
+        return;
+      }
+
+      setNotice("Payment received. Unlocking your premium report…");
+
+      const delays = [800, 1400, 2200, 3200];
+
       for (const d of delays) {
         await new Promise((r) => setTimeout(r, d));
         if (cancelled) return;
+
+        try {
+          await fetch(`/api/assessments/${id}/confirm-upgrade`, {
+            method: "POST",
+            cache: "no-store",
+          });
+        } catch {
+          // ignore transient errors
+        }
+
         try {
           const latest = await load();
           const tier = (latest?.report_tier ?? latest?.reportTier ?? "free") as "free" | "premium";
@@ -173,13 +207,17 @@ export default function ResultsClient({ id }: { id: string }) {
           // ignore transient errors during polling
         }
       }
-      setNotice("If your report is still locked, refresh once — the webhook may be a few seconds behind.");
-    })();
 
-    return () => {
-      cancelled = true;
-    };
-  }, [upgraded]);
+      setNotice("If your report is still locked, refresh once — payment may still be confirming.");
+    } catch {
+      setNotice("If your report is still locked, refresh once — payment may still be confirming.");
+    }
+  })();
+
+  return () => {
+    cancelled = true;
+  };
+}, [upgraded, id]);
 
   const normalized = useMemo(() => {
     const overall = toNum(data?.overall_score ?? data?.overallScore ?? 0, 0);
