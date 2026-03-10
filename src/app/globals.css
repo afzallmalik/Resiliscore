@@ -412,12 +412,6 @@ button {
   max-width: 760px;
 }
 
-.sectionHeadingDark h2,
-.sectionHeadingDark p,
-.sectionHeadingDark .sectionEyebrow {
-  color: white;
-}
-
 .sectionHeading h2 {
   margin: 0;
   font-size: 34px;
@@ -438,6 +432,16 @@ button {
   font-size: 12px;
   font-weight: 800;
   margin-bottom: 8px;
+}
+
+.sectionHeadingDark h2 { 
+color: var(--text-on-dark);
+}
+.sectionHeadingDark p { 
+color: var(--muted-on-dark);
+}
+.sectionHeadingDark .sectionEyebrow {
+  color: rgba(141, 240, 203, 0.95);
 }
 
 .sectionEyebrow.dark {
