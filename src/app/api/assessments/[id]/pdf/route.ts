@@ -3177,9 +3177,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       throw new Error("Supabase client not configured");
     }
 
-    const uploadResult = await supabase.storage.from("reports").upload(filePath, pdfBytes, {
-      contentType: "application/pdf",
-      upsert: true,
+    const uploadResult = await supabase.storage
+	.from("reports")
+	.upload(filePath, pdfBytes, {
+          contentType: "application/pdf",
+          upsert: true,
     });
 
     if (uploadResult.error) {
