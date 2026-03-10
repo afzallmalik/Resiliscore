@@ -38,7 +38,7 @@ export async function GET(req: Request) {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: "price_1T8pBv0PKdwFCGJ6lGoX53qC",
+          price: "price_1T8iIS0PKdwFCGJ6hFjPxYsy",
           quantity: 1,
         },
       ],
