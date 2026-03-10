@@ -1,6 +1,7 @@
 // src/app/api/assessments/route.ts
 export const dynamic = "force-dynamic";
 
+import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
@@ -25,8 +26,9 @@ export async function POST(req: Request) {
   }
 
   const { model, email, companyName, industry } = parsed.data;
-
   const modelVersion = model && model.trim() ? model.trim() : ACTIVE_MODEL_VERSION;
+
+  const downloadToken = crypto.randomBytes(32).toString("hex");
 
   const a = await prisma.assessment.create({
     data: {
@@ -35,9 +37,17 @@ export async function POST(req: Request) {
       companyName: companyName ?? null,
       industry,
       emailCapturedAt: new Date(),
+      downloadToken,
     },
-    select: { id: true },
+    select: {
+      id: true,
+      downloadToken: true,
+    },
   });
 
-  return NextResponse.json({ id: a.id, modelVersion });
+  return NextResponse.json({
+    id: a.id,
+    modelVersion,
+    downloadToken: a.downloadToken,
+  });
 }

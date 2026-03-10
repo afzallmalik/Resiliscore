@@ -32,392 +32,482 @@ const EVIDENCE = [
 
 export default function MethodologyPage() {
   return (
-    <main>
-      <div className="wrap">
-        {/* HEADER */}
-        <div className="panel hero">
-          <div className="head">
-            <div>
-              <div className="muted small">Resiliscore Methodology</div>
-              <h1 className="title">How your score is calculated</h1>
-              <p className="sub">
-                A practical 0–5 maturity model designed for SMEs. It measures whether controls exist,
-                operate consistently, and can be evidenced.
-              </p>
-            </div>
-
-            <div className="actions">
-              <Link className="btn primary" href="/assessment">
-                Start free assessment
-              </Link>
-              <Link className="btn ghost" href="/">
-                Back to home
-              </Link>
-            </div>
-          </div>
+    <main className="md-shell">
+      <section className="md-hero">
+        <div className="md-heroCopy">
+          <div className="md-kicker">Resiliscore Methodology</div>
+          <h1>How your score is calculated</h1>
+          <p className="md-lead">
+            A practical 0–5 maturity model designed for SMEs. It measures whether controls exist,
+            operate consistently, and can be evidenced.
+          </p>
         </div>
 
-        {/* TILE SECTION */}
-        <div className="tileGrid">
-          <div className="panel tile">
-            <div className="sectionTitle">What Resiliscore measures</div>
-            <ul className="bullets">
+        <div className="md-actions">
+          <Link className="md-btn md-btnPrimary" href="/assessment">
+            Start free assessment
+          </Link>
+          <Link className="md-btn md-btnSecondary" href="/">
+            Back to home
+          </Link>
+        </div>
+      </section>
+
+      <section className="md-lightSection">
+        <div className="md-gridTwo">
+          <div className="md-card">
+            <div className="md-sectionTitle">What Resiliscore measures</div>
+            <ul className="md-list">
               <li>
                 <b>Controls</b> — the right safeguards exist.
               </li>
               <li>
-                <b>Consistency</b> — they operate reliably day-to-day (not just “on paper”).
+                <b>Consistency</b> — they operate reliably day-to-day, not just on paper.
               </li>
               <li>
-                <b>Evidence</b> — you can prove it quickly if asked (logs, actions, policies, tests).
+                <b>Evidence</b> — you can prove it quickly if asked with logs, actions, policies or tests.
               </li>
             </ul>
           </div>
 
-          <div className="panel tile">
-            <div className="sectionTitle">How to answer</div>
-            <ul className="bullets">
+          <div className="md-card">
+            <div className="md-sectionTitle">How to answer</div>
+            <ul className="md-list">
               <li>Score what is true <b>today</b>.</li>
               <li>If uneven across teams, score lower.</li>
               <li>When unsure, choose the lower score.</li>
-              <li>Think: “could I evidence this quickly?”</li>
+              <li>Think: could I evidence this quickly?</li>
             </ul>
           </div>
+        </div>
+      </section>
 
-          <div className="panel tileWide strongBlock">
-            <div className="sectionTitle">Domains covered</div>
-            <div className="muted small sectionIntro">
-              Resiliscore focuses on the areas that most often cause disruption for SMEs — operations, access, recovery,
-              suppliers, and response.
-            </div>
-
-            <div className="domainGrid">
-              {DOMAINS_V13.map((d) => (
-                <div key={d.code} className="domainCard">
-                  <div className="domainShort">{d.short}</div>
-                  <div className="domainFull muted">{d.code}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel tileWide">
-            <div className="sectionTitle">Evidence checklist</div>
-            <div className="muted small sectionIntro">
-              You don’t need perfect documentation. You need clear ownership + simple evidence you can find quickly.
-            </div>
-
-            <div className="evidenceGrid">
-              {EVIDENCE.map((e) => (
-                <div key={e.title} className="card">
-                  <div className="cardTitle">{e.title}</div>
-                  <ul className="smallList">
-                    {e.examples.map((x) => (
-                      <li key={x}>{x}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            <div className="note">
-              Consultant view: evidence isn’t paperwork — it reduces “we think we do this” risk and proves consistency.
-            </div>
-          </div>
+      <section className="md-darkSection">
+        <div className="md-sectionHead">
+          <div className="md-sectionEyebrow">Domains covered</div>
+          <h2>The resilience areas Resiliscore focuses on</h2>
+          <p>
+            Resiliscore focuses on the areas that most often cause disruption for SMEs — operations, access,
+            recovery, suppliers and response.
+          </p>
         </div>
 
-        {/* STACKED SECTION */}
-        <div className="stack">
-          <div className="panel">
-            <div className="sectionTitle">How scoring works</div>
-
-            <div className="copy">
-              Resiliscore keeps scoring intentionally simple so it’s useful for decision-making, not just reporting.
+        <div className="md-domainGrid">
+          {DOMAINS_V13.map((d) => (
+            <div key={d.code} className="md-domainCard">
+              <div className="md-domainShort">{d.short}</div>
+              <div className="md-domainFull">{d.code}</div>
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="subBlock">
-              <div className="miniTitle">Scoring model</div>
-              <ul className="bullets">
-                <li>Each question is scored 0–5.</li>
-                <li>Domain score = average of its questions.</li>
-                <li>Overall score = average of domain scores.</li>
-                <li>Grade (A–E) is derived from overall score.</li>
-              </ul>
-            </div>
+      <section className="md-lightSection">
+        <div className="md-sectionHead md-sectionHeadLight">
+          <div className="md-sectionEyebrow">Evidence checklist</div>
+          <h2>What good evidence usually looks like</h2>
+          <p>
+            You do not need perfect documentation. You need clear ownership and simple evidence you can find quickly.
+          </p>
+        </div>
 
-            <div className="divider" />
-
-            <div className="subBlock">
-              <div className="miniTitle">Grade bands</div>
-              <div className="gradeTable">
-                {GRADE_BANDS.map((g) => (
-                  <div key={g.grade} className="gradeRow">
-                    <div className="gradeBadge">{g.grade}</div>
-                    <div className="gradeRange">{g.range}</div>
-                    <div>{g.meaning}</div>
-                  </div>
+        <div className="md-evidenceGrid">
+          {EVIDENCE.map((e) => (
+            <div key={e.title} className="md-card">
+              <div className="md-cardTitle">{e.title}</div>
+              <ul className="md-smallList">
+                {e.examples.map((x) => (
+                  <li key={x}>{x}</li>
                 ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="panel flatPanel">
-            <div className="sectionTitle">Framework mapping</div>
-
-            <p className="copy">
-              Resiliscore includes framework mapping so SMEs can translate improvements into language that customers,
-              auditors, insurers, and procurement teams recognise. It helps you show reasonable steps without needing a
-              full-time compliance team.
-            </p>
-
-            <div className="mapGrid">
-              <div className="mapCard">
-                <div className="mapTitle">NIST CSF</div>
-                <div className="mapText">
-                  A widely used cyber framework organised around outcomes (Identify, Protect, Detect, Respond, Recover).
-                  It helps explain <b>what</b> you’re improving and <b>why</b> it reduces risk.
-                </div>
-              </div>
-
-              <div className="mapCard">
-                <div className="mapTitle">ISO/IEC 27001 / 27002 themes</div>
-                <div className="mapText">
-                  ISO gives a control-oriented view (policies, access, operations, supplier controls, incident handling).
-                  It helps show your controls are aligned to recognised good practice.
-                </div>
-              </div>
-
-              <div className="mapCard">
-                <div className="mapTitle">UK “reasonable steps” alignment</div>
-                <div className="mapText">
-                  Helps you evidence due diligence expectations in the UK environment — useful for customer assurance,
-                  supplier onboarding, and demonstrating governance.
-                </div>
-              </div>
-            </div>
-
-            <p className="muted small footNote">
-              Note: Resiliscore is not a certification. Mapping supports alignment and reporting — it does not replace
-              formal audit or certification processes.
-            </p>
-          </div>
-
-          <div className="panel">
-            <div className="sectionTitle">What you get after the assessment</div>
-
-            <p className="copy">
-              You’ll receive a clear, board-friendly baseline and a practical improvement plan. The goal is to reduce
-              disruption risk quickly, focus investment where it matters, and make it easier to answer customer and
-              procurement security questions with confidence.
-            </p>
-
-            <div className="subBlock">
-              <ul className="bullets">
-                <li><b>Overall score + grade</b> — a simple maturity baseline you can track over time.</li>
-                <li><b>Radar + domain snapshot</b> — a clear visual of strengths vs weak points.</li>
-                <li><b>Domain breakdown</b> — what each domain means, what your score implies, and what to do next.</li>
-                <li><b>90-day action plan</b> — practical actions designed for SMEs (owners + evidence focus).</li>
-                <li><b>Shareable PDF report</b> — useful for internal buy-in and external assurance conversations.</li>
               </ul>
             </div>
+          ))}
+        </div>
 
-            <div className="note">
-              Best practice: treat this as a working plan. Pick owners, set dates, and retake quarterly to show progress.
+        <div className="md-note">
+          Consultant view: evidence is not paperwork for its own sake — it reduces “we think we do this”
+          risk and proves consistency.
+        </div>
+      </section>
+
+      <section className="md-lightSection">
+        <div className="md-sectionHead md-sectionHeadLight">
+          <div className="md-sectionEyebrow">Scoring model</div>
+          <h2>How scoring works</h2>
+          <p>
+            Resiliscore keeps scoring intentionally simple so it is useful for decision-making, not just reporting.
+          </p>
+        </div>
+
+        <div className="md-gridTwo">
+          <div className="md-card">
+            <div className="md-cardTitle">Scoring model</div>
+            <ul className="md-list">
+              <li>Each question is scored 0–5.</li>
+              <li>Domain score = average of its questions.</li>
+              <li>Overall score = average of domain scores.</li>
+              <li>Grade (A–E) is derived from overall score.</li>
+            </ul>
+          </div>
+
+          <div className="md-card">
+            <div className="md-cardTitle">Grade bands</div>
+            <div className="md-gradeTable">
+              {GRADE_BANDS.map((g) => (
+                <div key={g.grade} className="md-gradeRow">
+                  <div className="md-gradeBadge">{g.grade}</div>
+                  <div className="md-gradeRange">{g.range}</div>
+                  <div className="md-gradeMeaning">{g.meaning}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="md-darkSection">
+        <div className="md-sectionHead">
+          <div className="md-sectionEyebrow">Framework mapping</div>
+          <h2>Why the mapping exists</h2>
+          <p>
+            Resiliscore includes framework mapping so SMEs can translate improvements into language customers,
+            auditors, insurers and procurement teams recognise.
+          </p>
+        </div>
+
+        <div className="md-mapGrid">
+          <div className="md-mapCard">
+            <div className="md-mapTitle">NIST CSF</div>
+            <div className="md-mapText">
+              A widely used cyber framework organised around outcomes such as Identify, Protect, Detect,
+              Respond and Recover. It helps explain what you are improving and why it reduces risk.
             </div>
           </div>
 
-          <div className="panel flatPanel">
-            <div className="sectionTitle">Limitations</div>
-            <ul className="bullets">
-              <li>Indicative maturity snapshot based on responses.</li>
-              <li>Not a penetration test, forensic review, or formal audit.</li>
-              <li>Scores improve fastest when actions have owners, dates, and evidence (not just intent).</li>
-              <li>Use results to prioritise: lift the weakest domains first to remove single points of failure.</li>
-            </ul>
+          <div className="md-mapCard">
+            <div className="md-mapTitle">ISO/IEC 27001 / 27002 themes</div>
+            <div className="md-mapText">
+              ISO gives a control-oriented view across policies, access, operations, supplier controls and
+              incident handling. It helps show your controls align to recognised good practice.
+            </div>
+          </div>
+
+          <div className="md-mapCard">
+            <div className="md-mapTitle">UK reasonable steps alignment</div>
+            <div className="md-mapText">
+              Helps you evidence due diligence expectations in the UK environment and supports customer
+              assurance, supplier onboarding and governance conversations.
+            </div>
           </div>
         </div>
-      </div>
+
+        <div className="md-footNote">
+          Note: Resiliscore is not a certification. Mapping supports alignment and reporting — it does not
+          replace formal audit or certification processes.
+        </div>
+      </section>
+
+      <section className="md-lightSection">
+        <div className="md-sectionHead md-sectionHeadLight">
+          <div className="md-sectionEyebrow">Outputs</div>
+          <h2>What you get after the assessment</h2>
+          <p>
+            You receive a clear, board-friendly baseline and a practical improvement plan designed to reduce
+            disruption risk quickly.
+          </p>
+        </div>
+
+        <div className="md-card">
+          <ul className="md-list">
+            <li><b>Overall score + grade</b> — a simple maturity baseline you can track over time.</li>
+            <li><b>Radar + domain snapshot</b> — a visual view of strengths versus weak points.</li>
+            <li><b>Domain breakdown</b> — what each domain means, what your score implies, and what to do next.</li>
+            <li><b>90-day action plan</b> — practical SME-friendly actions with owners and evidence focus.</li>
+            <li><b>Shareable PDF report</b> — useful for internal buy-in and external assurance discussions.</li>
+          </ul>
+        </div>
+
+        <div className="md-note">
+          Best practice: treat this as a working plan. Pick owners, set dates, and retake quarterly to show progress.
+        </div>
+      </section>
+
+      <section className="md-lightSection">
+        <div className="md-sectionHead md-sectionHeadLight">
+          <div className="md-sectionEyebrow">Limitations</div>
+          <h2>What this does not replace</h2>
+        </div>
+
+        <div className="md-card">
+          <ul className="md-list">
+            <li>Indicative maturity snapshot based on responses.</li>
+            <li>Not a penetration test, forensic review, or formal audit.</li>
+            <li>Scores improve fastest when actions have owners, dates and evidence, not just intent.</li>
+            <li>Use results to prioritise: lift the weakest domains first to remove single points of failure.</li>
+          </ul>
+        </div>
+      </section>
 
       <style>{`
-        .wrap { margin-top: 20px; display: grid; gap: 20px; }
-
-        .panel {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          padding: 24px;
-          box-shadow: var(--shadow);
-        }
-
-        .flatPanel {
-          background: rgba(255,255,255,0.02);
-        }
-
-        .strongBlock {
-          background: rgba(255,255,255,0.035);
-        }
-
-        .hero { padding: 28px; }
-
-        .head {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 16px;
-          flex-wrap: wrap;
-        }
-
-        .title { margin: 6px 0 0; font-size: 28px; }
-        .sub { margin-top: 10px; color: var(--muted); max-width: 70ch; line-height: 1.6; }
-
-        .muted { color: var(--muted); }
-        .small { font-size: 13px; }
-
-        .actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        .btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          height: 40px;
-          padding: 0 14px;
-          border-radius: 12px;
-          border: 1px solid var(--border);
-          background: rgba(255,255,255,0.03);
-          color: var(--text);
-          text-decoration: none;
-          font-weight: 700;
-        }
-        .btn:hover { background: rgba(255,255,255,0.06); }
-        .btn.ghost { background: transparent; }
-        .btn.primary { background: rgba(94,234,106,0.12); border-color: rgba(94,234,106,0.25); }
-
-        .tileGrid {
+        .md-shell {
           display: grid;
-          grid-template-columns: 1fr 1fr;
           gap: 20px;
         }
 
-        .tileWide { grid-column: 1 / -1; }
-
-        @media (max-width: 900px) {
-          .tileGrid { grid-template-columns: 1fr; }
+        .md-hero,
+        .md-darkSection {
+          border-radius: 24px;
+          padding: 24px;
+          border: 1px solid rgba(255,255,255,0.10);
+          background:
+            radial-gradient(560px 260px at 0% 0%, rgba(13,177,123,0.14), transparent 60%),
+            linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
         }
 
-        .sectionTitle { font-weight: 900; font-size: 16px; margin-bottom: 12px; }
-        .miniTitle { font-weight: 800; margin-bottom: 10px; }
-
-        .sectionIntro {
-          margin-top: -2px;
-          margin-bottom: 14px;
-          line-height: 1.6;
+        .md-hero {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 18px;
+          flex-wrap: wrap;
         }
 
-        .copy { color: var(--text); line-height: 1.65; margin-top: -2px; margin-bottom: 12px; }
-
-        .subBlock {
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 14px;
-          background: rgba(255,255,255,0.02);
-          padding: 14px;
+        .md-kicker,
+        .md-sectionEyebrow {
+          color: rgba(141,240,203,0.95);
+          font-size: 12px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
         }
 
-        .bullets { padding-left: 18px; line-height: 1.7; }
-        .bullets li { margin: 6px 0; }
-
-        .divider { height: 1px; background: var(--border); margin: 18px 0; }
-
-        .domainGrid {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 12px;
-        }
-        @media (max-width: 900px) {
-          .domainGrid { grid-template-columns: 1fr; }
+        .md-hero h1,
+        .md-sectionHead h2 {
+          margin: 8px 0 0;
+          color: rgba(255,255,255,0.96);
+          font-size: 38px;
+          line-height: 1.08;
+          letter-spacing: -0.02em;
         }
 
-        .domainCard {
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          padding: 12px;
-          background: rgba(255,255,255,0.02);
+        .md-lead,
+        .md-sectionHead p {
+          margin: 12px 0 0;
+          color: rgba(255,255,255,0.72);
+          line-height: 1.7;
+          max-width: 72ch;
         }
-        .domainShort { font-weight: 800; }
-        .domainFull { font-size: 13px; margin-top: 4px; }
 
-        .evidenceGrid {
+        .md-actions {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+
+        .md-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 46px;
+          padding: 0 16px;
+          border-radius: 999px;
+          text-decoration: none;
+          font-weight: 800;
+          transition: transform 0.18s ease, background 0.18s ease;
+        }
+
+        .md-btn:hover {
+          transform: translateY(-1px);
+        }
+
+        .md-btnPrimary {
+          background: var(--primary);
+          color: #fff;
+          box-shadow: 0 8px 20px rgba(13,177,123,0.22);
+        }
+
+        .md-btnPrimary:hover {
+          background: var(--primary-dark);
+        }
+
+        .md-btnSecondary {
+          background: rgba(255,255,255,0.06);
+          color: rgba(255,255,255,0.94);
+          border: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .md-btnSecondary:hover {
+          background: rgba(255,255,255,0.10);
+        }
+
+        .md-lightSection {
+          border-radius: 24px;
+          padding: 24px;
+          background: #ffffff;
+          border: 1px solid rgba(6,27,34,0.08);
+          box-shadow: 0 10px 28px rgba(3,16,22,0.08);
+        }
+
+        .md-sectionHeadLight h2 {
+          color: #061b22;
+        }
+
+        .md-sectionHeadLight p,
+        .md-sectionHeadLight .md-sectionEyebrow {
+          color: rgba(6,27,34,0.72);
+        }
+
+        .md-gridTwo {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 12px;
-        }
-        @media (max-width: 900px) {
-          .evidenceGrid { grid-template-columns: 1fr; }
-        }
-        .card {
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          padding: 14px;
-          background: rgba(255,255,255,0.02);
-        }
-        .cardTitle { font-weight: 900; margin-bottom: 8px; }
-        .smallList { margin: 0; padding-left: 18px; line-height: 1.55; }
-        .smallList li { margin: 6px 0; }
-
-        .note {
-          margin-top: 14px;
-          padding: 12px 14px;
-          border-radius: 14px;
-          border: 1px solid var(--border);
-          background: rgba(255,255,255,0.02);
-          line-height: 1.6;
+          gap: 16px;
         }
 
-        .gradeTable { display: grid; gap: 10px; }
-        .gradeRow {
+        .md-card {
+          border-radius: 18px;
+          padding: 18px;
+          background: #fbfcfd;
+          border: 1px solid rgba(6,27,34,0.08);
+        }
+
+        .md-sectionTitle,
+        .md-cardTitle {
+          color: #061b22;
+          font-size: 18px;
+          font-weight: 850;
+          margin-bottom: 10px;
+        }
+
+        .md-list,
+        .md-smallList {
+          margin: 0;
+          padding-left: 18px;
+          color: rgba(6,27,34,0.78);
+          line-height: 1.7;
+        }
+
+        .md-list li + li,
+        .md-smallList li + li {
+          margin-top: 8px;
+        }
+
+        .md-domainGrid,
+        .md-evidenceGrid,
+        .md-mapGrid {
+          margin-top: 18px;
+          display: grid;
+          gap: 14px;
+        }
+
+        .md-domainGrid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .md-evidenceGrid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .md-mapGrid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .md-domainCard,
+        .md-mapCard {
+          border-radius: 18px;
+          padding: 16px;
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .md-domainShort,
+        .md-mapTitle {
+          color: rgba(255,255,255,0.95);
+          font-weight: 850;
+          font-size: 17px;
+        }
+
+        .md-domainFull,
+        .md-mapText,
+        .md-footNote {
+          margin-top: 6px;
+          color: rgba(255,255,255,0.72);
+          line-height: 1.65;
+        }
+
+        .md-note {
+          margin-top: 16px;
+          border-radius: 16px;
+          padding: 14px 16px;
+          background: rgba(13,177,123,0.08);
+          border: 1px solid rgba(13,177,123,0.16);
+          color: rgba(6,27,34,0.82);
+          line-height: 1.65;
+        }
+
+        .md-gradeTable {
+          display: grid;
+          gap: 10px;
+        }
+
+        .md-gradeRow {
           display: grid;
           grid-template-columns: 48px 120px 1fr;
           gap: 10px;
           align-items: center;
           padding: 12px;
           border-radius: 14px;
-          border: 1px solid var(--border);
-          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(6,27,34,0.08);
+          background: #ffffff;
         }
-        .gradeBadge {
-          width: 32px;
-          height: 32px;
-          border-radius: 10px;
+
+        .md-gradeBadge {
+          width: 34px;
+          height: 34px;
+          border-radius: 12px;
           display: grid;
           place-items: center;
+          background: rgba(13,177,123,0.10);
+          color: #0a8d62;
           font-weight: 900;
-          border: 1px solid var(--border);
-          background: rgba(255,255,255,0.03);
         }
-        .gradeRange { font-weight: 800; color: var(--muted); }
 
-        .mapGrid {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 12px;
-          margin-top: 12px;
+        .md-gradeRange {
+          color: rgba(6,27,34,0.65);
+          font-weight: 800;
         }
+
+        .md-gradeMeaning {
+          color: rgba(6,27,34,0.82);
+        }
+
         @media (max-width: 900px) {
-          .mapGrid { grid-template-columns: 1fr; }
+          .md-gridTwo,
+          .md-domainGrid,
+          .md-evidenceGrid,
+          .md-mapGrid {
+            grid-template-columns: 1fr;
+          }
         }
-        .mapCard {
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          padding: 14px;
-          background: rgba(255,255,255,0.02);
-        }
-        .mapTitle { font-weight: 900; margin-bottom: 6px; }
-        .mapText { line-height: 1.6; color: var(--text); }
 
-        .footNote {
-          margin-top: 14px;
-          padding-top: 12px;
-          border-top: 1px solid var(--border);
+        @media (max-width: 700px) {
+          .md-hero,
+          .md-darkSection,
+          .md-lightSection {
+            padding: 18px;
+          }
+
+          .md-hero h1,
+          .md-sectionHead h2 {
+            font-size: 30px;
+          }
+
+          .md-gradeRow {
+            grid-template-columns: 48px 1fr;
+          }
+
+          .md-gradeMeaning {
+            grid-column: 1 / -1;
+          }
         }
       `}</style>
     </main>

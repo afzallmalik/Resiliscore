@@ -64,9 +64,7 @@ function normaliseQuestions(payload: QuestionsPayload | null): QuestionUI[] {
 
       const domain_name = q.domain_name ?? q.domainName ?? domainFromMap?.name ?? String(domain_code);
       const domain_order = Number(q.domain_order ?? q.domainOrder ?? domainFromMap?.order ?? 999) || 999;
-
       const order = Number(q.question_number ?? q.questionNumber ?? q.order ?? q.index ?? 0) || 0;
-
       const text = String(q.text ?? q.prompt ?? "");
       const help_text_raw = q.help_text ?? q.helpText ?? q.help ?? "";
       const help_text = help_text_raw ? String(help_text_raw) : undefined;
@@ -94,6 +92,17 @@ function isValidEmail(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
+function DomainIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M12 2 5 5v6c0 5 3.4 9.4 7 11 3.6-1.6 7-6 7-11V5l-7-3Zm0 2.2 5 2.14V11c0 3.85-2.42 7.18-5 8.53C9.42 18.18 7 14.85 7 11V6.34l5-2.14Z"
+      />
+    </svg>
+  );
+}
+
 export default function AssessmentForm() {
   const router = useRouter();
 
@@ -111,12 +120,13 @@ export default function AssessmentForm() {
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [unansweredIds, setUnansweredIds] = useState<Set<string>>(new Set());;
+  const [unansweredIds, setUnansweredIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!started) return;
 
     let active = true;
+
     (async () => {
       try {
         setLoading(true);
@@ -159,10 +169,14 @@ export default function AssessmentForm() {
 
   const grouped = useMemo(() => {
     const map = new Map<string, { name: string; order: number; items: QuestionUI[] }>();
+
     for (const q of questions) {
-      if (!map.has(q.domain_code)) map.set(q.domain_code, { name: q.domain_name, order: q.domain_order, items: [] });
+      if (!map.has(q.domain_code)) {
+        map.set(q.domain_code, { name: q.domain_name, order: q.domain_order, items: [] });
+      }
       map.get(q.domain_code)!.items.push(q);
     }
+
     return Array.from(map.entries())
       .map(([code, v]) => ({
         code,
@@ -177,28 +191,27 @@ export default function AssessmentForm() {
     try {
       setSubmitting(true);
       setErr(null);
+      setSubmitError(null);
 
       const unanswered = questions.filter((q) => {
-       const value = answers[q.id]?.score;
-       return value === null || value === undefined;
-     });
+        const value = answers[q.id]?.score;
+        return value === null || value === undefined;
+      });
 
-     if (unanswered.length > 0) {
-       const missingIds = new Set(unanswered.map((q) => q.id));
-       setUnansweredIds(missingIds);
-       setSubmitError(
-         `Please answer all questions before submitting. ${unanswered.length} remaining.`
-       );
+      if (unanswered.length > 0) {
+        const missingIds = new Set(unanswered.map((q) => q.id));
+        setUnansweredIds(missingIds);
+        setSubmitError(`Please answer all questions before submitting. ${unanswered.length} remaining.`);
 
-       const firstMissing = unanswered[0];
-       const el = document.getElementById(`question-${firstMissing.id}`);
-       if (el) {
-         el.scrollIntoView({ behavior: "smooth", block: "center" });
-       }  
+        const firstMissing = unanswered[0];
+        const el = document.getElementById(`question-${firstMissing.id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
 
-       setSubmitting(false);
-       return;
-     }
+        setSubmitting(false);
+        return;
+      }
 
       const createRes = await fetch("/api/assessments", {
         method: "POST",
@@ -258,240 +271,464 @@ export default function AssessmentForm() {
 
     return (
       <main>
-        <div className="card" style={{ padding: 26 }}>
-          <h1 style={{ marginTop: 0 }}>Start Free Assessment</h1>
-
-          <p className="muted" style={{ maxWidth: "80ch", marginBottom: 10 }}>
-            Complete your free cyber resilience assessment to receive your dashboard results and resilience snapshot.
-          </p>
-
-          <p className="muted" style={{ maxWidth: "80ch", marginBottom: 18 }}>
-            After completion, you’ll have the option to unlock the full premium PDF report for <strong style={{ color: "var(--text)" }}>£99</strong>.
-          </p>
-
-          <div
-            style={{
-              border: "1px solid var(--border)",
-              borderRadius: 14,
-              background: "rgba(255,255,255,0.02)",
-              padding: 16,
-              display: "grid",
-              gap: 8,
-              maxWidth: 720,
-              marginBottom: 18,
-            }}
-          >
-            <div style={{ fontWeight: 700 }}>Included free</div>
-            <div className="muted">Overall score, grade, domain dashboard, and top priorities.</div>
-
-            <div style={{ fontWeight: 700, marginTop: 8 }}>Premium report (£99)</div>
-            <div className="muted">
-              Full branded PDF report, detailed domain analysis, tailored premium insight pages, 30/60/90 plan, and implementation checklist.
-            </div>
-          </div>
-
-          <div style={{ display: "grid", gap: 14, marginTop: 18, maxWidth: 560 }}>
+        <div className="af-startCard">
+          <div className="af-startGrid">
             <div>
-              <div className="muted" style={{ marginBottom: 6 }}>Email (required)</div>
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@company.com"
-                style={{
-                  width: "100%",
-                  padding: "12px 12px",
-                  borderRadius: 12,
-                  border: "1px solid var(--border)",
-                  background: "rgba(255,255,255,0.02)",
-                  color: "var(--text)",
-                  outline: "none",
-                }}
-              />
-              {!emailOk ? (
-                <div className="muted" style={{ marginTop: 6, color: "rgba(255,120,120,0.9)" }}>
-                  Please enter a valid email to start the assessment.
+              <div className="af-startEyebrow">Free dashboard first</div>
+              <h2>Start your assessment</h2>
+              <p className="af-startLead">
+                Complete your free cyber resilience assessment to receive your dashboard results and resilience snapshot.
+              </p>
+
+              <div className="af-tierGrid">
+                <div className="af-tierCard">
+                  <div className="af-tierTitle">Included free</div>
+                  <div className="af-tierText">
+                    Overall score, grade, domain dashboard, and top priorities.
+                  </div>
                 </div>
-              ) : null}
+
+                <div className="af-tierCard af-tierCardAccent">
+                  <div className="af-tierTitle">Premium report (£99)</div>
+                  <div className="af-tierText">
+                    Full branded PDF report, detailed domain analysis, tailored insight pages, 30/60/90 plan, and implementation checklist.
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <div className="muted" style={{ marginBottom: 6 }}>Company name (optional)</div>
-              <input
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Your company name"
-                style={{
-                  width: "100%",
-                  padding: "12px 12px",
-                  borderRadius: 12,
-                  border: "1px solid var(--border)",
-                  background: "rgba(255,255,255,0.02)",
-                  color: "var(--text)",
-                  outline: "none",
-                }}
-              />
-            </div>
+            <div className="af-formPanel">
+              <div className="af-field">
+                <label className="af-label">Email (required)</label>
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  className="af-input"
+                />
+                {!emailOk ? (
+                  <div className="af-errorText">Please enter a valid email to start the assessment.</div>
+                ) : null}
+              </div>
 
-            <div>
-              <div className="muted" style={{ marginBottom: 6 }}>Industry (required)</div>
-              <select
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "12px 12px",
-                  borderRadius: 12,
-                  border: "1px solid var(--border)",
-                  background: "rgba(255,255,255,0.02)",
-                  color: "var(--text)",
-                  outline: "none",
-                }}
-              >
-                <option value="">Select an industry…</option>
-                {INDUSTRIES.map((x) => (
-                  <option key={x} value={x}>{x}</option>
-                ))}
-              </select>
-            </div>
+              <div className="af-field">
+                <label className="af-label">Company name (optional)</label>
+                <input
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  placeholder="Your company name"
+                  className="af-input"
+                />
+              </div>
 
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 6 }}>
-              <button
-                className="btn primary"
-                type="button"
-                disabled={!canStart}
-                onClick={() => setStarted(true)}
-              >
-                Start questions
-              </button>
+              <div className="af-field">
+                <label className="af-label">Industry (required)</label>
+                <select value={industry} onChange={(e) => setIndustry(e.target.value)} className="af-input">
+                  <option value="">Select an industry…</option>
+                  {INDUSTRIES.map((x) => (
+                    <option key={x} value={x}>
+                      {x}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-              <a className="btn" href="/methodology">
-                Read methodology
-              </a>
-            </div>
+              <div className="af-startActions">
+                <button className="af-btn af-btnPrimary" type="button" disabled={!canStart} onClick={() => setStarted(true)}>
+                  Start questions
+                </button>
 
-            <div className="muted" style={{ fontSize: 13, marginTop: 4 }}>
-              Free dashboard included. Premium PDF report available after completion for £99.
+                <a className="af-btn af-btnSecondary" href="/methodology">
+                  Read methodology
+                </a>
+              </div>
+
+              <div className="af-smallNote">
+                Free dashboard included. Premium PDF report available after completion for £99.
+              </div>
             </div>
           </div>
         </div>
+
+        <style>{`
+          .af-startCard {
+            border-radius: 24px;
+            padding: 24px;
+            background: #ffffff;
+            border: 1px solid rgba(6,27,34,0.08);
+            box-shadow: 0 12px 30px rgba(3,16,22,0.08);
+          }
+
+          .af-startGrid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 22px;
+            align-items: start;
+          }
+
+          .af-startEyebrow {
+            color: #0a8d62;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+          }
+
+          .af-startCard h2 {
+            margin: 8px 0 0;
+            color: #061b22;
+            font-size: 34px;
+            line-height: 1.08;
+          }
+
+          .af-startLead {
+            margin: 12px 0 0;
+            color: rgba(6,27,34,0.72);
+            line-height: 1.7;
+            max-width: 64ch;
+          }
+
+          .af-tierGrid {
+            margin-top: 18px;
+            display: grid;
+            gap: 12px;
+          }
+
+          .af-tierCard {
+            border-radius: 18px;
+            padding: 16px;
+            background: #fbfcfd;
+            border: 1px solid rgba(6,27,34,0.08);
+          }
+
+          .af-tierCardAccent {
+            background: rgba(13,177,123,0.07);
+            border-color: rgba(13,177,123,0.18);
+          }
+
+          .af-tierTitle {
+            color: #061b22;
+            font-weight: 850;
+          }
+
+          .af-tierText {
+            margin-top: 8px;
+            color: rgba(6,27,34,0.72);
+            line-height: 1.6;
+          }
+
+          .af-formPanel {
+            border-radius: 20px;
+            padding: 18px;
+            background: #f8fbfb;
+            border: 1px solid rgba(6,27,34,0.08);
+            display: grid;
+            gap: 14px;
+          }
+
+          .af-field {
+            display: grid;
+            gap: 8px;
+          }
+
+          .af-label {
+            color: #061b22;
+            font-size: 14px;
+            font-weight: 700;
+          }
+
+          .af-input {
+            width: 100%;
+            min-height: 46px;
+            padding: 0 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(6,27,34,0.12);
+            background: #ffffff;
+            color: #061b22;
+            outline: none;
+          }
+
+          .af-input:focus {
+            border-color: rgba(13,177,123,0.42);
+            box-shadow: 0 0 0 3px rgba(13,177,123,0.12);
+          }
+
+          .af-errorText {
+            color: #c94a4a;
+            font-size: 13px;
+          }
+
+          .af-startActions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding-top: 4px;
+          }
+
+          .af-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 46px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+          }
+
+          .af-btn:hover {
+            transform: translateY(-1px);
+          }
+
+          .af-btnPrimary {
+            background: #0db17b;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(13,177,123,0.22);
+          }
+
+          .af-btnPrimary:hover {
+            background: #0a8d62;
+          }
+
+          .af-btnPrimary:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+          }
+
+          .af-btnSecondary {
+            background: #ffffff;
+            color: #061b22;
+            border-color: rgba(6,27,34,0.12);
+          }
+
+          .af-btnSecondary:hover {
+            background: #f4f7f8;
+          }
+
+          .af-smallNote {
+            color: rgba(6,27,34,0.62);
+            font-size: 13px;
+          }
+
+          @media (max-width: 900px) {
+            .af-startGrid {
+              grid-template-columns: 1fr;
+            }
+          }
+
+          @media (max-width: 700px) {
+            .af-startCard {
+              padding: 18px;
+            }
+
+            .af-startCard h2 {
+              font-size: 28px;
+            }
+          }
+        `}</style>
       </main>
     );
   }
 
   if (loading) {
     return (
-      <div className="card">
-        <div className="muted">Loading assessment…</div>
+      <div className="af-loadCard">
+        <div className="af-loadText">Loading assessment…</div>
+
+        <style>{`
+          .af-loadCard {
+            border-radius: 22px;
+            padding: 22px;
+            background: #ffffff;
+            border: 1px solid rgba(6,27,34,0.08);
+            box-shadow: 0 10px 28px rgba(3,16,22,0.08);
+          }
+
+          .af-loadText {
+            color: rgba(6,27,34,0.72);
+          }
+        `}</style>
       </div>
     );
   }
 
   if (err) {
-  return (
-    <div className="card">
-      <h2>Assessment</h2>
-      <p className="muted">{err}</p>
-      <button
-        className="btn primary"
-        type="button"
-        onClick={() => setErr(null)}
-        style={{ marginTop: 12 }}
-      >
-        Return to assessment
-      </button>
-    </div>
-  );
-}
+    return (
+      <div className="af-loadCard">
+        <h2 style={{ marginTop: 0 }}>Assessment</h2>
+        <p className="af-loadText">{err}</p>
+        <button className="af-btn af-btnPrimary" type="button" onClick={() => setErr(null)} style={{ marginTop: 12 }}>
+          Return to assessment
+        </button>
+
+        <style>{`
+          .af-loadCard {
+            border-radius: 22px;
+            padding: 22px;
+            background: #ffffff;
+            border: 1px solid rgba(6,27,34,0.08);
+            box-shadow: 0 10px 28px rgba(3,16,22,0.08);
+          }
+
+          .af-loadText {
+            color: rgba(6,27,34,0.72);
+          }
+
+          .af-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-weight: 800;
+            cursor: pointer;
+          }
+
+          .af-btnPrimary {
+            background: #0db17b;
+            color: #fff;
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   if (!questions.length) {
     return (
-      <div className="card">
-        <h2>Assessment</h2>
-        <p className="muted">No questions loaded.</p>
+      <div className="af-loadCard">
+        <h2 style={{ marginTop: 0 }}>Assessment</h2>
+        <p className="af-loadText">No questions loaded.</p>
+
+        <style>{`
+          .af-loadCard {
+            border-radius: 22px;
+            padding: 22px;
+            background: #ffffff;
+            border: 1px solid rgba(6,27,34,0.08);
+            box-shadow: 0 10px 28px rgba(3,16,22,0.08);
+          }
+
+          .af-loadText {
+            color: rgba(6,27,34,0.72);
+          }
+        `}</style>
       </div>
     );
   }
 
   return (
-    <div className="assess">
-      <section className="assess-head">
-        <div className="assess-hero card">
-          <div className="assess-kicker">Cyber resilience maturity assessment</div>
-          <h1 className="assess-title">Resiliscore Assessment</h1>
-          <p className="assess-sub">
-            Score each statement from <strong>0 to 5</strong>. All questions must be answered before results can be generated.
-          </p>
+    <div className="af-shell">
+      <section className="af-assessmentHero">
+        <div className="af-assessmentKicker">Cyber resilience maturity assessment</div>
+        <h2 className="af-assessmentTitle">Resiliscore Assessment</h2>
+        <p className="af-assessmentSub">
+          Score each statement from <strong>0 to 5</strong>. All questions must be answered before results can be generated.
+        </p>
 
-          <div className="assess-progress">
-            <div className="assess-progress-top">
-              <div className="muted">
-                Progress: <strong>{answeredCount}</strong> / {total} answered
-              </div>
-              <div className="muted">{pct}%</div>
+        <div className="af-progressPanel">
+          <div className="af-progressTop">
+            <div className="af-progressText">
+              Progress: <strong>{answeredCount}</strong> / {total} answered
             </div>
-            <div className="bar">
-              <div className="bar-fill" style={{ width: `${pct}%` }} />
-            </div>
+            <div className="af-progressPct">{pct}%</div>
           </div>
 
-          <details className="assess-help">
-            <summary>How to use the 0–5 scale</summary>
-            <div className="help-grid">
-              {SCALE_UI.map((s) => (
-                <div key={s.v} className="help-item">
-                  <div className="pill-mini">{s.label}</div>
-                  <div className="muted">{s.hint}</div>
-                </div>
-              ))}
-            </div>
-          </details>
+          <div className="af-progressBar">
+            <div className="af-progressFill" style={{ width: `${pct}%` }} />
+          </div>
         </div>
+
+        <details className="af-helpPanel">
+          <summary>How to use the 0–5 scale</summary>
+          <div className="af-scaleGrid">
+            {SCALE_UI.map((s) => (
+              <div key={s.v} className="af-scaleItem">
+                <div className="af-scaleNum">{s.label}</div>
+                <div className="af-scaleHint">{s.hint}</div>
+              </div>
+            ))}
+          </div>
+        </details>
+
+        {submitError ? <div className="af-submitError">{submitError}</div> : null}
       </section>
 
-      <section className="assess-body">
+      <section className="af-domainStack">
         {grouped.map((g) => (
-          <div key={g.code} className="domain">
-            <div className="domain-head">
-              <div className="domain-title">{g.name}</div>
-              <div className="domain-sub muted">Answer based on what is true in practice.</div>
+          <div key={g.code} className="af-domainSection">
+            <div className="af-domainHeader">
+              <div className="af-domainTitleRow">
+                <div className="af-domainIcon">
+                  <DomainIcon />
+                </div>
+                <div>
+                  <div className="af-domainTitle">{g.name}</div>
+                  <div className="af-domainSub">Answer based on what is true in practice today.</div>
+                </div>
+              </div>
+
+              <div className="af-domainCount">
+                {g.items.filter((q) => answers[q.id]?.score !== null).length} / {g.items.length}
+              </div>
             </div>
 
-            <div className="domain-list">
+            <div className="af-questionList">
               {g.items.map((q, idx) => {
                 const a = answers[q.id] ?? { score: null };
                 const num = idx + 1;
+                const isMissing = unansweredIds.has(q.id);
 
                 return (
-                  <div key={q.id} id={`question-${q.id}`} className="q card">
-                    <div className="q-top">
-                      <div className="q-num">Q{num}</div>
-                      <div className="q-text">{q.text}</div>
+                  <div
+                    key={q.id}
+                    id={`question-${q.id}`}
+                    className={`af-questionCard ${isMissing ? "af-questionCardMissing" : ""}`}
+                  >
+                    <div className="af-questionTop">
+                      <div className="af-questionNo">Q{num}</div>
+                      <div className="af-questionText">{q.text}</div>
                     </div>
 
                     {q.help_text ? (
-                      <details className="q-help">
+                      <details className="af-questionHelp">
                         <summary>Help</summary>
-                        <div className="muted">{q.help_text}</div>
+                        <div className="af-questionHelpText">{q.help_text}</div>
                       </details>
                     ) : null}
 
-                    <div className="q-scale">
+                    <div className="af-scaleButtons">
                       {SCALE_UI.map((s) => {
                         const active = a.score === s.v;
+
                         return (
                           <button
                             key={s.v}
                             type="button"
-                            className={`q-pill ${active ? "active" : ""}`}
-                            onClick={() =>
+                            className={`af-scoreBtn ${active ? "active" : ""}`}
+                            onClick={() => {
                               setAnswers((prev) => ({
                                 ...prev,
                                 [q.id]: { ...prev[q.id], score: s.v },
-                              }))
-                            }
+                              }));
+
+                              if (unansweredIds.has(q.id)) {
+                                setUnansweredIds((prev) => {
+                                  const next = new Set(prev);
+                                  next.delete(q.id);
+                                  return next;
+                                });
+                              }
+                            }}
                           >
-                            <span className="q-pill-num">{s.label}</span>
-                            <span className="q-pill-hint">{s.hint}</span>
+                            <span className="af-scoreBtnNum">{s.label}</span>
+                            <span className="af-scoreBtnHint">{s.hint}</span>
                           </button>
                         );
                       })}
@@ -504,84 +741,422 @@ export default function AssessmentForm() {
         ))}
       </section>
 
-      <div className="sticky">
-        <div className="sticky-inner">
-          <div className="muted">
-            Answered <strong>{answeredCount}</strong> / {total} ({pct}%)
+      <div className="af-stickyBar">
+        <div className="af-stickyInner">
+          <div className="af-stickyMeta">
+            <div className="af-stickyCount">
+              Answered <strong>{answeredCount}</strong> / {total}
+            </div>
+            <div className="af-stickyPct">{pct}% complete</div>
           </div>
-          <button className="btn primary" disabled={submitting} onClick={submit}>
+
+          <button className="af-btn af-btnPrimary" disabled={submitting} onClick={submit}>
             {submitting ? "Submitting…" : "Submit & View Results"}
           </button>
         </div>
       </div>
 
       <style>{`
-        .assess { padding-bottom: 90px; }
-        .assess-hero { padding: 28px; }
-        .assess-kicker { color: var(--muted); font-size: 13px; letter-spacing: 0.2px; }
-        .assess-title { margin: 10px 0 10px; font-size: 34px; }
-        .assess-sub { color: var(--muted); margin: 0; max-width: 80ch; line-height: 1.6; }
-
-        .assess-progress { margin-top: 18px; }
-        .assess-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .bar { height: 10px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--primary); }
-
-        .assess-help { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 14px; }
-        .assess-help summary { cursor: pointer; color: var(--text); font-weight: 600; }
-        .help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-        @media (max-width: 900px) { .help-grid { grid-template-columns: 1fr; } }
-        .help-item { display: flex; gap: 10px; align-items: center; }
-        .pill-mini { width: 34px; height: 26px; display:flex; align-items:center; justify-content:center; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); color: var(--primary); font-weight: 700; font-size: 13px; }
-
-        .domain { margin-top: 26px; }
-        .domain-title { font-size: 18px; font-weight: 700; }
-        .domain-list { display: grid; gap: 14px; margin-top: 12px; }
-
-        .q { padding: 22px; }
-        .q-top { display: grid; grid-template-columns: 58px 1fr; gap: 14px; align-items: start; }
-        .q-num { color: var(--muted); font-size: 13px; padding-top: 2px; }
-        .q-text { font-weight: 600; line-height: 1.45; }
-
-        .q-help { margin-top: 10px; }
-        .q-help summary { cursor: pointer; color: var(--muted); }
-
-        .q-scale { margin-top: 14px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
-        @media (max-width: 900px) { .q-scale { grid-template-columns: 1fr 1fr; } }
-
-        .q-pill {
-          text-align: left;
-          padding: 10px;
-          border-radius: 10px;
-          border: 1px solid var(--border);
-          background: rgba(255,255,255,0.02);
-          color: var(--text);
-          cursor: pointer;
+        .af-shell {
+          padding-bottom: 96px;
+          display: grid;
+          gap: 18px;
         }
-        .q-pill:hover { border-color: rgba(255,255,255,0.22); }
-        .q-pill.active { border-color: rgba(94,234,106,0.55); background: rgba(94,234,106,0.10); }
-        .q-pill-num { font-weight: 800; margin-right: 8px; color: var(--primary); }
-        .q-pill-hint { color: var(--muted); font-size: 12px; }
 
-        .sticky {
+        .af-assessmentHero {
+          border-radius: 24px;
+          padding: 22px;
+          background: #ffffff;
+          border: 1px solid rgba(6,27,34,0.08);
+          box-shadow: 0 10px 28px rgba(3,16,22,0.08);
+        }
+
+        .af-assessmentKicker {
+          color: #0a8d62;
+          font-size: 12px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+        }
+
+        .af-assessmentTitle {
+          margin: 8px 0 0;
+          color: #061b22;
+          font-size: 32px;
+          line-height: 1.08;
+        }
+
+        .af-assessmentSub {
+          margin: 12px 0 0;
+          color: rgba(6,27,34,0.72);
+          line-height: 1.7;
+          max-width: 76ch;
+        }
+
+        .af-progressPanel {
+          margin-top: 18px;
+          border-radius: 18px;
+          padding: 16px;
+          background: #f8fbfb;
+          border: 1px solid rgba(6,27,34,0.08);
+        }
+
+        .af-progressTop {
+          display: flex;
+          justify-content: space-between;
+          gap: 12px;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+
+        .af-progressText,
+        .af-progressPct {
+          color: rgba(6,27,34,0.72);
+        }
+
+        .af-progressBar {
+          height: 12px;
+          border-radius: 999px;
+          background: rgba(6,27,34,0.06);
+          overflow: hidden;
+        }
+
+        .af-progressFill {
+          height: 100%;
+          border-radius: 999px;
+          background: linear-gradient(90deg, #0db17b, #4fd8a9);
+        }
+
+        .af-helpPanel {
+          margin-top: 16px;
+          border-top: 1px solid rgba(6,27,34,0.08);
+          padding-top: 14px;
+        }
+
+        .af-helpPanel summary {
+          cursor: pointer;
+          color: #061b22;
+          font-weight: 700;
+        }
+
+        .af-scaleGrid {
+          margin-top: 12px;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
+        }
+
+        .af-scaleItem {
+          border-radius: 14px;
+          padding: 12px;
+          background: #f8fbfb;
+          border: 1px solid rgba(6,27,34,0.08);
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
+
+        .af-scaleNum {
+          width: 34px;
+          height: 28px;
+          border-radius: 10px;
+          display: grid;
+          place-items: center;
+          background: rgba(13,177,123,0.10);
+          color: #0a8d62;
+          font-weight: 900;
+          flex: 0 0 auto;
+        }
+
+        .af-scaleHint {
+          color: rgba(6,27,34,0.72);
+          font-size: 14px;
+        }
+
+        .af-submitError {
+          margin-top: 14px;
+          border-radius: 14px;
+          padding: 12px 14px;
+          background: rgba(255,107,107,0.10);
+          border: 1px solid rgba(255,107,107,0.22);
+          color: #b84242;
+          font-weight: 700;
+        }
+
+        .af-domainStack {
+          display: grid;
+          gap: 18px;
+        }
+
+        .af-domainSection {
+          border-radius: 24px;
+          padding: 18px;
+          background: #ffffff;
+          border: 1px solid rgba(6,27,34,0.08);
+          box-shadow: 0 10px 28px rgba(3,16,22,0.08);
+        }
+
+        .af-domainHeader {
+          display: flex;
+          justify-content: space-between;
+          gap: 14px;
+          align-items: center;
+          padding-bottom: 14px;
+          border-bottom: 1px solid rgba(6,27,34,0.08);
+        }
+
+        .af-domainTitleRow {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .af-domainIcon {
+          width: 42px;
+          height: 42px;
+          border-radius: 14px;
+          display: grid;
+          place-items: center;
+          background: rgba(13,177,123,0.10);
+          color: #0a8d62;
+          flex: 0 0 auto;
+        }
+
+        .af-domainTitle {
+          color: #061b22;
+          font-size: 19px;
+          font-weight: 850;
+        }
+
+        .af-domainSub {
+          margin-top: 4px;
+          color: rgba(6,27,34,0.62);
+          font-size: 14px;
+        }
+
+        .af-domainCount {
+          min-width: 66px;
+          height: 36px;
+          padding: 0 12px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(13,177,123,0.10);
+          color: #0a8d62;
+          font-weight: 850;
+          font-size: 14px;
+        }
+
+        .af-questionList {
+          margin-top: 16px;
+          display: grid;
+          gap: 14px;
+        }
+
+        .af-questionCard {
+          border-radius: 20px;
+          padding: 18px;
+          background: #fbfcfd;
+          border: 1px solid rgba(6,27,34,0.08);
+          transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+        }
+
+        .af-questionCard:hover {
+          border-color: rgba(13,177,123,0.16);
+          box-shadow: 0 12px 26px rgba(3,16,22,0.06);
+        }
+
+        .af-questionCardMissing {
+          border-color: rgba(255,107,107,0.28);
+          box-shadow: 0 0 0 3px rgba(255,107,107,0.08);
+        }
+
+        .af-questionTop {
+          display: grid;
+          grid-template-columns: 58px 1fr;
+          gap: 14px;
+          align-items: start;
+        }
+
+        .af-questionNo {
+          color: rgba(6,27,34,0.56);
+          font-size: 13px;
+          padding-top: 2px;
+          font-weight: 700;
+        }
+
+        .af-questionText {
+          color: #061b22;
+          font-weight: 700;
+          line-height: 1.5;
+        }
+
+        .af-questionHelp {
+          margin-top: 12px;
+        }
+
+        .af-questionHelp summary {
+          cursor: pointer;
+          color: rgba(6,27,34,0.62);
+          font-weight: 600;
+        }
+
+        .af-questionHelpText {
+          margin-top: 10px;
+          color: rgba(6,27,34,0.72);
+          line-height: 1.65;
+        }
+
+        .af-scaleButtons {
+          margin-top: 16px;
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
+          gap: 10px;
+        }
+
+        .af-scoreBtn {
+          text-align: left;
+          border-radius: 14px;
+          padding: 12px;
+          border: 1px solid rgba(6,27,34,0.10);
+          background: #ffffff;
+          color: #061b22;
+          cursor: pointer;
+          transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .af-scoreBtn:hover {
+          transform: translateY(-1px);
+          border-color: rgba(13,177,123,0.22);
+          box-shadow: 0 10px 20px rgba(3,16,22,0.06);
+        }
+
+        .af-scoreBtn.active {
+          border-color: rgba(13,177,123,0.36);
+          background: rgba(13,177,123,0.10);
+          box-shadow: 0 0 0 3px rgba(13,177,123,0.08);
+        }
+
+        .af-scoreBtnNum {
+          display: block;
+          color: #0a8d62;
+          font-weight: 900;
+          font-size: 18px;
+          line-height: 1;
+        }
+
+        .af-scoreBtnHint {
+          display: block;
+          margin-top: 8px;
+          color: rgba(6,27,34,0.66);
+          font-size: 12px;
+          line-height: 1.4;
+        }
+
+        .af-stickyBar {
           position: fixed;
           left: 0;
           right: 0;
           bottom: 0;
-          border-top: 1px solid var(--border);
-          background: rgba(6, 27, 34, 0.92);
-          backdrop-filter: blur(8px);
-          padding: 12px 0;
           z-index: 60;
+          padding: 12px 0;
+          border-top: 1px solid rgba(255,255,255,0.10);
+          background: rgba(6,27,34,0.92);
+          backdrop-filter: blur(10px);
         }
-        .sticky-inner {
-          max-width: 1100px;
+
+        .af-stickyInner {
+          max-width: 1180px;
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 0 16px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          gap: 12px;
+          gap: 14px;
+        }
+
+        .af-stickyMeta {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          flex-wrap: wrap;
+        }
+
+        .af-stickyCount,
+        .af-stickyPct {
+          color: rgba(255,255,255,0.78);
+        }
+
+        .af-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          min-height: 46px;
+          padding: 0 16px;
+          border-radius: 999px;
+          border: 1px solid transparent;
+          font-weight: 800;
+          cursor: pointer;
+          transition: transform 0.18s ease, background 0.18s ease;
+        }
+
+        .af-btn:hover {
+          transform: translateY(-1px);
+        }
+
+        .af-btnPrimary {
+          background: #0db17b;
+          color: #fff;
+          box-shadow: 0 8px 20px rgba(13,177,123,0.22);
+        }
+
+        .af-btnPrimary:hover {
+          background: #0a8d62;
+        }
+
+        .af-btnPrimary:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        @media (max-width: 980px) {
+          .af-scaleButtons {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        @media (max-width: 700px) {
+          .af-assessmentHero,
+          .af-domainSection {
+            padding: 16px;
+          }
+
+          .af-assessmentTitle {
+            font-size: 28px;
+          }
+
+          .af-scaleGrid,
+          .af-scaleButtons {
+            grid-template-columns: 1fr 1fr;
+          }
+
+          .af-questionTop {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+
+          .af-domainHeader,
+          .af-stickyInner {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .af-stickyInner {
+            padding: 0 12px;
+          }
         }
       `}</style>
     </div>

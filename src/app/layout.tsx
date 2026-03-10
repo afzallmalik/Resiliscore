@@ -30,14 +30,14 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
       </head>
       <body>
-        <header className="header">
-          <div className="header-inner">
-            <Link href="/" className="brand-logo">
+        <header className="siteHeader">
+          <div className="siteHeaderInner">
+            <Link href="/" className="siteBrand" aria-label="Resiliscore home">
               <Image
                 src="/resiliscore-logo.png"
                 alt="Resiliscore"
@@ -48,18 +48,24 @@ export default function RootLayout({
               />
             </Link>
 
-            <nav className="nav">
-              <Link href="/assessment" className="cta">
+            <nav className="siteNav" aria-label="Primary">
+              <Link href="/methodology" className="siteNavLink">
+                Methodology
+              </Link>
+              <Link href="/privacy" className="siteNavLink">
+                Privacy
+              </Link>
+              <Link href="/terms" className="siteNavLink">
+                Terms
+              </Link>
+              <Link href="/assessment" className="siteHeaderCta">
                 Start free assessment
               </Link>
-              <Link href="/methodology">Methodology</Link>
-              <Link href="/privacy">Privacy</Link>
-              <Link href="/terms">Terms</Link>
             </nav>
           </div>
         </header>
 
-        <div className="container">{children}</div>
+        <div className="sitePageWrap">{children}</div>
       </body>
     </html>
   );

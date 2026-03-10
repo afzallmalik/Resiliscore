@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import ScoreRadarCard from "@/components/ScoreRadarCard";
 
 type IndustryKey =
   | "general"
@@ -126,58 +127,178 @@ const INDUSTRY_COPY: Record<IndustryKey, IndustryCopy> = {
   },
 };
 
-function Icon({ name }: { name: "radar" | "plan" | "evidence" | "check" | "map" | "bolt" }) {
+const DOMAIN_MODULES = [
+  {
+    title: "Governance",
+    score: 72,
+    desc: "Policies, ownership, risk oversight and leadership accountability.",
+    icon: "shield",
+  },
+  {
+    title: "Technology",
+    score: 58,
+    desc: "Core security tooling, patching, access control and operational hygiene.",
+    icon: "chip",
+  },
+  {
+    title: "People",
+    score: 61,
+    desc: "Access lifecycle, awareness, roles and real-world security behaviour.",
+    icon: "users",
+  },
+  {
+    title: "Suppliers",
+    score: 49,
+    desc: "Third-party risk, contracts, critical dependencies and oversight.",
+    icon: "link",
+  },
+  {
+    title: "Recovery",
+    score: 67,
+    desc: "Backups, restore testing, continuity planning and recovery confidence.",
+    icon: "refresh",
+  },
+  {
+    title: "Incident Response",
+    score: 55,
+    desc: "Escalation, coordination, learning loops and response readiness.",
+    icon: "bolt",
+  },
+];
+
+function Icon({
+  name,
+  size = 18,
+}: {
+  name:
+    | "radar"
+    | "plan"
+    | "evidence"
+    | "check"
+    | "map"
+    | "bolt"
+    | "shield"
+    | "chip"
+    | "users"
+    | "link"
+    | "refresh";
+  size?: number;
+}) {
+  const common = { width: size, height: size, viewBox: "0 0 24 24", "aria-hidden": true };
+
   if (name === "radar") {
     return (
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          fill="currentColor"
-          d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 2a8 8 0 0 1 7.75 6H12V4Zm0 16a8 8 0 0 1-8-8h16a8 8 0 0 1-8 8Zm1-9h6.75A8 8 0 0 1 13 18Z"
-        />
+      <svg {...common}>
+        <path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 2a8 8 0 0 1 7.75 6H12V4Zm0 16a8 8 0 0 1-8-8h16a8 8 0 0 1-8 8Zm1-9h6.75A8 8 0 0 1 13 18Z" />
       </svg>
     );
   }
   if (name === "plan") {
     return (
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          fill="currentColor"
-          d="M7 2h10a2 2 0 0 1 2 2v18l-7-3-7 3V4a2 2 0 0 1 2-2Zm2 6h6V6H9v2Zm0 4h6v-2H9v2Z"
-        />
+      <svg {...common}>
+        <path fill="currentColor" d="M7 2h10a2 2 0 0 1 2 2v18l-7-3-7 3V4a2 2 0 0 1 2-2Zm2 6h6V6H9v2Zm0 4h6v-2H9v2Z" />
       </svg>
     );
   }
   if (name === "evidence") {
     return (
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          fill="currentColor"
-          d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5ZM8 12h8v-2H8v2Zm0 4h8v-2H8v2Zm0 4h5v-2H8v2Z"
-        />
+      <svg {...common}>
+        <path fill="currentColor" d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5ZM8 12h8v-2H8v2Zm0 4h8v-2H8v2Zm0 4h5v-2H8v2Z" />
       </svg>
     );
   }
   if (name === "map") {
     return (
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          fill="currentColor"
-          d="M15 5 9 3 3 5v16l6-2 6 2 6-2V3l-6 2Zm0 2.2 4-1.33V18.8l-4 1.33V7.2ZM9 5.2l4 1.33v12.93l-4-1.33V5.2Zm-2 .67v12.93L5 19.47V6.53l2-.66Z"
-        />
+      <svg {...common}>
+        <path fill="currentColor" d="M15 5 9 3 3 5v16l6-2 6 2 6-2V3l-6 2Zm0 2.2 4-1.33V18.8l-4 1.33V7.2ZM9 5.2l4 1.33v12.93l-4-1.33V5.2Zm-2 .67v12.93L5 19.47V6.53l2-.66Z" />
       </svg>
     );
   }
   if (name === "bolt") {
     return (
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+      <svg {...common}>
         <path fill="currentColor" d="M13 2 3 14h7l-1 8 12-14h-7l-1-6Z" />
       </svg>
     );
   }
+  if (name === "shield") {
+    return (
+      <svg {...common}>
+        <path fill="currentColor" d="M12 2 5 5v6c0 5 3.4 9.4 7 11 3.6-1.6 7-6 7-11V5l-7-3Zm0 2.2 5 2.14V11c0 3.85-2.42 7.18-5 8.53C9.42 18.18 7 14.85 7 11V6.34l5-2.14Z" />
+      </svg>
+    );
+  }
+  if (name === "chip") {
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M9 2h2v3h2V2h2v3h2a2 2 0 0 1 2 2v2h3v2h-3v2h3v2h-3v2a2 2 0 0 1-2 2h-2v3h-2v-3h-2v3H9v-3H7a2 2 0 0 1-2-2v-2H2v-2h3v-2H2V9h3V7a2 2 0 0 1 2-2h2V2Zm-2 5v10h10V7H7Zm2 2h6v6H9V9Z"
+        />
+      </svg>
+    );
+  }
+  if (name === "users") {
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M16 11a4 4 0 1 0-3.999-4A4 4 0 0 0 16 11ZM8 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm0 2c-2.67 0-8 1.34-8 4v2h10v-2c0-1.14.59-2.12 1.56-2.94A11.8 11.8 0 0 0 8 13Zm8 0c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4Z"
+        />
+      </svg>
+    );
+  }
+  if (name === "link") {
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M10.59 13.41a1.996 1.996 0 0 1 0-2.82l3-3a2 2 0 1 1 2.82 2.82l-1 1 1.41 1.41 1-1a4 4 0 1 0-5.66-5.66l-3 3a4 4 0 0 0 5.66 5.66l.88-.88-1.41-1.41-.7.88a2 2 0 0 1-2.82 0ZM6.17 12.17l1-1-1.41-1.41-1 1a4 4 0 1 0 5.66 5.66l3-3a4 4 0 1 0-5.66-5.66l-.88.88 1.41 1.41.7-.88a2 2 0 0 1 2.82 2.82l-3 3a2 2 0 1 1-2.82-2.82Z"
+        />
+      </svg>
+    );
+  }
+  if (name === "refresh") {
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M17.65 6.35A7.95 7.95 0 0 0 12 4V1L7 6l5 5V7a5 5 0 1 1-4.9 6h-2.02A7 7 0 1 0 17.65 6.35Z"
+        />
+      </svg>
+    );
+  }
+
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+    <svg {...common}>
       <path fill="currentColor" d="M9.5 16.2 5.8 12.5 4.4 13.9l5.1 5.1L20 8.5 18.6 7.1 9.5 16.2Z" />
     </svg>
+  );
+}
+
+function DomainModule({
+  title,
+  score,
+  desc,
+  icon,
+}: {
+  title: string;
+  score: number;
+  desc: string;
+  icon: "shield" | "chip" | "users" | "link" | "refresh" | "bolt";
+}) {
+  return (
+    <div className="moduleCard">
+      <div className="moduleTop">
+        <div className="moduleIcon">
+          <Icon name={icon} size={20} />
+        </div>
+        <div className="moduleScore">{score}</div>
+      </div>
+
+      <div className="moduleTitle">{title}</div>
+      <div className="moduleText">{desc}</div>
+    </div>
   );
 }
 
@@ -186,146 +307,153 @@ export default function HomePage() {
   const copy = useMemo(() => INDUSTRY_COPY[industry], [industry]);
 
   return (
-    <main>
-      <div className="wrap">
-        <section className="hero">
-          <div className="heroBanner">
-            <div className="heroBannerInner">
-              <div className="pill">
-                <Icon name="check" />
-                SME cyber resilience maturity — simple, practical, evidence-led
-              </div>
+    <main className="homePage">
+      <div className="homeShell">
+        <section className="heroSection">
+          <div className="heroGlow" />
 
-              <h1>Understand your organisation&apos;s cyber resilience in minutes</h1>
-
-              <p className="lead">
-                A fast, plain-English assessment that produces an executive-ready summary, ranked priorities, a 90-day plan, and an
-                evidence checklist you can actually use.
-              </p>
-
-              <div className="ctaRow">
-                <Link className="btn primary" href="/assessment">
-                  Start free assessment
-                </Link>
-                <Link className="btn ghost" href="/methodology">
-                  Methodology
-                </Link>
-                <a className="btn" href="#industry">
-                  Industry view
-                </a>
-              </div>
-
-              <div className="micro">Takes ~10–15 minutes • 0–5 maturity scale • Results page + PDF report</div>
-            </div>
-          </div>
-
-          <div className="heroGrid">
-            <div className="heroLeft heroPrimary">
-              <h2>Know where you stand — and what to fix next</h2>
-
-              <p className="lead">
-                Resiliscore gives SMEs a clear maturity baseline across core resilience domains, explains what your score means in
-                plain English, and produces a 90-day action plan with evidence you can show.
-              </p>
-
-              <div className="valueStrip">
-                <div className="valueCard">
-                  <div className="valueHead">
-                    <Icon name="radar" /> Clear baseline
-                  </div>
-                  <div className="valueText">See where disruption risk is coming from, ranked by priority.</div>
-                </div>
-                <div className="valueCard">
-                  <div className="valueHead">
-                    <Icon name="plan" /> 90-day plan
-                  </div>
-                  <div className="valueText">Practical steps that move maturity fastest: owners, cadence, evidence, testing.</div>
-                </div>
-                <div className="valueCard">
-                  <div className="valueHead">
-                    <Icon name="evidence" /> Evidence checklist
-                  </div>
-                  <div className="valueText">Know exactly what to keep so you can prove consistency to customers.</div>
-                </div>
-              </div>
-
-              <div className="quote">
-                <div className="qMark">“</div>
-                <div className="qBody">
-                  A score is useful — but only if it becomes a plan. Resiliscore is designed to leave you with clarity, not just a number.
-                </div>
-              </div>
+          <div className="heroCopy">
+            <div className="eyebrow">
+              <Icon name="check" />
+              SME cyber resilience maturity — simple, practical, evidence-led
             </div>
 
-            <div className="outputIntro heroSecondary">
-              <div className="outputTop">
-                <div className="outputTitle">
-                  <Icon name="bolt" /> What the output feels like
-                </div>
-                <div className="outputSub muted">A modern, executive-ready snapshot — followed by a practical plan.</div>
-              </div>
+            <h1>
+              Your <span>cyber resilience score</span>, in minutes
+            </h1>
 
-              <div className="outputGrid">
-                <div className="outputLeft">
-                  <div className="outputChips">
-                    <div className="chip">
-                      <Icon name="check" /> Executive summary
-                    </div>
-                    <div className="chip">
-                      <Icon name="check" /> Ranked priorities
-                    </div>
-                    <div className="chip">
-                      <Icon name="check" /> Evidence checklist
-                    </div>
-                    <div className="chip">
-                      <Icon name="check" /> PDF report
-                    </div>
-                  </div>
+            <p className="heroLead">
+              A fast, plain-English assessment that gives you an executive-ready summary, ranked priorities, a practical 90-day
+              plan, and an evidence checklist you can actually use.
+            </p>
 
-                  <div className="outputHint muted">Designed to feel like a consultant deliverable — clear, calm, and actionable.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section sampleSection">
-          <div className="sampleInner">
-            <div>
-              <div className="sampleKicker">Sample report</div>
-              <h2>Preview the Resiliscore report format</h2>
-              <p className="muted sampleText">
-                See the structure, tone, and layout of the report before you start. This sample is a public demonstration version
-                and is designed to show the style of output clients receive.
-              </p>
-            </div>
-
-            <div className="sampleActions">
-              <Link className="btn primary" href="/assessment">
+            <div className="heroActions">
+              <Link className="btn btnPrimary" href="/assessment">
                 Start free assessment
               </Link>
-              <a className="btn" href="/sample-report.pdf" target="_blank" rel="noreferrer">
-                View sample report
+              <Link className="btn btnSecondary" href="/methodology">
+                Methodology
+              </Link>
+              <a className="btn btnTertiary" href="#industry">
+                Industry view
               </a>
             </div>
+
+            <div className="heroMeta">Takes ~10–15 minutes • 0–5 maturity scale • Results page + PDF report</div>
+
+            <div className="heroMiniGrid">
+              <div className="miniCard">
+                <div className="miniHead">
+                  <Icon name="radar" />
+                  Clear baseline
+                </div>
+                <div className="miniText">See where disruption risk is coming from, ranked by priority.</div>
+              </div>
+
+              <div className="miniCard">
+                <div className="miniHead">
+                  <Icon name="plan" />
+                  90-day plan
+                </div>
+                <div className="miniText">Practical actions focused on ownership, cadence, evidence and testing.</div>
+              </div>
+
+              <div className="miniCard">
+                <div className="miniHead">
+                  <Icon name="evidence" />
+                  Evidence checklist
+                </div>
+                <div className="miniText">Know exactly what proof to keep so you can answer due diligence with confidence.</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="heroVisual">
+            <ScoreRadarCard />
           </div>
         </section>
 
-        <section id="industry" className="section sectionStrong">
-          <div className="sectionHead">
-            <h2>Why this matters in your industry</h2>
-            <p className="muted">
-              Same assessment, different impact. Select your industry to see how Resiliscore helps you reduce disruption risk and improve due diligence.
+        <section className="logoStripCard">
+          <div className="logoStripItem">
+            <strong>Score</strong>
+            <span>Understand where you stand</span>
+          </div>
+          <div className="logoStripDivider" />
+          <div className="logoStripItem">
+            <strong>Prioritise</strong>
+            <span>Focus on the right next 5 actions</span>
+          </div>
+          <div className="logoStripDivider" />
+          <div className="logoStripItem">
+            <strong>Prove</strong>
+            <span>Keep the evidence customers ask for</span>
+          </div>
+        </section>
+
+        <section className="lightSection">
+          <div className="sectionHeading">
+            <div className="sectionEyebrow">Platform view</div>
+            <h2>Turn the domains into a clear control panel</h2>
+            <p>
+              Resiliscore works best when people can instantly see the modules, the scores and where attention is needed. This makes
+              the product feel like software, not just content.
             </p>
           </div>
 
-          <div className="benefits">
-            <div className="benefitsLeft">
-              <div className="label">Select your industry</div>
+          <div className="moduleGrid">
+            {DOMAIN_MODULES.map((item) => (
+              <DomainModule
+                key={item.title}
+                title={item.title}
+                score={item.score}
+                desc={item.desc}
+                icon={item.icon as "shield" | "chip" | "users" | "link" | "refresh" | "bolt"}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="sampleCallout">
+          <div>
+            <div className="sectionEyebrow dark">Sample report</div>
+            <h2>Preview the Resiliscore report format</h2>
+            <p>
+              See the structure, tone and layout before you start. This sample is a public demonstration version designed to show the
+              style of output clients receive.
+            </p>
+          </div>
+
+          <div className="sampleCalloutActions">
+            <Link className="btn btnPrimary" href="/assessment">
+              Start free assessment
+            </Link>
+            <a className="btn btnSecondary" href="/sample-report.pdf" target="_blank" rel="noreferrer">
+              View sample report
+            </a>
+          </div>
+        </section>
+
+        <section id="industry" className="industrySection">
+          <div className="sectionHeading sectionHeadingDark">
+            <div className="sectionEyebrow">Industry view</div>
+            <h2>Why this matters in your industry</h2>
+            <p>
+              Same assessment, different impact. Select your industry to see how Resiliscore helps reduce disruption risk and improve
+              due diligence.
+            </p>
+          </div>
+
+          <div className="industryGrid">
+            <div className="industryMain">
+              <label className="fieldLabel" htmlFor="industry-select">
+                Select your industry
+              </label>
+
               <select
+                id="industry-select"
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value as IndustryKey)}
-                className="select"
+                className="industrySelect"
                 aria-label="Select industry"
               >
                 {INDUSTRIES.map((i) => (
@@ -335,188 +463,207 @@ export default function HomePage() {
                 ))}
               </select>
 
-              <div className="benefitCard">
-                <div className="benefitTitle">{copy.headline}</div>
-                <p className="benefitText">{copy.sub}</p>
+              <div className="industryCard">
+                <div className="industryTitle">{copy.headline}</div>
+                <p className="industrySub">{copy.sub}</p>
 
-                <div className="callout">
-                  <div className="calloutTitle">Common risk pattern</div>
-                  <div className="calloutText">{copy.commonRisk}</div>
+                <div className="industryCallout">
+                  <div className="industryCalloutTitle">Common risk pattern</div>
+                  <div className="industryCalloutText">{copy.commonRisk}</div>
                 </div>
 
-                <div className="benefitSubTitle">What you typically gain</div>
-                <ul className="benefitList">
+                <div className="industrySubHeading">What you typically gain</div>
+                <ul className="industryList">
                   {copy.outcomes.map((b) => (
                     <li key={b}>
-                      <span className="dot" /> {b}
+                      <span className="listDot" />
+                      {b}
                     </li>
                   ))}
                 </ul>
 
-                <div className="benefitSubTitle" style={{ marginTop: 14 }}>
-                  Typical evidence to keep
-                </div>
-                <ul className="benefitList">
+                <div className="industrySubHeading">Typical evidence to keep</div>
+                <ul className="industryList">
                   {copy.evidence.map((b) => (
                     <li key={b}>
-                      <span className="dot" /> {b}
+                      <span className="listDot" />
+                      {b}
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            <div className="benefitsRight">
-              <div className="card">
-                <div className="cardHead">
-                  <Icon name="check" /> The “so what?”
+            <div className="industrySide">
+              <div className="darkInfoCard">
+                <div className="darkInfoHead">
+                  <Icon name="check" />
+                  The “so what?”
                 </div>
-                <div className="cardText">
-                  Your results show <b>where risk is coming from</b> and what to fix first. Most SMEs don’t need 50 initiatives — they need the right
-                  5, executed consistently, with evidence.
-                </div>
-              </div>
-
-              <div className="card">
-                <div className="cardHead">
-                  <Icon name="plan" /> Why the plan works
-                </div>
-                <div className="cardText">
-                  The 90-day plan focuses on improvements that reliably move maturity: <b>ownership</b>, <b>cadence</b>, <b>evidence</b> and <b>testing</b>. That’s what reduces disruption risk in real life.
+                <div className="darkInfoText">
+                  Your results show <b>where risk is coming from</b> and what to fix first. Most SMEs don’t need 50 initiatives —
+                  they need the right 5, executed consistently, with evidence.
                 </div>
               </div>
 
-              <div className="card">
-                <div className="cardHead">
-                  <Icon name="map" /> Framework mapping (briefly)
+              <div className="darkInfoCard">
+                <div className="darkInfoHead">
+                  <Icon name="plan" />
+                  Why the plan works
                 </div>
-                <div className="cardText">
-                  Mapping helps you translate actions into terms others recognise. It’s useful for customer due diligence and structured improvement — without turning the tool into a compliance monster.
+                <div className="darkInfoText">
+                  The 90-day plan focuses on improvements that reliably move maturity: <b>ownership</b>, <b>cadence</b>,{" "}
+                  <b>evidence</b> and <b>testing</b>.
                 </div>
               </div>
 
-              <div className="card soft">
-                <div className="cardHead">
-                  <Icon name="check" /> Built for SMEs
+              <div className="darkInfoCard">
+                <div className="darkInfoHead">
+                  <Icon name="map" />
+                  Framework mapping
                 </div>
-                <div className="cardText">Clear questions. Plain-English results. A report you can share internally. No jargon-first output.</div>
+                <div className="darkInfoText">
+                  Mapping helps you translate actions into terms others recognise for due diligence and structured improvement —
+                  without turning the tool into a compliance monster.
+                </div>
+              </div>
+
+              <div className="darkInfoCard darkInfoCardAccent">
+                <div className="darkInfoHead">
+                  <Icon name="bolt" />
+                  Built for SMEs
+                </div>
+                <div className="darkInfoText">
+                  Clear questions. Plain-English results. A report you can share internally. No jargon-first output.
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="section sectionFlat">
-          <div className="sectionHead">
-            <h2>How it works</h2>
-            <p className="muted">A fast snapshot first — then deeper improvement over time if you choose.</p>
+        <section className="lightSection">
+          <div className="sectionHeading">
+            <div className="sectionEyebrow">How it works</div>
+            <h2>A fast snapshot first — then deeper improvement over time</h2>
+            <p>Simple enough to complete quickly, structured enough to drive meaningful action.</p>
           </div>
 
-          <div className="how">
-            <div className="howCard">
-              <div className="howNum">1</div>
+          <div className="stepsGrid">
+            <div className="stepCard">
+              <div className="stepNo">1</div>
               <div>
-                <div className="howTitle">Answer the assessment</div>
-                <div className="howText">Score each item 0–5 based on what is true today (not planned work).</div>
+                <div className="stepTitle">Answer the assessment</div>
+                <div className="stepText">Score each item 0–5 based on what is true today, not planned work.</div>
               </div>
             </div>
 
-            <div className="howCard">
-              <div className="howNum">2</div>
+            <div className="stepCard">
+              <div className="stepNo">2</div>
               <div>
-                <div className="howTitle">See results clearly</div>
-                <div className="howText">Dashboard visuals + consultant-style summary that makes sense to leaders.</div>
+                <div className="stepTitle">See results clearly</div>
+                <div className="stepText">Dashboard visuals plus consultant-style interpretation that leaders can understand.</div>
               </div>
             </div>
 
-            <div className="howCard">
-              <div className="howNum">3</div>
+            <div className="stepCard">
+              <div className="stepNo">3</div>
               <div>
-                <div className="howTitle">Leave with a plan</div>
-                <div className="howText">Priorities, actions, and evidence expectations you can actually implement.</div>
+                <div className="stepTitle">Leave with a plan</div>
+                <div className="stepText">Priorities, actions and evidence expectations you can actually implement.</div>
               </div>
             </div>
           </div>
 
-          <div className="ctaBanner">
+          <div className="ctaPanel">
             <div>
-              <div className="ctaTitle">Ready to see where you stand?</div>
-              <div className="muted">Get your baseline in minutes, then turn it into a 90-day improvement plan.</div>
+              <div className="ctaPanelTitle">Ready to see where you stand?</div>
+              <div className="ctaPanelText">Get your baseline in minutes, then turn it into a 90-day improvement plan.</div>
             </div>
-            <div className="ctaBtns">
-              <Link className="btn primary" href="/assessment">
+
+            <div className="ctaPanelActions">
+              <Link className="btn btnPrimary" href="/assessment">
                 Start free assessment
               </Link>
-              <Link className="btn ghost" href="/methodology">
+              <Link className="btn btnSecondary" href="/methodology">
                 Methodology
               </Link>
             </div>
           </div>
         </section>
 
-        <section className="section">
-          <div className="sectionHead">
+        <section className="outcomesSection">
+          <div className="sectionHeading sectionHeadingDark">
+            <div className="sectionEyebrow">What you get</div>
             <h2>What you get after the assessment</h2>
-            <p className="muted">Designed to leave you with a clear impression of where you are — and what to do next.</p>
+            <p>Designed to leave you with a clear impression of where you are — and what to do next.</p>
           </div>
 
-          <div className="get">
-            <div className="getCard">
-              <div className="getHead">
-                <Icon name="radar" /> Results dashboard
+          <div className="outcomesGrid">
+            <div className="outcomeCard">
+              <div className="outcomeHead">
+                <Icon name="radar" />
+                Results dashboard
               </div>
-              <div className="getText">Radar + ranked domain scores so risk is visible. Perfect for internal discussion without technical overload.</div>
+              <div className="outcomeText">Radar plus ranked domain scores so risk is visible without technical overload.</div>
             </div>
 
-            <div className="getCard">
-              <div className="getHead">
-                <Icon name="check" /> Consultant-style interpretation
+            <div className="outcomeCard">
+              <div className="outcomeHead">
+                <Icon name="check" />
+                Consultant-style interpretation
               </div>
-              <div className="getText">Plain-English meaning, strengths and priority risks — designed for leadership and decision-making.</div>
+              <div className="outcomeText">Plain-English meaning, strengths and priority risks designed for leadership decisions.</div>
             </div>
 
-            <div className="getCard">
-              <div className="getHead">
-                <Icon name="plan" /> 90-day action plan
+            <div className="outcomeCard">
+              <div className="outcomeHead">
+                <Icon name="plan" />
+                90-day action plan
               </div>
-              <div className="getText">High-impact actions first. Assign owners and dates, then improve consistency and evidence over time.</div>
+              <div className="outcomeText">High-impact actions first. Assign owners and dates, then improve consistency over time.</div>
             </div>
 
-            <div className="getCard">
-              <div className="getHead">
-                <Icon name="evidence" /> Evidence checklist
+            <div className="outcomeCard">
+              <div className="outcomeHead">
+                <Icon name="evidence" />
+                Evidence checklist
               </div>
-              <div className="getText">Know what “good” proof looks like: policies, operational proof, decisions, and testing notes.</div>
+              <div className="outcomeText">Know what “good” proof looks like: policies, operational evidence, decisions and testing notes.</div>
             </div>
           </div>
 
-          <div className="note">
-            Benefit: you can use the output to improve internally <b>and</b> to respond more confidently to customer due diligence — without pretending it’s a certification.
+          <div className="outcomesNote">
+            Benefit: you can use the output to improve internally <b>and</b> respond more confidently to customer due diligence —
+            without pretending it’s a certification.
           </div>
         </section>
 
-        <section className="section sectionFlat">
-          <div className="sectionHead">
-            <h2>Limitations (kept simple)</h2>
-            <p className="muted">Clear expectations: this is a prioritisation and improvement tool, not a badge.</p>
+        <section className="lightSection">
+          <div className="sectionHeading">
+            <div className="sectionEyebrow">Limitations</div>
+            <h2>Clear expectations, kept simple</h2>
+            <p>This is a prioritisation and improvement tool, not a badge.</p>
           </div>
 
-          <div className="framework">
-            <div className="frameworkCard">
-              <div className="frameworkHead">
-                <Icon name="check" /> What this is
+          <div className="limitsGrid">
+            <div className="limitCard">
+              <div className="limitHead">
+                <Icon name="check" />
+                What this is
               </div>
-              <ul className="list">
+              <ul className="limitList">
                 <li>An SME-friendly maturity snapshot based on your answers.</li>
                 <li>A plan to reduce disruption risk using practical controls.</li>
                 <li>A consistent evidence view you can reuse for due diligence.</li>
               </ul>
             </div>
 
-            <div className="frameworkCard">
-              <div className="frameworkHead">
-                <Icon name="check" /> What this isn’t
+            <div className="limitCard">
+              <div className="limitHead">
+                <Icon name="check" />
+                What this isn’t
               </div>
-              <ul className="list">
+              <ul className="limitList">
                 <li>Not a penetration test or vulnerability scan.</li>
                 <li>Not an ISO certification or compliance attestation.</li>
                 <li>Not a substitute for specialist advice where required.</li>
@@ -525,386 +672,18 @@ export default function HomePage() {
           </div>
         </section>
 
-        <footer className="footer">
-          <div className="footLeft">
-            <div className="footBrand">Resiliscore</div>
-            <div className="muted">Cyber resilience maturity for SMEs — practical, evidence-led, and actionable.</div>
+        <footer className="footerPanel">
+          <div>
+            <div className="footerBrand">Resiliscore</div>
+            <div className="footerText">Cyber resilience maturity for SMEs — practical, evidence-led and actionable.</div>
           </div>
-          <div className="footRight">
-            <Link className="footLink" href="/methodology">
-              Methodology
-            </Link>
-            <Link className="footLink" href="/assessment">
-              Start free assessment
-            </Link>
+
+          <div className="footerLinks">
+            <Link href="/methodology">Methodology</Link>
+            <Link href="/assessment">Start free assessment</Link>
           </div>
         </footer>
       </div>
-
-      <style>{`
-        .wrap { max-width: 1180px; margin: 0 auto; padding: 16px 16px 38px; display: grid; gap: 16px; }
-        .muted { color: var(--muted); }
-        h1, h2 { margin: 0; }
-
-        .btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          height: 42px;
-          padding: 0 14px;
-          border-radius: 14px;
-          border: 1px solid var(--border);
-          background: rgba(255,255,255,0.03);
-          color: var(--text);
-          text-decoration: none;
-          font-weight: 900;
-          cursor: pointer;
-        }
-        .btn:hover { background: rgba(255,255,255,0.06); }
-        .btn.primary {
-          background: rgba(94,234,106,0.14);
-          border-color: rgba(94,234,106,0.30);
-        }
-        .btn.primary:hover { background: rgba(94,234,106,0.18); }
-        .btn.ghost { background: transparent; }
-
-        .hero { display: grid; gap: 12px; align-items: start; }
-
-        .heroBanner {
-          border: 1px solid var(--border);
-          border-radius: 18px;
-          background:
-            radial-gradient(900px 380px at 18% 10%, rgba(94,234,106,0.16), transparent 60%),
-            radial-gradient(900px 380px at 90% 20%, rgba(255,255,255,0.10), transparent 55%),
-            rgba(255,255,255,0.03);
-          padding: 20px;
-        }
-        .heroBannerInner { max-width: 980px; }
-
-        .pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          border-radius: 999px;
-          padding: 8px 12px;
-          border: 1px solid rgba(255,255,255,0.10);
-          background: rgba(255,255,255,0.02);
-          font-weight: 900;
-          color: rgba(255,255,255,0.90);
-          font-size: 13px;
-        }
-
-        .hero h1 {
-          margin-top: 14px;
-          font-size: 44px;
-          line-height: 1.06;
-          letter-spacing: -0.02em;
-        }
-        @media (max-width: 700px) { .hero h1 { font-size: 34px; } }
-
-        .lead {
-          margin-top: 12px;
-          color: rgba(255,255,255,0.78);
-          line-height: 1.65;
-          max-width: 70ch;
-          font-size: 16px;
-        }
-
-        .ctaRow { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .micro { margin-top: 12px; color: rgba(255,255,255,0.62); font-size: 13px; }
-
-        .heroGrid {
-          display: grid;
-          grid-template-columns: 1.15fr 0.85fr;
-          gap: 12px;
-          align-items: stretch;
-        }
-        @media (max-width: 1000px) { .heroGrid { grid-template-columns: 1fr; } }
-
-        .heroPrimary {
-          border: 1px solid var(--border);
-          border-radius: 18px;
-          background: rgba(255,255,255,0.04);
-          padding: 18px;
-        }
-
-        .heroSecondary {
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 18px;
-          background: rgba(255,255,255,0.02);
-          padding: 16px;
-          overflow: hidden;
-        }
-
-        .outputTop { display: grid; gap: 6px; }
-        .outputTitle { font-weight: 950; display: inline-flex; gap: 10px; align-items: center; }
-        .outputSub { line-height: 1.6; }
-
-        .outputGrid {
-          margin-top: 12px;
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 12px;
-          align-items: stretch;
-        }
-
-        .outputLeft {
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 14px;
-          display: grid;
-          gap: 10px;
-          align-content: start;
-        }
-        .outputChips { display: flex; gap: 10px; flex-wrap: wrap; }
-        .outputHint { line-height: 1.6; }
-
-        .chip {
-          display: inline-flex;
-          gap: 8px;
-          align-items: center;
-          border-radius: 999px;
-          padding: 8px 12px;
-          border: 1px solid rgba(255,255,255,0.10);
-          background: rgba(255,255,255,0.02);
-          font-weight: 900;
-          color: rgba(255,255,255,0.86);
-          font-size: 13px;
-        }
-
-        .heroLeft h2 { font-size: 22px; }
-
-        .valueStrip {
-          margin-top: 16px;
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 10px;
-        }
-        @media (max-width: 900px) { .valueStrip { grid-template-columns: 1fr; } }
-
-        .valueCard {
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 12px;
-        }
-        .valueHead { display: inline-flex; gap: 10px; align-items: center; font-weight: 950; }
-        .valueText { margin-top: 8px; color: rgba(255,255,255,0.74); line-height: 1.6; }
-
-        .quote {
-          margin-top: 14px;
-          border: 1px solid rgba(94,234,106,0.18);
-          border-radius: 18px;
-          background: rgba(94,234,106,0.06);
-          padding: 14px;
-          display: grid;
-          grid-template-columns: 22px 1fr;
-          gap: 12px;
-          align-items: start;
-        }
-        .qMark { font-size: 26px; font-weight: 950; color: rgba(94,234,106,0.90); line-height: 1; }
-        .qBody { color: rgba(255,255,255,0.78); line-height: 1.6; }
-
-        .section {
-          border: 1px solid var(--border);
-          border-radius: 18px;
-          background: rgba(255,255,255,0.03);
-          padding: 18px;
-        }
-        .sectionStrong {
-          background: rgba(255,255,255,0.035);
-        }
-        .sectionFlat {
-          background: transparent;
-          border-color: rgba(255,255,255,0.08);
-        }
-        .sectionHead h2 { font-size: 22px; }
-        .sectionHead p { margin: 8px 0 0; line-height: 1.6; max-width: 92ch; }
-
-        .sampleSection {
-          background: rgba(255,255,255,0.025);
-        }
-        .sampleInner {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 16px;
-          flex-wrap: wrap;
-        }
-        .sampleKicker {
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-          color: var(--muted);
-          margin-bottom: 8px;
-        }
-        .sampleText {
-          margin-top: 10px;
-          max-width: 75ch;
-          line-height: 1.65;
-        }
-        .sampleActions {
-          display: flex;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
-
-        .label { font-weight: 950; color: rgba(255,255,255,0.86); font-size: 13px; }
-        .select {
-          width: 100%;
-          margin-top: 10px;
-          height: 44px;
-          border-radius: 14px;
-          border: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.02);
-          color: rgba(255,255,255,0.90);
-          padding: 0 12px;
-          font-weight: 900;
-          outline: none;
-        }
-        .select:focus { border-color: rgba(94,234,106,0.38); box-shadow: 0 0 0 3px rgba(94,234,106,0.10); }
-
-        .benefits {
-          margin-top: 16px;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 12px;
-          align-items: start;
-        }
-        @media (max-width: 1000px) { .benefits { grid-template-columns: 1fr; } }
-
-        .benefitsLeft {
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 16px;
-        }
-        .benefitCard {
-          margin-top: 12px;
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 14px;
-        }
-        .benefitTitle { font-weight: 950; font-size: 18px; }
-        .benefitText { margin: 10px 0 0; color: rgba(255,255,255,0.72); line-height: 1.65; }
-
-        .callout {
-          margin-top: 12px;
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 12px;
-        }
-        .calloutTitle { font-weight: 950; color: rgba(255,255,255,0.88); font-size: 13px; }
-        .calloutText { margin-top: 8px; color: rgba(255,255,255,0.70); line-height: 1.6; }
-
-        .benefitSubTitle { margin-top: 12px; font-weight: 950; font-size: 13px; color: rgba(255,255,255,0.86); }
-        .benefitList { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
-        .benefitList li { display: flex; gap: 10px; align-items: flex-start; color: rgba(255,255,255,0.88); line-height: 1.6; }
-        .dot { width: 9px; height: 9px; border-radius: 99px; background: rgba(94,234,106,0.85); margin-top: 6px; flex: 0 0 auto; }
-
-        .benefitsRight { display: grid; gap: 12px; }
-        .card {
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 14px;
-        }
-        .card.soft { background: rgba(94,234,106,0.06); border-color: rgba(94,234,106,0.18); }
-        .cardHead { display: inline-flex; gap: 10px; align-items: center; font-weight: 950; color: rgba(255,255,255,0.90); }
-        .cardText { margin-top: 10px; color: rgba(255,255,255,0.74); line-height: 1.65; }
-
-        .how { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        @media (max-width: 900px) { .how { grid-template-columns: 1fr; } }
-        .howCard {
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 14px;
-          display: grid;
-          grid-template-columns: 42px 1fr;
-          gap: 12px;
-          align-items: start;
-        }
-        .howNum {
-          width: 34px; height: 34px;
-          border-radius: 12px;
-          display: grid; place-items: center;
-          font-weight: 950;
-          border: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.03);
-        }
-        .howTitle { font-weight: 950; }
-        .howText { margin-top: 6px; color: rgba(255,255,255,0.74); line-height: 1.6; }
-
-        .ctaBanner {
-          margin-top: 14px;
-          border: 1px solid rgba(94,234,106,0.18);
-          border-radius: 18px;
-          background: rgba(94,234,106,0.06);
-          padding: 14px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
-        .ctaTitle { font-weight: 950; font-size: 16px; }
-        .ctaBtns { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        .get { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        @media (max-width: 900px) { .get { grid-template-columns: 1fr; } }
-        .getCard {
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 14px;
-        }
-        .getHead { display: inline-flex; gap: 10px; align-items: center; font-weight: 950; }
-        .getText { margin-top: 10px; color: rgba(255,255,255,0.74); line-height: 1.65; }
-
-        .note {
-          margin-top: 12px;
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 14px;
-          line-height: 1.65;
-          color: rgba(255,255,255,0.78);
-        }
-
-        .framework { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        @media (max-width: 900px) { .framework { grid-template-columns: 1fr; } }
-        .frameworkCard {
-          border: 1px solid rgba(255,255,255,0.10);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          padding: 14px;
-        }
-        .frameworkHead { display: inline-flex; gap: 10px; align-items: center; font-weight: 950; }
-        .list { margin: 10px 0 0; padding-left: 18px; color: rgba(255,255,255,0.78); line-height: 1.65; }
-        .list li { margin: 7px 0; }
-
-        .footer {
-          border: 1px solid var(--border);
-          border-radius: 18px;
-          background: rgba(255,255,255,0.03);
-          padding: 16px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
-        .footBrand { font-weight: 950; }
-        .footRight { display: flex; gap: 12px; flex-wrap: wrap; }
-        .footLink { color: rgba(255,255,255,0.82); text-decoration: none; font-weight: 900; }
-        .footLink:hover { text-decoration: underline; }
-      `}</style>
     </main>
   );
 }

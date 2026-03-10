@@ -16,7 +16,9 @@ function toNumberSafe(v: any): number | null {
 
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
   const assessment = await prisma.assessment.findUnique({ where: { id: params.id } });
-  if (!assessment) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!assessment) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
   const overall_score = toNumberSafe(assessment.overallScore);
   const domain_scores_raw = (assessment.domainScores ?? []) as any[];
@@ -43,5 +45,6 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
     industry: assessment.industry ?? null,
     report_reference,
     report_tier: assessment.reportTier ?? "free",
+    downloadToken: assessment.downloadToken ?? null,
   });
 }

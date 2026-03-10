@@ -26,13 +26,20 @@ const supabase =
 const A4: [number, number] = [595.28, 841.89];
 
 const BRAND = {
-  headerBg: rgb(0.05, 0.14, 0.14),
-  accent: rgb(0.36, 0.84, 0.46),
-  text: rgb(0.10, 0.10, 0.10),
-  muted: rgb(0.45, 0.45, 0.45),
-  line: rgb(0.88, 0.88, 0.88),
-  card: rgb(0.98, 0.98, 0.98),
-};
+  headerBg: rgb(0.024, 0.106, 0.133),      // #061B22
+  headerGlow: rgb(0.051, 0.694, 0.482),    // #0DB17B
+  accent: rgb(0.051, 0.694, 0.482),        // #0DB17B
+  accentSoft: rgb(0.90, 0.97, 0.95),
+  accentLine: rgb(0.72, 0.90, 0.84),
+  text: rgb(0.08, 0.12, 0.14),
+  muted: rgb(0.42, 0.48, 0.50),
+  line: rgb(0.90, 0.93, 0.94),
+  card: rgb(0.985, 0.99, 0.99),
+  white: rgb(1, 1, 1),
+  good: rgb(0.16, 0.62, 0.42),
+  med: rgb(0.91, 0.64, 0.15),
+  risk: rgb(0.86, 0.33, 0.33),
+}
 
 /**
  * ------------------------------
@@ -247,6 +254,180 @@ function drawBar(page: any, x: number, y: number, w: number, h: number, pct: num
     height: h,
     color: BRAND.accent,
   });
+}
+
+function drawRoundedCard(
+  page: any,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  opts?: {
+    fill?: ReturnType<typeof rgb>;
+    border?: ReturnType<typeof rgb>;
+    radius?: number;
+    borderWidth?: number;
+  }
+) {
+  page.drawRectangle({
+    x,
+    y,
+    width: w,
+    height: h,
+    color: opts?.fill ?? BRAND.card,
+    borderColor: opts?.border ?? BRAND.line,
+    borderWidth: opts?.borderWidth ?? 1,
+    borderRadius: opts?.radius ?? 16,
+  });
+}
+
+function drawLabel(page: any, text: string, x: number, y: number, fontBold: any) {
+  page.drawText(sanitizeText(text), {
+    x,
+    y,
+    size: 8.5,
+    font: fontBold,
+    color: BRAND.muted,
+  });
+}
+
+function drawMetricCard(
+  page: any,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  label: string,
+  value: string,
+  sub: string,
+  font: any,
+  fontBold: any
+) {
+  drawRoundedCard(page, x, y, w, h, {
+    fill: BRAND.white,
+    border: BRAND.line,
+    radius: 18,
+  });
+
+  drawLabel(page, label, x + 14, y + h - 18, fontBold);
+
+  page.drawText(sanitizeText(value), {
+    x: x + 14,
+    y: y + h - 52,
+    size: 24,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  page.drawText(sanitizeText(sub), {
+    x: x + 14,
+    y: y + 14,
+    size: 9.5,
+    font,
+    color: BRAND.muted,
+  });
+}
+
+function drawInsightCard(
+  page: any,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  title: string,
+  lines: string[],
+  font: any,
+  fontBold: any,
+  accent?: ReturnType<typeof rgb>
+) {
+  drawRoundedCard(page, x, y, w, h, {
+    fill: BRAND.white,
+    border: accent ?? BRAND.line,
+    radius: 18,
+  });
+
+  page.drawRectangle({
+    x: x + 12,
+    y: y + h - 18,
+    width: 28,
+    height: 4,
+    color: accent ?? BRAND.accent,
+    borderRadius: 2,
+  });
+
+  page.drawText(sanitizeText(title), {
+    x: x + 14,
+    y: y + h - 34,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  let ly = y + h - 54;
+  let drawn = 0;
+
+  for (const raw of lines) {
+    const wrapped = wrapText(raw, 24);
+    for (const line of wrapped) {
+      if (drawn >= 4) return;
+
+      page.drawText(`• ${sanitizeText(line)}`, {
+        x: x + 14,
+        y: ly,
+        size: 9,
+        font,
+        color: BRAND.text,
+      });
+
+      ly -= 12;
+      drawn += 1;
+    }
+  }
+}
+
+function drawSectionIntro(page: any, text: string, x: number, y: number, font: any) {
+  let cy = y;
+  for (const line of wrapText(text, 102)) {
+    page.drawText(line, {
+      x,
+      y: cy,
+      size: 10.5,
+      font,
+      color: rgb(0.15, 0.15, 0.15),
+    });
+    cy -= 14;
+  }
+  return cy;
+}
+
+function drawMiniScorePill(
+  page: any,
+  x: number,
+  y: number,
+  text: string,
+  fontBold: any,
+  fill?: ReturnType<typeof rgb>,
+  textColor?: ReturnType<typeof rgb>
+) {
+  drawRoundedCard(page, x, y, 74, 24, {
+    fill: fill ?? BRAND.accentSoft,
+    border: BRAND.accentLine,
+    radius: 999,
+  });
+
+  page.drawText(sanitizeText(text), {
+    x: x + 13,
+    y: y + 7,
+    size: 9,
+    font: fontBold,
+    color: textColor ?? BRAND.text,
+  });
+}
+
+function severityColor(score: number) {
+  if (score < 1.5) return BRAND.risk;
+  if (score < 2.5) return BRAND.med;
+  return BRAND.good;
 }
 
 function drawTrafficLight(page: any, x: number, y: number, band: ReturnType<typeof scoreBand>, fontBold: any, font: any) {
@@ -639,7 +820,7 @@ function build306090Plan(ranked: { domain_name: string; domain_code: string; sco
   return plan;
 }
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
     const id = params.id;
 
@@ -647,6 +828,11 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     if (!assessment) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
+
+    const token = new URL(req.url).searchParams.get("token");
+    if ( !token || token !== assessment.downloadToken) {
+       return NextResponse.json({ error:"unauthorized" }, { status: 403 });
+   }
 
     if ((assessment.reportTier ?? "free") !== "premium") {
       return NextResponse.json(
@@ -740,73 +926,139 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
     /**
      * ------------------------------
-     * Cover page (real cover)
+     * Cover page
      * ------------------------------
      */
     {
       const page = addPage(pdfDoc);
       drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.08);
+      drawWatermark(page, watermarkImg, 0.06);
 
-      const { height } = page.getSize();
-      let y = height - 150;
+      const { height, width } = page.getSize();
+
+      page.drawRectangle({
+        x: 0,
+        y: 0,
+        width,
+        height,
+        color: BRAND.white,
+      });
+
+      drawBrandHeader(page, shieldImg);
 
       page.drawText("RESILISCORE", {
         x: 50,
-        y,
-        size: 32,
+        y: height - 142,
+        size: 30,
         font: fontBold,
         color: BRAND.text,
       });
-      y -= 38;
 
-      page.drawText("Cyber Resilience Maturity Assessment Report", {
+      page.drawText("Cyber Resilience Assessment Report", {
         x: 50,
-        y,
-        size: 18,
+        y: height - 178,
+        size: 19,
         font: fontBold,
-        color: rgb(0.16, 0.16, 0.16),
+        color: BRAND.text,
       });
 
-      y -= 20;
-      page.drawRectangle({ x: 50, y, width: 190, height: 6, color: BRAND.accent });
+      page.drawText("A structured maturity snapshot designed for SMEs", {
+        x: 50,
+        y: height - 198,
+        size: 10.5,
+        font,
+        color: BRAND.muted,
+      });
 
-      y -= 42;
+      page.drawRectangle({
+        x: 50,
+        y: height - 220,
+        width: 220,
+        height: 5,
+        color: BRAND.accent,
+        borderRadius: 3,
+      });
+
+      drawMetricCard(
+        page,
+        50,
+        height - 370,
+        150,
+        108,
+        "Overall score",
+        `${overall.toFixed(2)} / 5`,
+        scoreLabel(overall),
+        font,
+        fontBold
+      );
+
+      drawMetricCard(
+        page,
+        214,
+        height - 370,
+        110,
+        108,
+        "Grade",
+        grade,
+        "Maturity band",
+        font,
+        fontBold
+      );
+
+      drawRoundedCard(page, 338, height - 370, 207, 108, {
+        fill: BRAND.white,
+        border: BRAND.line,
+        radius: 18,
+      });
+
+      drawLabel(page, "Assessment details", 352, height - 280, fontBold);
+
+      let infoY = height - 304;
 
       if (companyName) {
-        page.drawText("Company", { x: 50, y, size: 10, font: fontBold, color: BRAND.muted });
-        y -= 16;
-        page.drawText(companyName, { x: 50, y, size: 13, font, color: BRAND.text });
-        y -= 26;
+        page.drawText("Company", { x: 352, y: infoY, size: 9, font: fontBold, color: BRAND.muted });
+        page.drawText(companyName, { x: 430, y: infoY, size: 10.5, font, color: BRAND.text });
+        infoY -= 18;
       }
 
-      page.drawText("Assessment date", { x: 50, y, size: 10, font: fontBold, color: BRAND.muted });
-      y -= 16;
-      page.drawText(assessmentDate, { x: 50, y, size: 13, font, color: BRAND.text });
-      y -= 26;
+      page.drawText("Date", { x: 352, y: infoY, size: 9, font: fontBold, color: BRAND.muted });
+      page.drawText(assessmentDate, { x: 430, y: infoY, size: 10.5, font, color: BRAND.text });
+      infoY -= 18;
 
-      page.drawText("Report reference", { x: 50, y, size: 10, font: fontBold, color: BRAND.muted });
-      y -= 16;
-      page.drawText(reportRef, { x: 50, y, size: 13, font, color: BRAND.text });
-      y -= 36;
+      page.drawText("Reference", { x: 352, y: infoY, size: 9, font: fontBold, color: BRAND.muted });
+      page.drawText(reportRef, { x: 430, y: infoY, size: 10.5, font, color: BRAND.text });
 
-      page.drawText("Overall score", { x: 50, y, size: 10, font: fontBold, color: BRAND.muted });
-      y -= 24;
-      page.drawText(`${overall.toFixed(2)} / 5`, {
-        x: 50,
-        y,
-        size: 28,
+      drawRoundedCard(page, 50, 168, 495, 86, {
+        fill: BRAND.card,
+        border: BRAND.line,
+        radius: 18,
+      });
+
+      page.drawText("What this report contains", {
+        x: 64,
+        y: 228,
+        size: 11,
         font: fontBold,
         color: BRAND.text,
       });
-      y -= 28;
-      page.drawText(`${grade} - ${scoreLabel(overall)}`, {
-        x: 50,
-        y,
-        size: 14,
-        font: fontBold,
-        color: BRAND.text,
-      });
+
+      const coverBullets = [
+        "Overall resilience score, grade and maturity interpretation",
+        "Domain visuals showing stronger and weaker areas",
+        "Priority findings, practical actions and a 30 / 60 / 90 day plan",
+      ];
+
+      let cy = 208;
+      for (const b of coverBullets) {
+        page.drawText(`• ${sanitizeText(b)}`, {
+          x: 64,
+          y: cy,
+          size: 10,
+          font,
+          color: BRAND.text,
+        });
+        cy -= 16;
+      }
 
       drawFooter(page, pageNum++, font, reportRef);
     }
@@ -910,168 +1162,140 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     {
       const page = addPage(pdfDoc);
       drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+      drawWatermark(page, watermarkImg, 0.08);
 
       const { height } = page.getSize();
       let y = height - 96;
       drawSectionTitle(page, "Executive Summary", 50, y, fontBold);
-      y -= 34;
+      y -= 26;
 
-      page.drawText("Overall result", { x: 50, y, size: 11, font: fontBold, color: BRAND.text });
-      y -= 18;
+      y = drawSectionIntro(
+        page,
+        "This page gives a clean, leadership-ready summary of your current resilience position, what your score means, and where attention should go first.",
+        50,
+        y,
+        font
+      );
 
-      page.drawText(sanitizeText(`Overall score: ${overall.toFixed(2)} / 5`), {
+      y -= 10;
+
+      drawMetricCard(page, 50, y - 104, 146, 104, "Overall score", `${overall.toFixed(2)} / 5`, "Out of 5", font, fontBold);
+      drawMetricCard(page, 208, y - 104, 146, 104, "Grade", grade, scoreLabel(overall), font, fontBold);
+      drawMetricCard(page, 366, y - 104, 179, 104, "Risk signal", scoreBand(overall).replace("_", " "), "Relative resilience position", font, fontBold);
+
+      y -= 126;
+
+      page.drawText("Interpretation", {
         x: 50,
         y,
-        size: 10,
-        font,
-        color: BRAND.text,
-      });
-      page.drawText(sanitizeText(`Grade: ${grade}`), {
-        x: 260,
-        y,
         size: 11,
-        font,
-        color: BRAND.text,
-      });
-      page.drawText(sanitizeText(`Maturity: ${scoreLabel(overall)}`), {
-        x: 360,
-        y,
-        size: 11,
-        font,
+        font: fontBold,
         color: BRAND.text,
       });
 
-      y -= 18;
-      drawBar(page, 50, y, 280, 10, overall / 5);
-      page.drawText("0", { x: 50, y: y - 12, size: 8, font, color: BRAND.muted });
-      page.drawText("5", { x: 330, y: y - 12, size: 8, font, color: BRAND.muted });
-
-      drawTrafficLight(page, 50, y - 36, scoreBand(overall), fontBold, font);
-
-      y -= 64;
+      y -= 16;
 
       const band = scoreBand(overall);
       const execCopy =
         band === "very_low"
           ? [
               "Controls are limited or not operating consistently day-to-day.",
-              "Fast wins: ownership, MFA/leavers, backup restore testing, and a simple risk register.",
-              "Reduce disruption risk first, then turn improvements into repeatable routines with owners and dates.",
+              "Fast wins are ownership, MFA, backup restore testing and a simple risk register.",
+              "Reduce disruption risk first, then turn improvements into repeatable routines.",
             ]
           : band === "low"
           ? [
-              "Some controls exist, but consistency and evidence may be patchy across domains.",
-              "Prioritise the weakest 2-3 domains and convert them into routines (owner, cadence, evidence).",
-              "Add basic measurement (restore success, patch timeliness, exercise cadence) to move maturity up quickly.",
+              "Some controls exist, but consistency and evidence may still be patchy.",
+              "Prioritise the weakest 2–3 domains and make them routine, owned and evidenced.",
+              "Add simple measurement such as restore success and patch timeliness.",
             ]
           : band === "mid"
           ? [
-              "Defined practices exist. Next step is consistency, measurement and proof they work under pressure.",
-              "Lift the weakest domains to remove single points of failure.",
-              "Introduce lightweight assurance: testing, evidence, and simple KPIs.",
+              "Defined practices exist, but some domains need more consistency and proof.",
+              "Lift the weakest domains to reduce single points of failure.",
+              "Use testing, evidence and simple KPIs to stop maturity drift.",
             ]
           : band === "high"
           ? [
-              "Good consistency across most domains with opportunities to strengthen assurance and measurement.",
-              "Biggest gains now are proving effectiveness: testing, exercising, tightening exceptions.",
-              "Maintain standards as the business changes (new suppliers, systems, growth).",
+              "Good consistency exists across most domains.",
+              "Biggest gains now are tighter assurance, testing and exception control.",
+              "Keep standards strong through growth, supplier change and new systems.",
             ]
           : [
-              "Strong foundations with disciplined operating practices and continuous improvement.",
-              "Focus on optimising assurance and reducing hidden risk through measurement.",
-              "Embed resilience into onboarding, procurement and system change to maintain maturity at scale.",
+              "Strong maturity foundations are in place.",
+              "Focus now is optimisation, assurance and reducing hidden risk.",
+              "Maintain resilience by embedding controls into business change.",
             ];
 
-      page.drawText("Interpretation (consultant view)", {
+      drawInsightCard(page, 50, y - 138, 155, 126, "Overall meaning", execCopy.slice(0, 2), font, fontBold, BRAND.accent);
+      drawInsightCard(
+        page,
+        220,
+        y - 138,
+        155,
+        126,
+        "Top priorities",
+        topRisks.map((d) => `${d.domain_name || d.domain_code}: ${Number(d.score ?? 0).toFixed(2)} / 5`),
+        font,
+        fontBold,
+        BRAND.risk
+      );
+      drawInsightCard(
+        page,
+        390,
+        y - 138,
+        155,
+        126,
+        "Top strengths",
+        topStrengths.map((d) => `${d.domain_name || d.domain_code}: ${Number(d.score ?? 0).toFixed(2)} / 5`),
+        font,
+        fontBold,
+        BRAND.good
+      );
+
+      y -= 164;
+
+      page.drawText("Weakest domains ranked", {
         x: 50,
         y,
         size: 11,
         font: fontBold,
         color: BRAND.text,
       });
+
       y -= 16;
-
-      for (const b of execCopy) {
-        for (const line of wrapText(`• ${b}`, 98)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 10;
-      page.drawText("Top priorities (weakest domains)", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
 
       for (const d of topRisks) {
         const name = d.domain_name || d.domain_code || "Domain";
-        const nameLines = wrapText(name, 40);
+        const score = Number(d.score ?? 0);
+        const color = severityColor(score);
 
-        page.drawText(nameLines[0] ?? "Domain", {
+        page.drawText(sanitizeText(name), {
           x: 50,
           y,
           size: 10.5,
           font,
           color: BRAND.text,
         });
-        page.drawText(sanitizeText(`${Number(d.score ?? 0).toFixed(2)}`), {
-          x: 430,
+
+        drawBar(page, 285, y - 2, 175, 8, score / 5);
+
+        page.drawText(sanitizeText(score.toFixed(2)), {
+          x: 470,
           y,
           size: 10.5,
           font: fontBold,
           color: BRAND.text,
         });
-        drawBar(page, 270, y - 2, 145, 8, Number(d.score ?? 0) / 5);
-        y -= 16;
 
-        if (nameLines.length > 1) {
-          page.drawText(nameLines[1], { x: 50, y, size: 9.5, font, color: BRAND.muted });
-          y -= 14;
-        }
-      }
-
-      y -= 8;
-      page.drawText("Key strengths (highest domains)", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      for (const d of topStrengths) {
-        const name = d.domain_name || d.domain_code || "Domain";
-        const nameLines = wrapText(name, 40);
-
-        page.drawText(nameLines[0] ?? "Domain", {
-          x: 50,
-          y,
-          size: 10.5,
-          font,
-          color: BRAND.text,
+        page.drawCircle({
+          x: 530,
+          y: y + 4,
+          size: 4.5,
+          color,
         });
-        page.drawText(sanitizeText(`${Number(d.score ?? 0).toFixed(2)}`), {
-          x: 430,
-          y,
-          size: 10.5,
-          font: fontBold,
-          color: BRAND.text,
-        });
-        drawBar(page, 270, y - 2, 145, 8, Number(d.score ?? 0) / 5);
-        y -= 16;
 
-        if (nameLines.length > 1) {
-          page.drawText(nameLines[1], { x: 50, y, size: 9.5, font, color: BRAND.muted });
-          y -= 14;
-        }
+        y -= 20;
       }
 
       drawFooter(page, pageNum++, font, reportRef);
@@ -1309,22 +1533,68 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
     /**
      * ------------------------------
-     * Visuals page (Radar + ranked bars)
+     * Visuals page
      * ------------------------------
      */
     {
       const page = addPage(pdfDoc);
       drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+      drawWatermark(page, watermarkImg, 0.08);
 
       const { height } = page.getSize();
       let y = height - 96;
       drawSectionTitle(page, "Results Visuals", 50, y, fontBold);
-      y -= 28;
+      y -= 24;
 
-      const radarCx = 190;
-      const radarCy = 520;
-      const radarR = 112;
+      y = drawSectionIntro(
+        page,
+        "This page mirrors the dashboard view: a clear radar visual for balance across domains, plus ranked scores showing where resilience is strongest and where risk is highest.",
+        50,
+        y,
+        font
+      );
+
+      const radarCardX = 50;
+      const radarCardY = 350;
+      const radarCardW = 245;
+      const radarCardH = 290;
+
+      const rankedCardX = 315;
+      const rankedCardY = 350;
+      const rankedCardW = 230;
+      const rankedCardH = 290;
+
+      drawRoundedCard(page, radarCardX, radarCardY, radarCardW, radarCardH, {
+        fill: BRAND.white,
+        border: BRAND.line,
+        radius: 20,
+      });
+
+      drawRoundedCard(page, rankedCardX, rankedCardY, rankedCardW, rankedCardH, {
+        fill: BRAND.white,
+        border: BRAND.line,
+        radius: 20,
+      });
+
+      page.drawText("Radar profile", {
+        x: radarCardX + 16,
+        y: radarCardY + radarCardH - 24,
+        size: 11,
+        font: fontBold,
+        color: BRAND.text,
+      });
+
+      page.drawText("Ranked domain scores", {
+        x: rankedCardX + 16,
+        y: rankedCardY + rankedCardH - 24,
+        size: 11,
+        font: fontBold,
+        color: BRAND.text,
+      });
+
+      const radarCx = radarCardX + 122;
+      const radarCy = radarCardY + 136;
+      const radarR = 74;
 
       const RADAR_ORDER = ["Response", "Recovery", "Operations", "Identity", "Governance", "Asset", "Threat", "Suppliers", "Risk"];
 
@@ -1340,105 +1610,125 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       const values01 = radarDomains.map((d) => Number(d.score ?? 0) / 5);
 
       {
-        const n = Math.max(3, Math.min(values01.length, 12));
-        const vals = values01.slice(0, n).map((v) => clamp(v, 0, 1));
-        const ang0 = -Math.PI / 2;
+  const n = Math.max(3, Math.min(values01.length, 12));
+  const vals = values01.slice(0, n).map((v) => clamp(v, 0, 1));
+  const ang0 = -Math.PI / 2;
 
-        for (const t of [0.25, 0.5, 0.75, 1]) {
-          const rr = radarR * t;
-          page.drawCircle({ x: radarCx, y: radarCy, size: rr, borderWidth: 1, borderColor: rgb(0.90, 0.90, 0.90) });
-        }
+  for (const t of [0.25, 0.5, 0.75, 1]) {
+    const rr = radarR * t;
+    page.drawCircle({
+      x: radarCx,
+      y: radarCy,
+      size: rr,
+      borderWidth: 1,
+      borderColor: rgb(0.90, 0.90, 0.90),
+    });
+  }
 
-        for (let i = 0; i < n; i++) {
-          const a = ang0 + (i * 2 * Math.PI) / n;
-          const x = radarCx + Math.cos(a) * radarR;
-          const yy = radarCy + Math.sin(a) * radarR;
-          page.drawLine({ start: { x: radarCx, y: radarCy }, end: { x, y: yy }, thickness: 1, color: rgb(0.92, 0.92, 0.92) });
-        }
+  for (let i = 0; i < n; i++) {
+    const a = ang0 + (i * 2 * Math.PI) / n;
+    const x = radarCx + Math.cos(a) * radarR;
+    const yy = radarCy + Math.sin(a) * radarR;
 
-        const pts = vals.map((v, i) => {
-          const a = ang0 + (i * 2 * Math.PI) / n;
-          return {
-            x: radarCx + Math.cos(a) * radarR * v,
-            y: radarCy + Math.sin(a) * radarR * v,
-          };
-        });
+    page.drawLine({
+      start: { x: radarCx, y: radarCy },
+      end: { x, y: yy },
+      thickness: 1,
+      color: rgb(0.92, 0.92, 0.92),
+    });
+  }
 
-        const pathD = "M " + pts.map((p) => `${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(" L ") + " Z";
+  const pts = vals.map((v, i) => {
+    const a = ang0 + (i * 2 * Math.PI) / n;
+    return {
+      x: radarCx + Math.cos(a) * radarR * v,
+      y: radarCy + Math.sin(a) * radarR * v,
+    };
+  });
 
-        page.drawSvgPath(pathD, {
-          color: rgb(0.36, 0.84, 0.46),
-          opacity: 0.16,
-          borderColor: rgb(0.36, 0.84, 0.46),
-          borderWidth: 2,
-        });
+  const pathD =
+    "M " + pts.map((p) => `${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(" L ") + " Z";
 
-        for (let i = 0; i < pts.length; i++) {
-          const p1 = pts[i];
-          const p2 = pts[(i + 1) % pts.length];
-          page.drawLine({
-            start: { x: p1.x, y: p1.y },
-            end: { x: p2.x, y: p2.y },
-            thickness: 1,
-            color: rgb(0.36, 0.84, 0.46),
-            opacity: 0.35 as any,
-          });
-        }
+  page.drawSvgPath(pathD, {
+    color: BRAND.accent,
+    opacity: 0.14,
+    borderColor: BRAND.accent,
+    borderWidth: 2,
+  });
 
-        for (const p of pts) {
-          page.drawCircle({
-            x: p.x,
-            y: p.y,
-            size: 3.2,
-            color: rgb(0.36, 0.84, 0.46),
-            opacity: 0.95,
-          });
-          page.drawCircle({
-            x: p.x,
-            y: p.y,
-            size: 4.8,
-            borderWidth: 1,
-            borderColor: rgb(0.36, 0.84, 0.46),
-            opacity: 0.35,
-          });
-        }
+  for (let i = 0; i < pts.length; i++) {
+    const p1 = pts[i];
+    const p2 = pts[(i + 1) % pts.length];
 
-        for (let i = 0; i < n; i++) {
-          const a = ang0 + (i * 2 * Math.PI) / n;
-          const lab = sanitizeText(labels[i] ?? "");
-          if (!lab) continue;
+    page.drawLine({
+      start: { x: p1.x, y: p1.y },
+      end: { x: p2.x, y: p2.y },
+      thickness: 1.4,
+      color: BRAND.accent,
+      opacity: 0.45 as any,
+    });
+  }
 
-          const lx = radarCx + Math.cos(a) * (radarR + 16);
-          const ly = radarCy + Math.sin(a) * (radarR + 16);
+  for (const p of pts) {
+    page.drawCircle({
+      x: p.x,
+      y: p.y,
+      size: 3.2,
+      color: BRAND.accent,
+      opacity: 0.95,
+    });
 
-          const leftSide = Math.cos(a) < -0.2;
-          const rightSide = Math.cos(a) > 0.2;
+    page.drawCircle({
+      x: p.x,
+      y: p.y,
+      size: 4.8,
+      borderWidth: 1,
+      borderColor: BRAND.accent,
+      opacity: 0.35,
+    });
+  }
 
-          const size = 7.0;
-          const x = rightSide ? lx - 8 : leftSide ? lx - 28 : lx - 18;
+  for (let i = 0; i < n; i++) {
+    const a = ang0 + (i * 2 * Math.PI) / n;
+    const lab = sanitizeText(labels[i] ?? "");
+    if (!lab) continue;
 
-          page.drawText(lab, {
-            x,
-            y: ly - 4,
-            size,
-            font,
-            color: BRAND.muted,
-          });
-        }
+    const lx = radarCx + Math.cos(a) * (radarR + 10);
+    const ly = radarCy + Math.sin(a) * (radarR + 10);
 
-        page.drawText("Scale: 0-5", { x: 85, y: 380, size: 9, font, color: BRAND.muted });
-      }
+    const leftSide = Math.cos(a) < -0.2;
+    const rightSide = Math.cos(a) > 0.2;
 
-      const rightX = 352;
-      page.drawText("Ranked domains (weakest first)", {
-        x: rightX,
-        y: 660,
-        size: 10.5,
-        font: fontBold,
-        color: BRAND.text,
+    const size = 6.3;
+    const x = rightSide ? lx - 8 : leftSide ? lx - 28 : lx - 18;
+
+    page.drawText(lab, {
+      x,
+      y: ly - 4,
+      size,
+      font,
+      color: BRAND.muted,
+    });
+  }
+
+  page.drawText("Scale: 0-5", {
+    x: 85,
+    y: 380,
+    size: 9,
+    font,
+    color: BRAND.muted,
+  });
+}
+
+      page.drawText("Scale: 0–5", {
+        x: radarCardX + 16,
+        y: radarCardY + 16,
+        size: 8.5,
+        font,
+        color: BRAND.muted,
       });
 
-      let by = 640;
+      let by = rankedCardY + rankedCardH - 50;
       const rankedForBars = [...ranked]
         .map((d) => ({
           ...d,
@@ -1450,37 +1740,62 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         const label = d.short || "Domain";
         const score = Number(d.score ?? 0);
 
-        page.drawText(label, { x: rightX, y: by, size: 9.5, font, color: BRAND.text });
-        drawBar(page, rightX + 82, by - 2, 130, 8, score / 5);
+        page.drawText(label, {
+          x: rankedCardX + 16,
+          y: by,
+          size: 9.4,
+          font,
+          color: BRAND.text,
+        });
+
+        drawBar(page, rankedCardX + 92, by - 2, 92, 8, score / 5);
 
         page.drawText(sanitizeText(score.toFixed(2)), {
-          x: 545 - 28,
+          x: rankedCardX + 186,
           y: by,
-          size: 9.5,
+          size: 9.2,
           font: fontBold,
           color: BRAND.text,
         });
 
-        by -= 22;
-        if (by < 380) break;
+        page.drawCircle({
+          x: rankedCardX + 214,
+          y: by + 4,
+          size: 3.6,
+          color: severityColor(score),
+        });
+
+        by -= 24;
       }
 
-      let ey = 340;
-      page.drawText("How to read this", { x: 50, y: ey, size: 11, font: fontBold, color: BRAND.text });
-      ey -= 14;
+      const insightY = 282;
+      page.drawText("What this means", {
+        x: 50,
+        y: insightY,
+        size: 11,
+        font: fontBold,
+        color: BRAND.text,
+      });
 
-      const expl = [
-        "The radar shows relative maturity by domain (0-5 scaled). Bigger shape = more consistent controls.",
-        "The ranked list highlights where disruption risk is most likely to come from first.",
-        "Focus on lifting the lowest 2-3 domains - that usually produces the fastest overall improvement.",
+      const visualBullets = [
+        "The radar shows balance across domains. A larger, more even shape indicates stronger operating consistency.",
+        "The ranked view shows where disruption risk is most likely to come from first.",
+        "Improving the lowest 2–3 domains usually raises resilience fastest.",
       ];
 
-      for (const b of expl) {
-        for (const line of wrapText(`• ${b}`, 98)) {
-          page.drawText(line, { x: 50, y: ey, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-          ey -= 14;
+      let vy = insightY - 16;
+      for (const b of visualBullets) {
+        for (const line of wrapText(`• ${b}`, 100)) {
+          page.drawText(line, {
+            x: 50,
+            y: vy,
+            size: 10.3,
+            font,
+            color: BRAND.text,
+          });
+          vy -= 14;
         }
-        ey -= 2;
+        vy -= 2;
       }
 
       drawFooter(page, pageNum++, font, reportRef);
@@ -2540,19 +2855,28 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       y -= 28;
 
       const field = (label: string, x: number, yTop: number, w: number) => {
-        page.drawText(sanitizeText(label), { x, y: yTop, size: 9, font: fontBold, color: BRAND.muted });
-        const boxY = yTop - 18;
-        page.drawRectangle({
-          x,
-          y: boxY,
-          width: w,
-          height: 18,
-          borderWidth: 1,
-          borderColor: rgb(0.82, 0.82, 0.82),
-          color: rgb(1, 1, 1),
-        });
-        return boxY - 10;
-      };
+  page.drawText(sanitizeText(label), {
+    x,
+    y: yTop,
+    size: 9,
+    font: fontBold,
+    color: BRAND.muted,
+  });
+
+  const boxY = yTop - 24;
+
+  page.drawRectangle({
+    x,
+    y: boxY,
+    width: w,
+    height: 18,
+    borderWidth: 1,
+    borderColor: rgb(0.82, 0.82, 0.82),
+    color: rgb(1, 1, 1),
+  });
+
+  return boxY - 12;
+};
 
       const col1X = 50;
       const col2X = 310;
@@ -2686,17 +3010,32 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         });
 
         const lines = wrapText(text, 52);
-        page.drawText(lines[0] ?? "", { x: 90, y, size: 10, font, color: BRAND.text });
-        if (lines[1]) page.drawText(lines[1], { x: 90, y: y - 12, size: 9.5, font, color: BRAND.muted });
+        page.drawText(lines[0] ?? "", {
+  	  x: 90,
+  	  y,
+  	  size: 10,
+  	  font,
+  	  color: BRAND.text,
+	});
 
-        page.drawLine({
-          start: { x: 400, y: y - 2 },
-          end: { x: width - 50, y: y - 2 },
-          thickness: 1,
-          color: rgb(0.88, 0.88, 0.88),
-        });
+	if (lines[1]) {
+  	  page.drawText(lines[1], {
+    	  x: 90,
+    	  y: y - 12,
+    	  size: 8.5,
+    	  font,
+    	  color: BRAND.muted,
+  	});
+      }
 
-        y -= lines[1] ? 28 : 18;
+	page.drawLine({
+  	  start: { x: 400, y: y - 2 },
+  	  end: { x: width - 50, y: y - 2 },
+  	  thickness: 1,
+  	  color: rgb(0.88, 0.88, 0.88),
+	});
+
+	y -= lines[1] ? 30 : 18;
         return true;
       };
 
@@ -2854,15 +3193,6 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         reportUrl: filePath,
         reportGeneratedAt: new Date(),
         reportEmail: assessment.email ?? null,
-      },
-    });
-
-    return new NextResponse(pdfBytes, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${filename}"`,
-        "Cache-Control": "no-store",
       },
     });
 
