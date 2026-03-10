@@ -152,6 +152,27 @@ export default function ResultsClient({ id }: { id: string }) {
   }, [id]);
 
   useEffect(() => {
+    async function confirmUpgradeIfNeeded() {
+    const url = new URL(window.location.href);
+    const upgraded = url.searchParams.get("upgraded");
+
+    if (upgraded !== "1") return;
+
+    try {
+      await fetch(`/api/assessments/${id}/confirm-upgrade`, {
+        method: "POST",
+      });
+    } catch (e) {
+      console.error("Confirm upgrade failed", e);
+    }
+
+    await load();
+  }
+
+  confirmUpgradeIfNeeded();
+}, [id, load]);
+
+  useEffect(() => {
   if (!upgraded) return;
 
   let cancelled = false;
