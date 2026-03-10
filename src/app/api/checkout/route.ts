@@ -30,7 +30,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Missing STRIPE_PRICE_ID in env" }, { status: 500 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     const stripe = getStripe();
 
     const session = await stripe.checkout.sessions.create({
@@ -38,7 +38,7 @@ export async function GET(req: Request) {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: "price_1T8iIS0PKdwFCGJ6hFjPxYsy",
+          price: priceId,
           quantity: 1,
         },
       ],
