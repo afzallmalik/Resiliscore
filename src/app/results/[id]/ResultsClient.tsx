@@ -747,7 +747,7 @@ export default function ResultsClient({ id }: { id: string }) {
         }
 
         .rs-loadingText {
-          color: rgba(255,255,255,0.78);
+          color: #061b22; font-weight:700;
         }
 
         .rs-btn {

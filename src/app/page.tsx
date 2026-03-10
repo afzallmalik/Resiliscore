@@ -437,7 +437,7 @@ export default function HomePage() {
           <div className="sectionHeading sectionHeadingDark">
             <div className="sectionEyebrow">Industry view</div>
             <h2>Why this matters in your industry</h2>
-            <p>
+            <p style={{ color: "rgba(255,255.255,0.82)" }}>
               Same assessment, different impact. Select your industry to see how Resiliscore helps reduce disruption risk and improve
               due diligence.
             </p>
@@ -595,7 +595,7 @@ export default function HomePage() {
           <div className="sectionHeading sectionHeadingDark">
             <div className="sectionEyebrow">What you get</div>
             <h2>What you get after the assessment</h2>
-            <p>Designed to leave you with a clear impression of where you are — and what to do next.</p>
+            <p style={{ color: "rgba(255,255.255,0.82)" }}>Designed to leave you with a clear impression of where you are — and what to do next.</p>
           </div>
 
           <div className="outcomesGrid">
