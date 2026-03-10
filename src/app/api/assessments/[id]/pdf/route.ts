@@ -976,7 +976,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
         width: 220,
         height: 5,
         color: BRAND.accent,
-        borderRadius: 3,
       });
 
       drawMetricCard(
