@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { DOMAINS_V13 } from "@/lib/domains";
-import ResultsRadarCard from "@/components/ResultsRadarCard";
 
 type DomainScoreRaw = {
   code?: string;
@@ -14,25 +13,77 @@ type DomainScoreRaw = {
   domain_name?: string;
   domainName?: string;
   score?: number;
+  risk_score?: number | null;
+  breach_route?: string;
+  risk_band?: string;
+};
+
+type PriorityAction = {
+  title?: string;
+  why?: string;
+  urgency?: string;
+};
+
+type FinancialImpact = {
+  min?: number | null;
+  max?: number | null;
+  breakdown?: {
+    downtime?: [number, number] | null;
+    lostRevenue?: [number, number] | null;
+    recovery?: [number, number] | null;
+    reputational?: [number, number] | null;
+  } | null;
+};
+
+type Benchmark = {
+  more_secure_than?: number | null;
+  less_secure_than?: number | null;
+};
+
+type ReportSummary = {
+  headline?: string;
+  why_it_matters?: string;
 };
 
 type ResultsPayload = {
   overall_score?: number;
   overallScore?: number;
   grade?: string;
+
   domain_scores?: DomainScoreRaw[];
   domainScores?: DomainScoreRaw[];
+
   interpretation?: string;
   recommendations?: string[];
+
   email?: string | null;
   company_name?: string | null;
   companyName?: string | null;
   industry?: string | null;
+
   report_reference?: string | null;
   reportReference?: string | null;
+
   report_tier?: "free" | "premium";
   reportTier?: "free" | "premium";
   downloadToken?: string | null;
+
+  risk_level?: "High" | "Medium" | "Low" | null;
+  top_breach_routes?: string[];
+  priority_actions?: PriorityAction[];
+  financial_impact?: FinancialImpact | null;
+  benchmark?: Benchmark | null;
+  report_summary?: ReportSummary | null;
+};
+
+type NormalizedDomainScore = {
+  code: string;
+  name: string;
+  fullName: string;
+  order: number;
+  score: number;
+  riskScore: number | null;
+  breachRoute: string | null;
 };
 
 function toNum(v: unknown, fallback = 0) {
@@ -44,68 +95,311 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-function maturityLabel(score: number) {
-  if (score >= 4.5) return "Optimised";
-  if (score >= 3.5) return "Managed";
-  if (score >= 2.5) return "Defined";
-  if (score >= 1.5) return "Repeatable";
-  if (score >= 0.5) return "Ad hoc";
-  return "Not in place";
-}
-
 function severity(score: number) {
   if (score < 1.5) return "high";
   if (score < 2.5) return "med";
   return "low";
 }
 
-function scoreBand(score: number): "very_low" | "low" | "mid" | "high" | "very_high" {
-  if (score < 1.0) return "very_low";
-  if (score < 2.0) return "low";
-  if (score < 3.0) return "mid";
-  if (score < 4.0) return "high";
-  return "very_high";
+function getRiskLevel(overall: number): "High" | "Medium" | "Low" {
+  if (overall < 2.25) return "High";
+  if (overall < 3.5) return "Medium";
+  return "Low";
 }
 
-function executiveSummary(overall: number) {
-  const band = scoreBand(overall);
+function getRiskSummary(overall: number) {
+  const level = getRiskLevel(overall);
 
-  if (band === "very_low") {
-    return [
-      "This suggests resilience controls are limited or not operating consistently in day-to-day practice.",
-      "Fast wins usually come from ownership, access control, backup restore testing, and a simple risk register.",
-      "Reduce disruption risk first, then turn improvements into repeatable routines with owners and dates.",
-    ];
+  if (level === "High") {
+    return "Your business appears exposed to a small number of common weaknesses that attackers often exploit first.";
   }
 
-  if (band === "low") {
-    return [
-      "Some controls are in place, but consistency and evidence may be patchy across domains.",
-      "Prioritise the weakest 2–3 domains and convert them into routines with an owner, cadence and evidence.",
-      "Add basic measurement like restore success, patch timeliness and exercise cadence to move maturity up quickly.",
-    ];
+  if (level === "Medium") {
+    return "Some protections appear to be in place, but there are still gaps that could lead to disruption or avoidable cost.";
   }
 
-  if (band === "mid") {
-    return [
-      "Defined practices exist. The next step is making controls consistent, measurable and proven to work under pressure.",
-      "Lift the weakest domains to avoid single points of failure.",
-      "Introduce assurance through testing, evidence and simple KPIs to prevent maturity drift.",
-    ];
+  return "You appear to have a stronger baseline than many small businesses, but a few gaps could still be exploited if left unchecked.";
+}
+
+function getDomainRiskLabel(score: number) {
+  if (score < 1.5) return "Urgent";
+  if (score < 2.5) return "Needs attention";
+  if (score < 3.5) return "Partly covered";
+  return "Stronger";
+}
+
+function getBreachRoute(fullName: string, shortName: string) {
+  const key = `${fullName} ${shortName}`.toLowerCase();
+
+  if (key.includes("identity") || key.includes("access")) {
+    return "Email or account compromise";
   }
 
-  if (band === "high") {
-    return [
-      "Good consistency across most domains, with opportunities to strengthen assurance and measurement.",
-      "Biggest gains now are proving effectiveness through testing, exercising and tighter exception control.",
-      "Keep standards strong as the business changes through growth, new systems and new suppliers.",
-    ];
+  if (key.includes("recovery") || key.includes("backup") || key.includes("resilience")) {
+    return "Data loss or ransomware with slow recovery";
   }
+
+  if (key.includes("incident") || key.includes("response")) {
+    return "Longer downtime because nobody responds quickly enough";
+  }
+
+  if (key.includes("threat") || key.includes("vulnerability")) {
+    return "Attack through outdated software or known weaknesses";
+  }
+
+  if (key.includes("operations")) {
+    return "Operational disruption from weak day-to-day security routines";
+  }
+
+  if (key.includes("supplier") || key.includes("third")) {
+    return "Third-party or supplier weakness";
+  }
+
+  if (key.includes("asset") || key.includes("data")) {
+    return "Sensitive data exposure or poor system visibility";
+  }
+
+  if (key.includes("risk") || key.includes("compliance")) {
+    return "Known issues being left unresolved for too long";
+  }
+
+  if (key.includes("governance")) {
+    return "Important security gaps not being owned clearly";
+  }
+
+  return "A preventable cyber incident through common weaknesses";
+}
+
+function uniqueStrings(values: string[]) {
+  return Array.from(new Set(values.filter(Boolean)));
+}
+
+function getTopBreachRoutes(ranked: NormalizedDomainScore[]) {
+  return uniqueStrings(
+    ranked.slice(0, 3).map((d) => d.breachRoute || getBreachRoute(d.fullName, d.name))
+  ).slice(0, 3);
+}
+
+function getBusinessSizeBand(companyName: string | null, industry: string | null) {
+  if ((industry ?? "").toLowerCase().includes("manufacturing")) return "small_plus";
+  if ((industry ?? "").toLowerCase().includes("health")) return "small_plus";
+  if ((companyName ?? "").length > 22) return "small_plus";
+  return "small";
+}
+
+function estimateFinancialImpact(overall: number, industry: string | null, companyName: string | null) {
+  const sizeBand = getBusinessSizeBand(companyName, industry);
+
+  let min = 8000;
+  let max = 45000;
+
+  if (sizeBand === "small_plus") {
+    min = 12000;
+    max = 65000;
+  }
+
+  if (overall < 2.0) {
+    min = Math.round(min * 1.4);
+    max = Math.round(max * 1.5);
+  } else if (overall < 3.0) {
+    min = Math.round(min * 1.1);
+    max = Math.round(max * 1.15);
+  } else if (overall >= 4.0) {
+    min = Math.round(min * 0.55);
+    max = Math.round(max * 0.55);
+  } else if (overall >= 3.5) {
+    min = Math.round(min * 0.75);
+    max = Math.round(max * 0.75);
+  }
+
+  return {
+    min,
+    max,
+    breakdown: {
+      downtime: [Math.round(min * 0.22), Math.round(max * 0.24)] as [number, number],
+      lostRevenue: [Math.round(min * 0.28), Math.round(max * 0.3)] as [number, number],
+      recovery: [Math.round(min * 0.32), Math.round(max * 0.34)] as [number, number],
+      reputational: [Math.round(min * 0.18), Math.round(max * 0.12)] as [number, number],
+    },
+  };
+}
+
+function fmtGBP(n: number) {
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    maximumFractionDigits: 0,
+  }).format(n);
+}
+
+function fmtRange(min: number, max: number) {
+  return `${fmtGBP(min)} – ${fmtGBP(max)}`;
+}
+
+function getBenchmarkPercent(overall: number) {
+  const moreSecureThan = clamp(Math.round(((overall - 0.5) / 4.5) * 100), 5, 95);
+  const lessSecureThan = 100 - moreSecureThan;
+
+  return {
+    moreSecureThan,
+    lessSecureThan,
+  };
+}
+
+function getPriorityActions(ranked: NormalizedDomainScore[]) {
+  const actions: { title: string; why: string }[] = [];
+
+  for (const d of ranked.slice(0, 5)) {
+    const key = `${d.fullName} ${d.name}`.toLowerCase();
+
+    if (key.includes("identity") || key.includes("access")) {
+      actions.push({
+        title: "Enable multi-factor authentication on all email and key business accounts",
+        why: "This blocks one of the most common ways small businesses are breached.",
+      });
+      continue;
+    }
+
+    if (key.includes("recovery") || key.includes("backup") || key.includes("resilience")) {
+      actions.push({
+        title: "Back up your data daily to a separate system and test recovery",
+        why: "This reduces downtime and damage if files are lost or encrypted.",
+      });
+      continue;
+    }
+
+    if (key.includes("threat") || key.includes("vulnerability")) {
+      actions.push({
+        title: "Make sure all business devices and systems update automatically",
+        why: "Attackers often exploit known weaknesses that already have fixes available.",
+      });
+      continue;
+    }
+
+    if (key.includes("incident") || key.includes("response")) {
+      actions.push({
+        title: "Create a simple plan for what to do if something goes wrong",
+        why: "Fast, clear action reduces downtime, confusion, and cost.",
+      });
+      continue;
+    }
+
+    if (key.includes("operations")) {
+      actions.push({
+        title: "Put basic day-to-day security routines in place for devices, users, and data",
+        why: "Simple routines prevent small gaps from becoming expensive incidents.",
+      });
+      continue;
+    }
+
+    if (key.includes("supplier") || key.includes("third")) {
+      actions.push({
+        title: "Review which suppliers can access your systems or data",
+        why: "A weak supplier can still create major disruption for your business.",
+      });
+      continue;
+    }
+
+    if (key.includes("asset") || key.includes("data")) {
+      actions.push({
+        title: "List your key systems and sensitive data so you know what must be protected first",
+        why: "You cannot protect or recover what you cannot quickly identify.",
+      });
+      continue;
+    }
+
+    if (key.includes("risk") || key.includes("compliance")) {
+      actions.push({
+        title: "Track your main security risks and assign an owner to each one",
+        why: "Known problems often stay open too long when nobody owns them clearly.",
+      });
+      continue;
+    }
+
+    if (key.includes("governance")) {
+      actions.push({
+        title: "Assign one person to own cyber risk and review progress monthly",
+        why: "Clear ownership is one of the fastest ways to reduce avoidable gaps.",
+      });
+      continue;
+    }
+
+    actions.push({
+      title: "Fix the biggest security gap in this area first and assign clear ownership",
+      why: "The fastest improvements come from fixing the weakest points before attackers find them.",
+    });
+  }
+
+  const deduped: { title: string; why: string }[] = [];
+  const seen = new Set<string>();
+
+  for (const a of actions) {
+    if (seen.has(a.title)) continue;
+    seen.add(a.title);
+    deduped.push(a);
+  }
+
+  while (deduped.length < 5) {
+    const filler = [
+      {
+        title: "Use strong, unique passwords and stop sharing logins",
+        why: "Shared and reused passwords make account takeover much easier.",
+      },
+      {
+        title: "Train staff to spot suspicious emails and fake login pages",
+        why: "Staff are often the first route attackers use to get in.",
+      },
+      {
+        title: "Remove access quickly when staff leave or change roles",
+        why: "Old accounts are an easy weakness if left active too long.",
+      },
+    ];
+
+    for (const f of filler) {
+      if (!seen.has(f.title)) {
+        seen.add(f.title);
+        deduped.push(f);
+      }
+      if (deduped.length >= 5) break;
+    }
+  }
+
+  return deduped.slice(0, 5);
+}
+
+function getAssuranceChecklist(domainScores: NormalizedDomainScore[]) {
+  const byName = (needle: string) =>
+    domainScores.find((d) =>
+      `${d.fullName} ${d.name}`.toLowerCase().includes(needle.toLowerCase())
+    );
+
+  const access = byName("identity") || byName("access");
+  const recovery = byName("recovery") || byName("backup") || byName("resilience");
+  const response = byName("incident") || byName("response");
+  const operations = byName("operations");
+  const suppliers = byName("supplier") || byName("third");
 
   return [
-    "Strong maturity foundations with disciplined operating practices and continuous improvement.",
-    "Focus now is optimising assurance, measuring what matters and reducing hidden risk.",
-    "Maintain resilience through change by embedding controls into onboarding, procurement and system change.",
+    {
+      label: "Protected access to email and key systems",
+      status: (access?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+    {
+      label: "Backups and recovery arrangements",
+      status: (recovery?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+    {
+      label: "Basic response plan for incidents",
+      status: (response?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+    {
+      label: "Day-to-day security routines",
+      status: (operations?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+    {
+      label: "Third-party and supplier controls",
+      status: (suppliers?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
   ];
 }
 
@@ -119,9 +413,10 @@ function Icon({
     | "plan"
     | "download"
     | "copy"
-    | "star"
     | "risk"
-    | "arrow";
+    | "arrow"
+    | "money"
+    | "shield";
   size?: number;
 }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24", "aria-hidden": true };
@@ -133,6 +428,7 @@ function Icon({
       </svg>
     );
   }
+
   if (name === "bolt") {
     return (
       <svg {...common}>
@@ -140,6 +436,7 @@ function Icon({
       </svg>
     );
   }
+
   if (name === "plan") {
     return (
       <svg {...common}>
@@ -147,6 +444,7 @@ function Icon({
       </svg>
     );
   }
+
   if (name === "download") {
     return (
       <svg {...common}>
@@ -154,6 +452,7 @@ function Icon({
       </svg>
     );
   }
+
   if (name === "copy") {
     return (
       <svg {...common}>
@@ -164,13 +463,7 @@ function Icon({
       </svg>
     );
   }
-  if (name === "star") {
-    return (
-      <svg {...common}>
-        <path fill="currentColor" d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-      </svg>
-    );
-  }
+
   if (name === "risk") {
     return (
       <svg {...common}>
@@ -179,10 +472,84 @@ function Icon({
     );
   }
 
+  if (name === "money") {
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Zm9 9a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-2.2c-.74 0-1.3-.29-1.74-.79l-1.2.99c.55.67 1.33 1.1 2.24 1.19V15h1.4v-.82c1.35-.19 2.2-1.03 2.2-2.2 0-1.25-.84-1.88-2.32-2.24-1.05-.26-1.33-.44-1.33-.88 0-.37.34-.7.96-.7.66 0 1.12.24 1.56.64l1.08-1.03c-.5-.48-1.1-.81-1.97-.92V6.1h-1.4v.78c-1.19.16-2.03.96-2.03 2.05 0 1.24.82 1.81 2.28 2.18 1.03.25 1.36.48 1.36.96 0 .48-.46.73-1.09.73Z"
+        />
+      </svg>
+    );
+  }
+
+  if (name === "shield") {
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M12 2 4 5v6c0 5 3.4 9.4 8 10.9 4.6-1.5 8-5.9 8-10.9V5l-8-3Zm-1 14-4-4 1.4-1.4 2.6 2.6 5.6-5.6L18 8.6 11 15.6Z"
+        />
+      </svg>
+    );
+  }
+
   return (
     <svg {...common}>
       <path fill="currentColor" d="M12 4 10.59 5.41 16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8Z" />
     </svg>
+  );
+}
+
+function RiskCard({
+  title,
+  detail,
+}: {
+  title: string;
+  detail: string;
+}) {
+  return (
+    <div className="rr-riskCard">
+      <div className="rr-riskCardTitle">{title}</div>
+      <div className="rr-riskCardDetail">{detail}</div>
+    </div>
+  );
+}
+
+function ActionCard({
+  index,
+  title,
+  why,
+}: {
+  index: number;
+  title: string;
+  why: string;
+}) {
+  return (
+    <div className="rr-actionCard">
+      <div className="rr-actionNo">{index}</div>
+      <div>
+        <div className="rr-actionTitle">{title}</div>
+        <div className="rr-actionWhy">{why}</div>
+      </div>
+    </div>
+  );
+}
+
+function AssuranceItem({
+  label,
+  status,
+}: {
+  label: string;
+  status: string;
+}) {
+  const ready = status === "Ready to show";
+
+  return (
+    <div className={`rr-assuranceItem ${ready ? "ready" : "needs"}`}>
+      <div className="rr-assuranceLabel">{label}</div>
+      <div className="rr-assuranceStatus">{status}</div>
+    </div>
   );
 }
 
@@ -201,7 +568,7 @@ function DomainCard({
       <div className="rs-domainTop">
         <div>
           <div className="rs-domainName">{name}</div>
-          <div className="rs-domainLabel">{maturityLabel(score)}</div>
+          <div className="rs-domainLabel">{getDomainRiskLabel(score)}</div>
         </div>
         <div className={`rs-domainBadge ${sev}`}>{score.toFixed(2)}</div>
       </div>
@@ -348,10 +715,9 @@ export default function ResultsClient({ id }: { id: string }) {
 
   const normalized = useMemo(() => {
     const overall = toNum(data?.overall_score ?? data?.overallScore ?? 0, 0);
-    const grade = String(data?.grade ?? "-");
     const raw = (data?.domain_scores ?? data?.domainScores ?? []) as DomainScoreRaw[];
 
-    const scoreByKey = new Map<string, number>();
+    const scoreByKey = new Map<string, { score: number; riskScore: number | null; breachRoute: string | null }>();
 
     for (const d of raw) {
       const key = String(
@@ -365,44 +731,108 @@ export default function ResultsClient({ id }: { id: string }) {
       ).trim();
 
       if (!key) continue;
-      scoreByKey.set(key, clamp(toNum(d.score, 0), 0, 5));
+
+      scoreByKey.set(key, {
+        score: clamp(toNum(d.score, 0), 0, 5),
+        riskScore: d.risk_score === null || d.risk_score === undefined ? null : toNum(d.risk_score, 0),
+        breachRoute: d.breach_route ? String(d.breach_route) : null,
+      });
     }
 
-    const domainScores = DOMAINS_V13.map((def) => {
+    const domainScores: NormalizedDomainScore[] = DOMAINS_V13.map((def) => {
       const byFull = scoreByKey.get(def.code);
       const byShort = scoreByKey.get(def.short);
-      const score = byFull ?? byShort ?? 0;
+      const resolved = byFull ?? byShort ?? { score: 0, riskScore: null, breachRoute: null };
 
       return {
         code: def.code,
         name: def.short,
         fullName: def.code,
         order: def.order,
-        score: Number(score.toFixed(2)),
+        score: Number(resolved.score.toFixed(2)),
+        riskScore: resolved.riskScore,
+        breachRoute: resolved.breachRoute,
       };
     });
 
     const ranked = [...domainScores].sort((a, b) => a.score - b.score);
-    const risks = ranked.slice(0, 3);
-    const strengths = ranked.slice(-3).reverse();
-    const exec = executiveSummary(overall);
     const tier = (data?.report_tier ?? data?.reportTier ?? "free") as "free" | "premium";
+
+    const riskLevel =
+      data?.risk_level ??
+      getRiskLevel(overall);
+
+    const riskSummary =
+      data?.report_summary?.headline?.trim() ||
+      getRiskSummary(overall);
+
+    const topBreachRoutes =
+      Array.isArray(data?.top_breach_routes) && data.top_breach_routes.length
+        ? uniqueStrings(data.top_breach_routes)
+        : getTopBreachRoutes(ranked);
+
+    const impact =
+      data?.financial_impact?.min != null && data?.financial_impact?.max != null
+        ? {
+            min: toNum(data.financial_impact.min, 0),
+            max: toNum(data.financial_impact.max, 0),
+            downtime:
+              data.financial_impact.breakdown?.downtime ?? [0, 0],
+            lostRevenue:
+              data.financial_impact.breakdown?.lostRevenue ?? [0, 0],
+            recovery:
+              data.financial_impact.breakdown?.recovery ?? [0, 0],
+            reputational:
+              data.financial_impact.breakdown?.reputational ?? [0, 0],
+          }
+        : estimateFinancialImpact(
+            overall,
+            data?.industry ?? null,
+            data?.company_name ?? data?.companyName ?? null
+          );
+
+    const benchmark =
+      data?.benchmark?.less_secure_than != null
+        ? {
+            moreSecureThan: toNum(data?.benchmark?.more_secure_than, 0),
+            lessSecureThan: toNum(data?.benchmark?.less_secure_than, 0),
+          }
+        : getBenchmarkPercent(overall);
+
+    const actions =
+      Array.isArray(data?.priority_actions) && data.priority_actions.length
+        ? data.priority_actions
+            .map((a) => ({
+              title: String(a?.title ?? "").trim(),
+              why: String(a?.why ?? "").trim(),
+            }))
+            .filter((a) => a.title && a.why)
+            .slice(0, 5)
+        : getPriorityActions(ranked);
+
+    const assurance = getAssuranceChecklist(domainScores);
 
     return {
       overall: Number(overall.toFixed(2)),
-      grade,
       domainScores,
       ranked,
-      strengths,
-      risks,
-      execSummary: exec,
       email: data?.email ?? null,
       companyName: data?.company_name ?? data?.companyName ?? null,
       industry: data?.industry ?? null,
       reportReference: data?.report_reference ?? data?.reportReference ?? null,
-      interpretation: data?.interpretation ?? "This is an indicative resilience snapshot based on your responses.",
       reportTier: tier,
       downloadToken: data?.downloadToken ?? null,
+      riskLevel,
+      riskSummary,
+      whyItMatters:
+        data?.report_summary?.why_it_matters?.trim() ||
+        data?.interpretation ||
+        "Attackers usually look for simple weaknesses first. Your report highlights where those gaps are most likely to exist and what to fix quickly.",
+      topBreachRoutes,
+      impact,
+      benchmark,
+      actions,
+      assurance,
     };
   }, [data]);
 
@@ -425,7 +855,7 @@ export default function ResultsClient({ id }: { id: string }) {
       <main>
         <div className="rs-loadingWrap">
           <div className="rs-loadingCard">
-            <div className="rs-loadingText">Loading results…</div>
+            <div className="rs-loadingText">Loading your risk report…</div>
           </div>
         </div>
       </main>
@@ -437,10 +867,10 @@ export default function ResultsClient({ id }: { id: string }) {
       <main>
         <div className="rs-loadingWrap">
           <div className="rs-loadingCard">
-            <h2 style={{ marginTop: 0 }}>Results</h2>
-            <p className="rs-muted">{err ?? "Result not found."}</p>
+            <h2 style={{ marginTop: 0 }}>Risk report</h2>
+            <p className="rs-muted rs-mutedDark">{err ?? "Result not found."}</p>
             <Link className="rs-btn rs-btnPrimary" href="/assessment">
-              Start a new assessment
+             Start a new assessment
             </Link>
           </div>
         </div>
@@ -450,27 +880,24 @@ export default function ResultsClient({ id }: { id: string }) {
 
   const {
     overall,
-    grade,
     ranked,
-    strengths,
-    risks,
-    execSummary,
     email,
     companyName,
     industry,
     reportReference,
-    interpretation,
     reportTier,
-    domainScores,
     downloadToken,
+    riskLevel,
+    riskSummary,
+    whyItMatters,
+    topBreachRoutes,
+    impact,
+    benchmark,
+    actions,
+    assurance,
   } = normalized;
 
   const isPremium = reportTier === "premium";
-
-  const radarPoints = domainScores.map((d) => ({
-    label: d.name,
-    value: d.score,
-  }));
 
   return (
     <main>
@@ -478,14 +905,13 @@ export default function ResultsClient({ id }: { id: string }) {
         <section className="rs-hero">
           <div className="rs-heroCopy">
             <div className="rs-kicker">
-              <Icon name="check" />
-              Resiliscore Results
+              <Icon name="shield" />
+              Resiliscore Risk Report
             </div>
 
-            <h1>Your maturity baseline</h1>
-            <p className="rs-heroLead">
-              This dashboard shows where your resilience is strongest, where your main risks sit, and what needs attention first.
-            </p>
+            <h1>Find out how your business could be breached — before it happens</h1>
+
+            <p className="rs-heroLead">{riskSummary}</p>
 
             <div className="rs-metaRow">
               {email ? (
@@ -495,7 +921,7 @@ export default function ResultsClient({ id }: { id: string }) {
               ) : null}
               {companyName ? (
                 <div className="rs-pill">
-                  Company <span>{companyName}</span>
+                  Business <span>{companyName}</span>
                 </div>
               ) : null}
               {industry ? (
@@ -509,7 +935,7 @@ export default function ResultsClient({ id }: { id: string }) {
                 </div>
               ) : null}
               <div className="rs-pill">
-                Report <span>{isPremium ? "Premium" : "Free dashboard"}</span>
+                Report <span>{isPremium ? "Premium" : "Free report"}</span>
               </div>
             </div>
 
@@ -518,18 +944,18 @@ export default function ResultsClient({ id }: { id: string }) {
             <div className="rs-actions">
               {isPremium ? (
                 <a
- 		  className="rs-btn rs-btnPrimary"
-  		  href={`/api/assessments/${id}/pdf?token=${encodeURIComponent(downloadToken ?? "")}`}
-  		  target="_blank"
-  		  rel="noreferrer"
-		>
+                  className="rs-btn rs-btnPrimary"
+                  href={`/api/assessments/${id}/pdf?token=${encodeURIComponent(downloadToken ?? "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <Icon name="download" />
-                  Download PDF report
+                  Download full report
                 </a>
               ) : (
                 <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
                   <Icon name="bolt" />
-                  Unlock Premium Report — £99
+                  Unlock full report — £99
                 </button>
               )}
 
@@ -544,83 +970,164 @@ export default function ResultsClient({ id }: { id: string }) {
             </div>
           </div>
 
-          <div className="rs-heroVisual">
-            <ResultsRadarCard overall={overall} grade={grade} points={radarPoints} />
+          <div className="rr-heroCard">
+            <div className={`rr-riskBadge ${riskLevel.toLowerCase()}`}>{riskLevel} risk</div>
+
+            <div className="rr-impactLabel">Estimated impact</div>
+            <div className="rr-impactValue">{fmtRange(impact.min, impact.max)}</div>
+
+            <div className="rr-impactNote">
+              Includes downtime, lost revenue, recovery costs, and business disruption.
+            </div>
+
+            <div className="rr-breachList">
+              {topBreachRoutes.map((route) => (
+                <div key={route} className="rr-breachItem">
+                  <Icon name="risk" size={16} />
+                  <span>{route}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         <section className="rs-kpiGrid">
           <div className="rs-kpiCard">
-            <div className="rs-kpiLabel">Overall score</div>
-            <div className="rs-kpiValue">{overall.toFixed(2)}</div>
-            <div className="rs-kpiSub">Out of 5</div>
+            <div className="rs-kpiLabel">Current risk level</div>
+            <div className="rs-kpiValue rs-kpiValueSmall">{riskLevel}</div>
+            <div className="rs-kpiSub">Based on your answers today</div>
           </div>
 
           <div className="rs-kpiCard">
-            <div className="rs-kpiLabel">Maturity level</div>
-            <div className="rs-kpiValue rs-kpiValueSmall">{maturityLabel(overall)}</div>
-            <div className="rs-kpiSub">Grade {grade}</div>
+            <div className="rs-kpiLabel">Indicative security position</div>
+            <div className="rs-kpiValue">{overall.toFixed(1)}</div>
+            <div className="rs-kpiSub">Higher score = stronger protection</div>
           </div>
 
           <div className="rs-kpiCard rs-kpiWide">
-            <div className="rs-kpiLabel">Interpretation</div>
-            <div className="rs-kpiText">{interpretation}</div>
+            <div className="rs-kpiLabel">Why this matters</div>
+            <div className="rs-kpiText">{whyItMatters}</div>
+          </div>
+        </section>
+
+        <section className="rr-sectionGrid">
+          <div className="rs-panel rs-panelLight">
+            <div className="rr-sectionHead">
+              <div className="rr-sectionTitle">1. How your business is most likely to be breached</div>
+              <div className="rr-sectionSub">Plain-English summary of your top likely breach routes.</div>
+            </div>
+
+            <div className="rr-riskGrid">
+              {topBreachRoutes.map((route, i) => (
+                <RiskCard
+                  key={route}
+                  title={route}
+                  detail={
+                    i === 0
+                      ? "This appears to be your highest-priority weakness right now."
+                      : i === 1
+                      ? "This is another common route attackers use against small businesses."
+                      : "This may not be the first issue hit, but it can still cause major disruption."
+                  }
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="rs-panel rs-panelLight">
+            <div className="rr-sectionHead">
+              <div className="rr-sectionTitle">2. What a breach could cost</div>
+              <div className="rr-sectionSub">Indicative range based on your current answers.</div>
+            </div>
+
+            <div className="rr-moneyCard">
+              <div className="rr-moneyTop">
+                <div className="rr-moneyIcon">
+                  <Icon name="money" size={20} />
+                </div>
+                <div>
+                  <div className="rr-moneyLabel">Estimated business impact</div>
+                  <div className="rr-moneyValue">{fmtRange(impact.min, impact.max)}</div>
+                </div>
+              </div>
+
+              <div className="rr-costRows">
+                <div className="rr-costRow">
+                  <span>Downtime</span>
+                  <strong>{fmtRange(impact.downtime[0], impact.downtime[1])}</strong>
+                </div>
+                <div className="rr-costRow">
+                  <span>Lost revenue</span>
+                  <strong>{fmtRange(impact.lostRevenue[0], impact.lostRevenue[1])}</strong>
+                </div>
+                <div className="rr-costRow">
+                  <span>Recovery costs</span>
+                  <strong>{fmtRange(impact.recovery[0], impact.recovery[1])}</strong>
+                </div>
+                <div className="rr-costRow">
+                  <span>Reputational impact</span>
+                  <strong>Harder to measure</strong>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <section className="rs-mainGrid">
           <div className="rs-column">
             <div className="rs-panel rs-panelLight">
-              <div className="rs-panelHead">
-                <div className="rs-panelTitle">Executive summary</div>
+              <div className="rr-sectionHead">
+                <div className="rr-sectionTitle">3. What to fix in the next 90 days</div>
+                <div className="rr-sectionSub">Top 5 practical actions for a non-technical business owner.</div>
               </div>
 
-              <div className="rs-summaryList">
-                {execSummary.map((x, i) => (
-                  <div key={i} className="rs-summaryItem">
-                    <span className="rs-summaryDot" />
-                    <span>{x}</span>
-                  </div>
+              <div className="rr-actionStack">
+                {actions.map((action, i) => (
+                  <ActionCard
+                    key={action.title}
+                    index={i + 1}
+                    title={action.title}
+                    why={action.why}
+                  />
                 ))}
               </div>
             </div>
 
             {!isPremium ? (
               <div className="rs-panel rs-upsell">
-                <div className="rs-upsellKicker">Free dashboard complete</div>
-                <div className="rs-upsellTitle">Unlock your full premium report — £99</div>
+                <div className="rs-upsellKicker">Your free report is ready</div>
+                <div className="rs-upsellTitle">Unlock the full business risk report — £99</div>
                 <div className="rs-upsellText">
-                  Your dashboard shows the score. The premium report explains what it means, where your real risks are, and what to
-                  fix first.
+                  Get the full PDF version with deeper analysis, risk detail, a clearer 90-day action plan, and a shareable report for clients, insurers, or partners.
                 </div>
 
                 <div className="rs-featureList">
                   <div className="rs-featureItem">
                     <Icon name="check" />
-                    Detailed domain-by-domain analysis
+                    Full downloadable PDF report
                   </div>
                   <div className="rs-featureItem">
                     <Icon name="check" />
-                    Real-world failure scenarios and exposure
+                    Deeper explanation of likely business risk
                   </div>
                   <div className="rs-featureItem">
                     <Icon name="check" />
-                    Tailored next actions and target state
+                    Clearer 90-day improvement plan
                   </div>
                   <div className="rs-featureItem">
                     <Icon name="check" />
-                    30 / 60 / 90 day improvement plan
+                    Evidence and assurance checklist
                   </div>
                   <div className="rs-featureItem">
                     <Icon name="check" />
-                    Branded downloadable PDF report
+                    Report you can share internally or externally
                   </div>
                 </div>
 
                 <div className="rs-upsellActions">
                   <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
                     <Icon name="bolt" />
-                    Unlock Full Report — £99
+                    Unlock full report — £99
                   </button>
                 </div>
 
@@ -630,11 +1137,36 @@ export default function ResultsClient({ id }: { id: string }) {
           </div>
 
           <div className="rs-column">
+            <div className="rs-panel rs-panelLight">
+              <div className="rr-sectionHead">
+                <div className="rr-sectionTitle">4. How you compare</div>
+                <div className="rr-sectionSub">Simple benchmark view for businesses like yours.</div>
+              </div>
+
+              <div className="rr-benchmarkWrap">
+                <div className="rr-benchmarkValue">
+                  You are less secure than <strong>{benchmark.lessSecureThan}%</strong> of similar businesses
+                </div>
+
+                <div className="rr-benchmarkTrack">
+                  <div
+                    className="rr-benchmarkFill"
+                    style={{ width: `${benchmark.lessSecureThan}%` }}
+                  />
+                </div>
+
+                <div className="rr-benchmarkScale">
+                  <span>Lower risk</span>
+                  <span>Higher risk</span>
+                </div>
+              </div>
+            </div>
+
             <div className="rs-panel rs-panelDark">
               <div className="rs-panelHead">
                 <div>
-                  <div className="rs-panelTitle rs-panelTitleLight">Domain scores</div>
-                  <div className="rs-panelSub">Weakest to strongest — top items are your highest priority.</div>
+                  <div className="rs-panelTitle rs-panelTitleLight">Risk areas by topic</div>
+                  <div className="rs-panelSub">Lower scores mean the gap is more likely to matter commercially.</div>
                 </div>
               </div>
 
@@ -645,67 +1177,52 @@ export default function ResultsClient({ id }: { id: string }) {
               </div>
             </div>
 
-            <div className="rs-sideGrid">
-              <div className="rs-panel rs-panelLight">
-                <div className="rs-miniHead rs-good">
-                  <Icon name="star" />
-                  Top strengths
-                </div>
-
-                <div className="rs-chipStack">
-                  {strengths.map((d) => (
-                    <div key={d.code} className="rs-chip rs-chipGood">
-                      <span>{d.name}</span>
-                      <strong>{d.score.toFixed(2)}</strong>
-                    </div>
-                  ))}
-                </div>
+            <div className="rs-panel rs-panelLight">
+              <div className="rr-sectionHead">
+                <div className="rr-sectionTitle">5. What you can show others</div>
+                <div className="rr-sectionSub">Useful for insurers, clients, partners, and due diligence conversations.</div>
               </div>
 
-              <div className="rs-panel rs-panelLight">
-                <div className="rs-miniHead rs-risk">
-                  <Icon name="risk" />
-                  Top risk areas
-                </div>
-
-                <div className="rs-chipStack">
-                  {risks.map((d) => (
-                    <div key={d.code} className={`rs-chip ${severity(d.score) === "high" ? "rs-chipHigh" : "rs-chipMed"}`}>
-                      <span>{d.name}</span>
-                      <strong>{d.score.toFixed(2)}</strong>
-                    </div>
-                  ))}
-                </div>
+              <div className="rr-assuranceStack">
+                {assurance.map((item) => (
+                  <AssuranceItem
+                    key={item.label}
+                    label={item.label}
+                    status={item.status}
+                  />
+                ))}
               </div>
             </div>
 
             <div className="rs-panel rs-panelLight">
               {isPremium ? (
                 <>
-                  <div className="rs-deliverablesTitle">Deliverables</div>
-                  <div className="rs-deliverablesText">Your premium report is ready to download as a branded consultant-style PDF.</div>
+                  <div className="rs-deliverablesTitle">Your full report is ready</div>
+                  <div className="rs-deliverablesText">
+                    Download the full branded report as a PDF.
+                  </div>
                   <div className="rs-deliverablesActions">
-                   <a
- 		     className="rs-btn rs-btnPrimary"
-  		     href={`/api/assessments/${id}/pdf?token=${encodeURIComponent(downloadToken ?? "")}`}
-  		     target="_blank"
-  		     rel="noreferrer"
-		   >
+                    <a
+                      className="rs-btn rs-btnPrimary"
+                      href={`/api/assessments/${id}/pdf?token=${encodeURIComponent(downloadToken ?? "")}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <Icon name="download" />
-                      Download PDF report
+                      Download full report
                     </a>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="rs-deliverablesTitle">Premium PDF report — £99</div>
+                  <div className="rs-deliverablesTitle">Full report available</div>
                   <div className="rs-deliverablesText">
-                    Unlock the full consultant-style report with tailored analysis, action planning and a downloadable branded PDF.
+                    Unlock the downloadable PDF version of your business risk report.
                   </div>
                   <div className="rs-deliverablesActions">
                     <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
                       <Icon name="bolt" />
-                      Unlock Premium Report — £99
+                      Unlock full report — £99
                     </button>
                   </div>
                   <div className="rs-deliverablesFoot">One-time payment. Instant access after checkout.</div>
@@ -714,7 +1231,7 @@ export default function ResultsClient({ id }: { id: string }) {
             </div>
 
             <div className="rs-support">
-              For support or interpretation help contact <strong>hello@resiliscore.co.uk</strong>
+              For support or help understanding your report, contact <strong>hello@resiliscore.co.uk</strong>
             </div>
           </div>
         </section>
@@ -733,6 +1250,10 @@ export default function ResultsClient({ id }: { id: string }) {
           color: rgba(255,255,255,0.68);
         }
 
+        .rs-mutedDark {
+          color: rgba(6,27,34,0.72);
+        }
+
         .rs-loadingWrap {
           max-width: 1180px;
           margin: 0 auto;
@@ -747,7 +1268,8 @@ export default function ResultsClient({ id }: { id: string }) {
         }
 
         .rs-loadingText {
-          color: #061b22; font-weight:700;
+          color: #061b22;
+          font-weight: 700;
         }
 
         .rs-btn {
@@ -811,7 +1333,7 @@ export default function ResultsClient({ id }: { id: string }) {
             radial-gradient(700px 340px at 100% 0%, rgba(255,255,255,0.07), transparent 55%),
             linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
           display: grid;
-          grid-template-columns: 1.02fr 0.98fr;
+          grid-template-columns: 1.05fr 0.95fr;
           gap: 18px;
           align-items: stretch;
         }
@@ -832,16 +1354,17 @@ export default function ResultsClient({ id }: { id: string }) {
         .rs-hero h1 {
           margin: 16px 0 0;
           color: rgba(255,255,255,0.96);
-          font-size: 46px;
-          line-height: 1.04;
+          font-size: 42px;
+          line-height: 1.05;
           letter-spacing: -0.03em;
+          max-width: 14ch;
         }
 
         .rs-heroLead {
           margin: 14px 0 0;
-          color: rgba(255,255,255,0.72);
+          color: rgba(255,255,255,0.76);
           line-height: 1.7;
-          max-width: 58ch;
+          max-width: 62ch;
         }
 
         .rs-metaRow {
@@ -883,9 +1406,79 @@ export default function ResultsClient({ id }: { id: string }) {
           flex-wrap: wrap;
         }
 
-        .rs-heroVisual {
+        .rr-heroCard {
+          border-radius: 24px;
+          background: #ffffff;
+          border: 1px solid rgba(6,27,34,0.08);
+          box-shadow: 0 12px 30px rgba(3,16,22,0.10);
+          padding: 20px;
+          display: grid;
+          align-content: start;
+          gap: 14px;
+        }
+
+        .rr-riskBadge {
+          width: fit-content;
+          min-height: 34px;
+          padding: 0 12px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          font-weight: 900;
+          font-size: 14px;
+        }
+
+        .rr-riskBadge.high {
+          background: rgba(255,107,107,0.12);
+          color: #c94a4a;
+          border: 1px solid rgba(255,107,107,0.22);
+        }
+
+        .rr-riskBadge.medium {
+          background: rgba(255,193,7,0.12);
+          color: #a97100;
+          border: 1px solid rgba(255,193,7,0.22);
+        }
+
+        .rr-riskBadge.low {
+          background: rgba(13,177,123,0.12);
+          color: #0a8d62;
+          border: 1px solid rgba(13,177,123,0.22);
+        }
+
+        .rr-impactLabel {
+          color: rgba(6,27,34,0.60);
+          font-size: 13px;
+          font-weight: 700;
+        }
+
+        .rr-impactValue {
+          color: #061b22;
+          font-size: 34px;
+          line-height: 1.05;
+          font-weight: 900;
+        }
+
+        .rr-impactNote {
+          color: rgba(6,27,34,0.72);
+          line-height: 1.6;
+        }
+
+        .rr-breachList {
+          display: grid;
+          gap: 10px;
+          margin-top: 4px;
+        }
+
+        .rr-breachItem {
           display: flex;
-          align-items: stretch;
+          align-items: center;
+          gap: 10px;
+          border: 1px solid rgba(6,27,34,0.08);
+          border-radius: 14px;
+          padding: 11px 12px;
+          background: #fafcfc;
+          color: #061b22;
         }
 
         .rs-kpiGrid {
@@ -932,9 +1525,15 @@ export default function ResultsClient({ id }: { id: string }) {
           line-height: 1.65;
         }
 
+        .rr-sectionGrid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 18px;
+        }
+
         .rs-mainGrid {
           display: grid;
-          grid-template-columns: 0.95fr 1.05fr;
+          grid-template-columns: 0.98fr 1.02fr;
           gap: 18px;
           align-items: start;
         }
@@ -985,33 +1584,143 @@ export default function ResultsClient({ id }: { id: string }) {
           line-height: 1.6;
         }
 
-        .rs-summaryList {
+        .rr-sectionHead {
+          display: grid;
+          gap: 6px;
+        }
+
+        .rr-sectionTitle {
+          color: #061b22;
+          font-size: 18px;
+          font-weight: 850;
+        }
+
+        .rr-sectionSub {
+          color: rgba(6,27,34,0.68);
+          line-height: 1.6;
+        }
+
+        .rr-riskGrid {
+          margin-top: 14px;
           display: grid;
           gap: 12px;
         }
 
-        .rs-summaryItem {
-          display: flex;
-          gap: 10px;
-          align-items: flex-start;
-          color: rgba(6,27,34,0.82);
-          line-height: 1.65;
-          padding: 12px 0;
-          border-bottom: 1px solid rgba(6,27,34,0.06);
+        .rr-riskCard {
+          border: 1px solid rgba(6,27,34,0.08);
+          border-radius: 18px;
+          background: #fbfcfd;
+          padding: 16px;
         }
 
-        .rs-summaryItem:last-child {
+        .rr-riskCardTitle {
+          color: #061b22;
+          font-weight: 850;
+          font-size: 17px;
+        }
+
+        .rr-riskCardDetail {
+          margin-top: 8px;
+          color: rgba(6,27,34,0.74);
+          line-height: 1.6;
+        }
+
+        .rr-moneyCard {
+          margin-top: 14px;
+          border-radius: 18px;
+          border: 1px solid rgba(6,27,34,0.08);
+          background: linear-gradient(180deg, #ffffff, #fbfcfd);
+          padding: 18px;
+        }
+
+        .rr-moneyTop {
+          display: flex;
+          gap: 14px;
+          align-items: center;
+        }
+
+        .rr-moneyIcon {
+          width: 44px;
+          height: 44px;
+          border-radius: 14px;
+          display: grid;
+          place-items: center;
+          background: rgba(13,177,123,0.10);
+          color: #0a8d62;
+        }
+
+        .rr-moneyLabel {
+          color: rgba(6,27,34,0.60);
+          font-size: 13px;
+          font-weight: 700;
+        }
+
+        .rr-moneyValue {
+          margin-top: 4px;
+          color: #061b22;
+          font-size: 32px;
+          line-height: 1.05;
+          font-weight: 900;
+        }
+
+        .rr-costRows {
+          margin-top: 16px;
+          display: grid;
+          gap: 10px;
+        }
+
+        .rr-costRow {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 10px 0;
+          border-bottom: 1px solid rgba(6,27,34,0.06);
+          color: rgba(6,27,34,0.82);
+        }
+
+        .rr-costRow:last-child {
           border-bottom: 0;
           padding-bottom: 0;
         }
 
-        .rs-summaryDot {
-          width: 9px;
-          height: 9px;
-          border-radius: 999px;
-          background: #0db17b;
-          margin-top: 8px;
-          flex: 0 0 auto;
+        .rr-actionStack {
+          margin-top: 14px;
+          display: grid;
+          gap: 12px;
+        }
+
+        .rr-actionCard {
+          display: grid;
+          grid-template-columns: 44px 1fr;
+          gap: 14px;
+          border-radius: 18px;
+          padding: 16px;
+          background: #fbfcfd;
+          border: 1px solid rgba(6,27,34,0.08);
+        }
+
+        .rr-actionNo {
+          width: 40px;
+          height: 40px;
+          border-radius: 14px;
+          display: grid;
+          place-items: center;
+          background: rgba(13,177,123,0.12);
+          color: #0a8d62;
+          font-weight: 900;
+        }
+
+        .rr-actionTitle {
+          color: #061b22;
+          font-weight: 850;
+          line-height: 1.4;
+        }
+
+        .rr-actionWhy {
+          margin-top: 6px;
+          color: rgba(6,27,34,0.72);
+          line-height: 1.6;
         }
 
         .rs-domainGrid {
@@ -1101,63 +1810,83 @@ export default function ResultsClient({ id }: { id: string }) {
           background: rgba(255,107,107,0.82);
         }
 
-        .rs-sideGrid {
+        .rr-benchmarkWrap {
+          margin-top: 14px;
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 18px;
+          gap: 12px;
         }
 
-        .rs-miniHead {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          font-weight: 850;
-          font-size: 16px;
+        .rr-benchmarkValue {
+          color: #061b22;
+          line-height: 1.6;
+          font-size: 17px;
         }
 
-        .rs-miniHead.rs-good {
-          color: #0a8d62;
+        .rr-benchmarkValue strong {
+          font-weight: 900;
         }
 
-        .rs-miniHead.rs-risk {
-          color: #c94a4a;
+        .rr-benchmarkTrack {
+          height: 14px;
+          border-radius: 999px;
+          background: #edf2f4;
+          border: 1px solid rgba(6,27,34,0.08);
+          overflow: hidden;
         }
 
-        .rs-chipStack {
+        .rr-benchmarkFill {
+          height: 100%;
+          border-radius: 999px;
+          background: linear-gradient(90deg, #0db17b, #f0b323, #ff6b6b);
+        }
+
+        .rr-benchmarkScale {
+          display: flex;
+          justify-content: space-between;
+          gap: 12px;
+          color: rgba(6,27,34,0.60);
+          font-size: 13px;
+          font-weight: 700;
+        }
+
+        .rr-assuranceStack {
           margin-top: 14px;
           display: grid;
           gap: 10px;
         }
 
-        .rs-chip {
+        .rr-assuranceItem {
           display: flex;
-          align-items: center;
           justify-content: space-between;
-          gap: 10px;
+          gap: 12px;
+          align-items: center;
           border-radius: 14px;
           padding: 12px 14px;
           border: 1px solid rgba(6,27,34,0.08);
           background: #fbfcfd;
-          color: #061b22;
         }
 
-        .rs-chipGood {
+        .rr-assuranceItem.ready {
           border-color: rgba(13,177,123,0.20);
           background: rgba(13,177,123,0.06);
         }
 
-        .rs-chipMed {
-          border-color: rgba(255,193,7,0.24);
+        .rr-assuranceItem.needs {
+          border-color: rgba(255,193,7,0.22);
           background: rgba(255,193,7,0.08);
         }
 
-        .rs-chipHigh {
-          border-color: rgba(255,107,107,0.24);
-          background: rgba(255,107,107,0.08);
+        .rr-assuranceLabel {
+          color: #061b22;
+          font-weight: 700;
+          line-height: 1.5;
         }
 
-        .rs-chip strong {
+        .rr-assuranceStatus {
+          font-size: 13px;
           font-weight: 900;
+          white-space: nowrap;
+          color: #061b22;
         }
 
         .rs-upsell {
@@ -1247,133 +1976,11 @@ export default function ResultsClient({ id }: { id: string }) {
           padding: 0 4px;
         }
 
-        .rr-card {
-          width: 100%;
-          border-radius: 24px;
-          background: #ffffff;
-          border: 1px solid rgba(6,27,34,0.08);
-          box-shadow: 0 12px 30px rgba(3,16,22,0.10);
-          padding: 20px;
-          display: grid;
-          gap: 18px;
-        }
-
-        .rr-top {
-          display: flex;
-          justify-content: space-between;
-          gap: 14px;
-          align-items: start;
-        }
-
-        .rr-kicker {
-          color: #0a8d62;
-          font-size: 12px;
-          font-weight: 800;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-        }
-
-        .rr-card h3 {
-          margin: 8px 0 0;
-          color: #061b22;
-          font-size: 25px;
-          line-height: 1.1;
-        }
-
-        .rr-card p {
-          margin: 10px 0 0;
-          color: rgba(6,27,34,0.72);
-          line-height: 1.6;
-        }
-
-        .rr-scoreBox {
-          border-radius: 18px;
-          background: linear-gradient(180deg, rgba(13,177,123,0.14), rgba(13,177,123,0.05));
-          border: 1px solid rgba(13,177,123,0.18);
-          padding: 12px 14px;
-          display: grid;
-          justify-items: end;
-          min-width: 112px;
-        }
-
-        .rr-scoreLabel {
-          color: rgba(6,27,34,0.60);
-          font-size: 12px;
-          font-weight: 700;
-        }
-
-        .rr-scoreValue {
-          margin-top: 4px;
-          color: #061b22;
-          font-size: 34px;
-          line-height: 1;
-          font-weight: 900;
-        }
-
-        .rr-scoreSub {
-          color: rgba(6,27,34,0.65);
-          font-size: 13px;
-          font-weight: 700;
-          margin-top: 4px;
-        }
-
-        .rr-chartWrap {
-          display: flex;
-          justify-content: center;
-        }
-
-        .rr-chart {
-          width: 100%;
-          max-width: 360px;
-          height: auto;
-        }
-
-        .rr-legend {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 10px;
-        }
-
-        .rr-legendItem {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          border: 1px solid rgba(6,27,34,0.07);
-          border-radius: 14px;
-          padding: 10px 12px;
-          background: #fafcfc;
-        }
-
-        .rr-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 999px;
-          background: #0db17b;
-          flex: 0 0 auto;
-        }
-
-        .rr-label {
-          flex: 1;
-          color: #061b22;
-          font-weight: 700;
-        }
-
-        .rr-value {
-          color: #0a8d62;
-          font-weight: 900;
-        }
-
         @media (max-width: 1080px) {
           .rs-hero,
-          .rs-mainGrid,
-          .rs-kpiGrid {
-            grid-template-columns: 1fr;
-          }
-        }
-
-        @media (max-width: 900px) {
-          .rs-sideGrid,
-          .rr-legend {
+          .rs-kpiGrid,
+          .rr-sectionGrid,
+          .rs-mainGrid {
             grid-template-columns: 1fr;
           }
         }
@@ -1388,17 +1995,24 @@ export default function ResultsClient({ id }: { id: string }) {
           }
 
           .rs-hero h1 {
-            font-size: 36px;
+            font-size: 34px;
+            max-width: none;
           }
 
           .rs-panel,
           .rs-kpiCard,
-          .rr-card,
-          .rs-loadingCard {
+          .rs-loadingCard,
+          .rr-heroCard {
             padding: 16px;
           }
 
-          .rr-top {
+          .rr-actionCard {
+            grid-template-columns: 1fr;
+          }
+
+          .rr-assuranceItem,
+          .rr-costRow {
+            align-items: start;
             flex-direction: column;
           }
         }

@@ -289,10 +289,16 @@ export default function AssessmentForm() {
                 </div>
 
                 <div className="af-tierCard af-tierCardAccent">
-                  <div className="af-tierTitle">Premium report (£99)</div>
+                  <div className="af-tierTitle">Premium Business Risk Report (£99)</div>
                   <div className="af-tierText">
-                    Full branded PDF report, detailed domain analysis, tailored insight pages, 30/60/90 plan, and implementation checklist.
-                  </div>
+                    <ul>
+    <li>Understand your biggest business risks</li>
+    <li>See how a breach is most likely to happen</li>
+    <li>Know what it could cost your business</li>
+    <li>Get a clear 90-day action plan</li>
+    <li>Show evidence to clients, insurers, or partners</li>
+  </ul>
+</div>
                 </div>
               </div>
             </div>

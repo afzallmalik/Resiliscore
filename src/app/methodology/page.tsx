@@ -3,30 +3,42 @@ import { DOMAINS_V13 } from "@/lib/domains";
 
 export const dynamic = "force-dynamic";
 
-const GRADE_BANDS = [
-  { grade: "A", range: "4.5 – 5.0", meaning: "Optimised: measured, tested, improving." },
-  { grade: "B", range: "3.5 – 4.49", meaning: "Managed: consistent, owned, repeatable." },
-  { grade: "C", range: "2.5 – 3.49", meaning: "Defined: documented, uneven consistency." },
-  { grade: "D", range: "1.5 – 2.49", meaning: "Repeatable: some routine, notable gaps." },
-  { grade: "E", range: "0.0 – 1.49", meaning: "Not in place: informal, reactive." },
-];
-
 const EVIDENCE = [
   {
-    title: "Policy & Standards",
-    examples: ["Information security policy", "Access control policy", "Backup/retention rules", "Supplier clauses"],
+    title: "Access & accounts",
+    examples: [
+      "MFA enabled on email and key systems",
+      "Leaver access removed quickly",
+      "Admin accounts reviewed",
+      "Strong password or sign-in controls in place",
+    ],
   },
   {
-    title: "Operational Proof",
-    examples: ["MFA enabled", "Leaver removal record", "Patch reports", "Backup success logs"],
+    title: "Backups & recovery",
+    examples: [
+      "Backups running successfully",
+      "Restore test completed",
+      "Critical systems identified",
+      "Simple recovery steps written down",
+    ],
   },
   {
-    title: "Risk & Decisions",
-    examples: ["Risk register", "Leadership reviews", "Accepted risk sign-offs"],
+    title: "Day-to-day security",
+    examples: [
+      "Devices updated regularly",
+      "Known issues tracked and fixed",
+      "Suspicious emails reported",
+      "Key supplier access reviewed",
+    ],
   },
   {
-    title: "Testing & Exercises",
-    examples: ["Restore test results", "Incident tabletop", "Lessons learned log"],
+    title: "Ownership & proof",
+    examples: [
+      "Named owner for cyber risk",
+      "Simple risk list",
+      "Leadership review notes",
+      "Incident or lessons-learned log",
+    ],
   },
 ];
 
@@ -35,11 +47,11 @@ export default function MethodologyPage() {
     <main className="md-shell">
       <section className="md-hero">
         <div className="md-heroCopy">
-          <div className="md-kicker">Resiliscore Methodology</div>
-          <h1>How your score is calculated</h1>
+          <div className="md-kicker">How Resiliscore works</div>
+          <h1>How your report is created</h1>
           <p className="md-lead">
-            A practical 0–5 maturity model designed for SMEs. It measures whether controls exist,
-            operate consistently, and can be evidenced.
+            Resiliscore uses a structured assessment to show where your business is most exposed,
+            how a breach could happen, what it could cost, and what to fix first.
           </p>
         </div>
 
@@ -56,16 +68,16 @@ export default function MethodologyPage() {
       <section className="md-lightSection">
         <div className="md-gridTwo">
           <div className="md-card">
-            <div className="md-sectionTitle">What Resiliscore measures</div>
+            <div className="md-sectionTitle">What Resiliscore looks at</div>
             <ul className="md-list">
               <li>
-                <b>Controls</b> — the right safeguards exist.
+                <b>Weak points</b> — where your business is most exposed to avoidable disruption.
               </li>
               <li>
-                <b>Consistency</b> — they operate reliably day-to-day, not just on paper.
+                <b>Consistency</b> — whether key protections happen reliably, not just occasionally.
               </li>
               <li>
-                <b>Evidence</b> — you can prove it quickly if asked with logs, actions, policies or tests.
+                <b>Proof</b> — whether you could show a client, insurer, or partner that the basics are in place.
               </li>
             </ul>
           </div>
@@ -73,10 +85,10 @@ export default function MethodologyPage() {
           <div className="md-card">
             <div className="md-sectionTitle">How to answer</div>
             <ul className="md-list">
-              <li>Score what is true <b>today</b>.</li>
-              <li>If uneven across teams, score lower.</li>
-              <li>When unsure, choose the lower score.</li>
-              <li>Think: could I evidence this quickly?</li>
+              <li>Answer based on what is true <b>today</b>.</li>
+              <li>If something is only partly in place, score it lower.</li>
+              <li>If different teams do things differently, answer for the overall business.</li>
+              <li>Think: could we prove this quickly if someone asked?</li>
             </ul>
           </div>
         </div>
@@ -84,11 +96,11 @@ export default function MethodologyPage() {
 
       <section className="md-darkSection">
         <div className="md-sectionHead">
-          <div className="md-sectionEyebrow">Domains covered</div>
-          <h2>The resilience areas Resiliscore focuses on</h2>
+          <div className="md-sectionEyebrow">Areas covered</div>
+          <h2>The business risk areas Resiliscore reviews</h2>
           <p>
-            Resiliscore focuses on the areas that most often cause disruption for SMEs — operations, access,
-            recovery, suppliers and response.
+            Resiliscore focuses on the areas that most often create disruption for small and medium-sized
+            businesses — access, recovery, daily security routines, suppliers, and response.
           </p>
         </div>
 
@@ -104,10 +116,48 @@ export default function MethodologyPage() {
 
       <section className="md-lightSection">
         <div className="md-sectionHead md-sectionHeadLight">
-          <div className="md-sectionEyebrow">Evidence checklist</div>
-          <h2>What good evidence usually looks like</h2>
+          <div className="md-sectionEyebrow">How the report is built</div>
+          <h2>What happens after you complete the assessment</h2>
           <p>
-            You do not need perfect documentation. You need clear ownership and simple evidence you can find quickly.
+            Your answers are used to turn technical risk into a simple business report that is easier to act on.
+          </p>
+        </div>
+
+        <div className="md-gridTwo">
+          <div className="md-card">
+            <div className="md-cardTitle">How results are created</div>
+            <ul className="md-list">
+              <li>Each answer contributes to a score across key business risk areas.</li>
+              <li>We identify the weakest areas that are most likely to cause disruption first.</li>
+              <li>Those weaker areas are translated into likely breach routes and practical priorities.</li>
+              <li>The final report focuses on risk, impact, and what to do next.</li>
+            </ul>
+          </div>
+
+          <div className="md-card">
+            <div className="md-cardTitle">What you receive</div>
+            <ul className="md-list">
+              <li><b>Business risk summary</b> — your main weaknesses in plain English.</li>
+              <li><b>Likely breach routes</b> — how a problem is most likely to happen.</li>
+              <li><b>Estimated impact range</b> — what disruption could cost your business.</li>
+              <li><b>Top 5 actions</b> — what to fix in the next 90 days.</li>
+              <li><b>Benchmark and checklist</b> — how you compare and what you can show others.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="md-note">
+          The goal is not to create a technical audit. The goal is to give a business owner a report they can
+          understand quickly and use immediately.
+        </div>
+      </section>
+
+      <section className="md-lightSection">
+        <div className="md-sectionHead md-sectionHeadLight">
+          <div className="md-sectionEyebrow">Evidence examples</div>
+          <h2>What useful evidence usually looks like</h2>
+          <p>
+            You do not need perfect documentation. You need clear ownership and simple proof that the basics are actually happening.
           </p>
         </div>
 
@@ -125,53 +175,17 @@ export default function MethodologyPage() {
         </div>
 
         <div className="md-note">
-          Consultant view: evidence is not paperwork for its own sake — it reduces “we think we do this”
-          risk and proves consistency.
-        </div>
-      </section>
-
-      <section className="md-lightSection">
-        <div className="md-sectionHead md-sectionHeadLight">
-          <div className="md-sectionEyebrow">Scoring model</div>
-          <h2>How scoring works</h2>
-          <p>
-            Resiliscore keeps scoring intentionally simple so it is useful for decision-making, not just reporting.
-          </p>
-        </div>
-
-        <div className="md-gridTwo">
-          <div className="md-card">
-            <div className="md-cardTitle">Scoring model</div>
-            <ul className="md-list">
-              <li>Each question is scored 0–5.</li>
-              <li>Domain score = average of its questions.</li>
-              <li>Overall score = average of domain scores.</li>
-              <li>Grade (A–E) is derived from overall score.</li>
-            </ul>
-          </div>
-
-          <div className="md-card">
-            <div className="md-cardTitle">Grade bands</div>
-            <div className="md-gradeTable">
-              {GRADE_BANDS.map((g) => (
-                <div key={g.grade} className="md-gradeRow">
-                  <div className="md-gradeBadge">{g.grade}</div>
-                  <div className="md-gradeRange">{g.range}</div>
-                  <div className="md-gradeMeaning">{g.meaning}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          Good evidence reduces the risk of saying “we think we do this” when a client, insurer, or incident later proves otherwise.
         </div>
       </section>
 
       <section className="md-darkSection">
         <div className="md-sectionHead">
-          <div className="md-sectionEyebrow">Framework mapping</div>
-          <h2>Why the mapping exists</h2>
+          <div className="md-sectionEyebrow">Frameworks in the background</div>
+          <h2>Why frameworks still matter</h2>
           <p>
-            Resiliscore includes framework mapping so SMEs can translate improvements into language customers,
-            auditors, insurers and procurement teams recognise.
+            Resiliscore uses recognised frameworks in the background to keep the assessment structured and credible,
+            but the customer-facing report is designed to stay simple and business-focused.
           </p>
         </div>
 
@@ -179,71 +193,43 @@ export default function MethodologyPage() {
           <div className="md-mapCard">
             <div className="md-mapTitle">NIST CSF</div>
             <div className="md-mapText">
-              A widely used cyber framework organised around outcomes such as Identify, Protect, Detect,
-              Respond and Recover. It helps explain what you are improving and why it reduces risk.
+              Helps structure cyber outcomes such as identifying weaknesses, protecting systems, responding to incidents,
+              and recovering from disruption.
             </div>
           </div>
 
           <div className="md-mapCard">
-            <div className="md-mapTitle">ISO/IEC 27001 / 27002 themes</div>
+            <div className="md-mapTitle">ISO / IEC 27001 themes</div>
             <div className="md-mapText">
-              ISO gives a control-oriented view across policies, access, operations, supplier controls and
-              incident handling. It helps show your controls align to recognised good practice.
+              Provides recognised control themes across access, operations, suppliers, incident handling, and governance.
             </div>
           </div>
 
           <div className="md-mapCard">
-            <div className="md-mapTitle">UK reasonable steps alignment</div>
+            <div className="md-mapTitle">Practical business assurance</div>
             <div className="md-mapText">
-              Helps you evidence due diligence expectations in the UK environment and supports customer
-              assurance, supplier onboarding and governance conversations.
+              Supports clearer conversations with clients, insurers, procurement teams, and partners without making the main report feel compliance-heavy.
             </div>
           </div>
         </div>
 
         <div className="md-footNote">
-          Note: Resiliscore is not a certification. Mapping supports alignment and reporting — it does not
-          replace formal audit or certification processes.
+          Resiliscore is not a certification. Frameworks help structure the assessment in the background, but the report is designed first and foremost as a practical business risk tool.
         </div>
       </section>
 
       <section className="md-lightSection">
         <div className="md-sectionHead md-sectionHeadLight">
-          <div className="md-sectionEyebrow">Outputs</div>
-          <h2>What you get after the assessment</h2>
-          <p>
-            You receive a clear, board-friendly baseline and a practical improvement plan designed to reduce
-            disruption risk quickly.
-          </p>
-        </div>
-
-        <div className="md-card">
-          <ul className="md-list">
-            <li><b>Overall score + grade</b> — a simple maturity baseline you can track over time.</li>
-            <li><b>Radar + domain snapshot</b> — a visual view of strengths versus weak points.</li>
-            <li><b>Domain breakdown</b> — what each domain means, what your score implies, and what to do next.</li>
-            <li><b>90-day action plan</b> — practical SME-friendly actions with owners and evidence focus.</li>
-            <li><b>Shareable PDF report</b> — useful for internal buy-in and external assurance discussions.</li>
-          </ul>
-        </div>
-
-        <div className="md-note">
-          Best practice: treat this as a working plan. Pick owners, set dates, and retake quarterly to show progress.
-        </div>
-      </section>
-
-      <section className="md-lightSection">
-        <div className="md-sectionHead md-sectionHeadLight">
-          <div className="md-sectionEyebrow">Limitations</div>
+          <div className="md-sectionEyebrow">Limits</div>
           <h2>What this does not replace</h2>
         </div>
 
         <div className="md-card">
           <ul className="md-list">
-            <li>Indicative maturity snapshot based on responses.</li>
-            <li>Not a penetration test, forensic review, or formal audit.</li>
-            <li>Scores improve fastest when actions have owners, dates and evidence, not just intent.</li>
-            <li>Use results to prioritise: lift the weakest domains first to remove single points of failure.</li>
+            <li>It is an indicative business risk report based on your responses.</li>
+            <li>It does not replace a penetration test, forensic investigation, or formal external audit.</li>
+            <li>It is designed to help you prioritise action, not create paperwork for its own sake.</li>
+            <li>The biggest improvements usually come from fixing the weakest few areas first and reviewing progress regularly.</li>
           </ul>
         </div>
       </section>
@@ -444,42 +430,6 @@ export default function MethodologyPage() {
           line-height: 1.65;
         }
 
-        .md-gradeTable {
-          display: grid;
-          gap: 10px;
-        }
-
-        .md-gradeRow {
-          display: grid;
-          grid-template-columns: 48px 120px 1fr;
-          gap: 10px;
-          align-items: center;
-          padding: 12px;
-          border-radius: 14px;
-          border: 1px solid rgba(6,27,34,0.08);
-          background: #ffffff;
-        }
-
-        .md-gradeBadge {
-          width: 34px;
-          height: 34px;
-          border-radius: 12px;
-          display: grid;
-          place-items: center;
-          background: rgba(13,177,123,0.10);
-          color: #0a8d62;
-          font-weight: 900;
-        }
-
-        .md-gradeRange {
-          color: rgba(6,27,34,0.65);
-          font-weight: 800;
-        }
-
-        .md-gradeMeaning {
-          color: rgba(6,27,34,0.82);
-        }
-
         @media (max-width: 900px) {
           .md-gridTwo,
           .md-domainGrid,
@@ -499,14 +449,6 @@ export default function MethodologyPage() {
           .md-hero h1,
           .md-sectionHead h2 {
             font-size: 30px;
-          }
-
-          .md-gradeRow {
-            grid-template-columns: 48px 1fr;
-          }
-
-          .md-gradeMeaning {
-            grid-column: 1 / -1;
           }
         }
       `}</style>

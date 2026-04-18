@@ -30,7 +30,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
       </head>
@@ -59,7 +59,7 @@ export default function RootLayout({
                 Terms
               </Link>
               <Link href="/assessment" className="siteHeaderCta">
-                Start free assessment
+                Take free assessment
               </Link>
             </nav>
           </div>

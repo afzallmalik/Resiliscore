@@ -26,19 +26,65 @@ const supabase =
 const A4: [number, number] = [595.28, 841.89];
 
 const BRAND = {
-  headerBg: rgb(0.024, 0.106, 0.133),      // #061B22
-  headerGlow: rgb(0.051, 0.694, 0.482),    // #0DB17B
-  accent: rgb(0.051, 0.694, 0.482),        // #0DB17B
-  accentSoft: rgb(0.90, 0.97, 0.95),
-  accentLine: rgb(0.72, 0.90, 0.84),
-  text: rgb(0.08, 0.12, 0.14),
-  muted: rgb(0.42, 0.48, 0.50),
-  line: rgb(0.90, 0.93, 0.94),
-  card: rgb(0.985, 0.99, 0.99),
+  // Backgrounds
+  bg: rgb(0.965, 0.97, 0.99),
   white: rgb(1, 1, 1),
-  good: rgb(0.16, 0.62, 0.42),
-  med: rgb(0.91, 0.64, 0.15),
-  risk: rgb(0.86, 0.33, 0.33),
+  card: rgb(0.982, 0.986, 0.998),
+
+  // Header / primary brand
+  headerBg: rgb(0.12, 0.05, 0.28),        // deep purple
+  headerGlow: rgb(0.25, 0.55, 1.0),       // electric blue glow
+
+  // Core accent
+  accent: rgb(0.13, 0.45, 0.92),          // primary blue
+  accentSoft: rgb(0.91, 0.95, 1.0),
+  accentLine: rgb(0.72, 0.82, 0.98),
+
+  // Text
+  text: rgb(0.07, 0.09, 0.12),
+  muted: rgb(0.40, 0.46, 0.52),
+
+  // Structure
+  line: rgb(0.86, 0.89, 0.94),
+
+  // Status
+  good: rgb(0.18, 0.76, 0.64),            // teal
+  med: rgb(0.93, 0.66, 0.20),             // amber
+  risk: rgb(0.84, 0.33, 0.67),            // pink-magenta
+
+  // Tinted surfaces
+  greenTint: rgb(0.93, 0.985, 0.97),
+  amberTint: rgb(0.998, 0.978, 0.93),
+  redTint: rgb(0.992, 0.95, 0.975),
+  blueTint: rgb(0.94, 0.965, 1.0),
+};
+
+/**
+ * ------------------------------
+ * Benchmark + Breach Cost Logic
+ * ------------------------------
+ */
+
+function estimateBreachCost(overall: number, weakestDomains: string[]) {
+  let base = 25000;
+
+  if (overall < 2) base = 120000;
+  else if (overall < 3) base = 70000;
+  else if (overall < 4) base = 35000;
+  else base = 15000;
+
+  if (weakestDomains.some(d => d.toLowerCase().includes("identity"))) base *= 1.2;
+  if (weakestDomains.some(d => d.toLowerCase().includes("recovery"))) base *= 1.15;
+  if (weakestDomains.some(d => d.toLowerCase().includes("incident"))) base *= 1.15;
+
+  const low = Math.round(base * 0.7);
+  const high = Math.round(base * 1.6);
+
+  return {
+    low,
+    high,
+    mid: Math.round((low + high) / 2),
+  };
 }
 
 /**
@@ -145,10 +191,19 @@ function drawBrandHeader(page: any, shieldImg?: any) {
 
   page.drawRectangle({
     x: 0,
-    y: height - 58,
+    y: height - 60,
     width,
-    height: 58,
+    height: 60,
     color: BRAND.headerBg,
+  });
+
+  page.drawRectangle({
+    x: 0,
+    y: height - 60,
+    width,
+    height: 60,
+    color: BRAND.headerGlow,
+    opacity: 0.08,
   });
 
   if (shieldImg) {
@@ -169,7 +224,7 @@ function drawFooter(page: any, pageNum: number, font: any, ref?: string) {
     start: { x: 40, y: 44 },
     end: { x: width - 40, y: 44 },
     thickness: 1,
-    color: rgb(0.92, 0.92, 0.92),
+    color: BRAND.line,
   });
 
   page.drawText(sanitizeText(`Resiliscore Cyber Resilience Assessment Report`), {
@@ -221,12 +276,19 @@ function drawWatermark(page: any, watermarkImg?: any, opacity = 0.12) {
     y,
     width: wmW,
     height: wmH,
-    opacity: clamp(opacity, 0.02, 0.25),
+    opacity: clamp(opacity, 0.02, 0.12),
   });
 }
 
 function drawSectionTitle(page: any, title: string, x: number, y: number, fontBold: any) {
-  page.drawText(sanitizeText(title), { x, y, size: 12, font: fontBold, color: BRAND.text });
+  page.drawText(sanitizeText(title), {
+    x,
+    y,
+    size: 12,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
   page.drawLine({
     start: { x, y: y - 8 },
     end: { x: 545, y: y - 8 },
@@ -236,23 +298,74 @@ function drawSectionTitle(page: any, title: string, x: number, y: number, fontBo
 }
 
 function drawBar(page: any, x: number, y: number, w: number, h: number, pct: number) {
+  const safePct = clamp(pct, 0, 1);
+  const r = h / 2;
+
+  const trackColor = rgb(0.95, 0.96, 0.985);
+  const trackBorder = BRAND.line;
+  const fillColor = BRAND.accent;
+
   page.drawRectangle({
-    x,
+    x: x + r,
     y,
-    width: w,
+    width: Math.max(0, w - h),
     height: h,
+    color: trackColor,
+    borderColor: trackBorder,
     borderWidth: 1,
-    borderColor: rgb(0.82, 0.82, 0.82),
-    color: rgb(0.98, 0.98, 0.98),
   });
 
-  const fillW = w * clamp(pct, 0, 1);
+  page.drawCircle({
+    x: x + r,
+    y: y + r,
+    size: r,
+    color: trackColor,
+    borderColor: trackBorder,
+    borderWidth: 1,
+  });
+
+  page.drawCircle({
+    x: x + w - r,
+    y: y + r,
+    size: r,
+    color: trackColor,
+    borderColor: trackBorder,
+    borderWidth: 1,
+  });
+
+  const fillW = w * safePct;
+  if (fillW <= 0) return;
+
+  if (fillW <= h) {
+    page.drawCircle({
+      x: x + r,
+      y: y + r,
+      size: Math.max(fillW / 2, r * 0.55),
+      color: fillColor,
+    });
+    return;
+  }
+
+  page.drawCircle({
+    x: x + r,
+    y: y + r,
+    size: r,
+    color: fillColor,
+  });
+
   page.drawRectangle({
-    x,
+    x: x + r,
     y,
-    width: fillW,
+    width: Math.max(0, fillW - r),
     height: h,
-    color: BRAND.accent,
+    color: fillColor,
+  });
+
+  page.drawCircle({
+    x: x + fillW - r,
+    y: y + r,
+    size: r,
+    color: fillColor,
   });
 }
 
@@ -340,48 +453,60 @@ function drawInsightCard(
   fontBold: any,
   accent?: ReturnType<typeof rgb>
 ) {
+  const borderColor = accent ?? BRAND.accent;
+  const fillColor =
+    borderColor === BRAND.risk
+      ? BRAND.redTint
+      : borderColor === BRAND.med
+      ? BRAND.amberTint
+      : borderColor === BRAND.good
+      ? BRAND.greenTint
+      : BRAND.blueTint;
+
   drawRoundedCard(page, x, y, w, h, {
-    fill: BRAND.white,
-    border: accent ?? BRAND.line,
+    fill: fillColor,
+    border: borderColor,
     radius: 18,
   });
 
   page.drawRectangle({
     x: x + 12,
     y: y + h - 18,
-    width: 28,
-    height: 4,
-    color: accent ?? BRAND.accent,
-    borderRadius: 2,
+    width: 34,
+    height: 5,
+    color: borderColor,
   });
 
   page.drawText(sanitizeText(title), {
     x: x + 14,
-    y: y + h - 34,
+    y: y + h - 36,
     size: 11,
     font: fontBold,
     color: BRAND.text,
   });
 
-  let ly = y + h - 54;
-  let drawn = 0;
+  let ly = y + h - 58;
+  const minY = y + 16;
 
   for (const raw of lines) {
-    const wrapped = wrapText(raw, 24);
-    for (const line of wrapped) {
-      if (drawn >= 4) return;
+    const wrapped = wrapText(raw, 34);
 
-      page.drawText(`• ${sanitizeText(line)}`, {
+    for (const line of wrapped) {
+      if (ly < minY) return;
+
+      page.drawText(sanitizeText(line), {
         x: x + 14,
         y: ly,
-        size: 9,
+        size: 8.5,
         font,
         color: BRAND.text,
       });
 
-      ly -= 12;
-      drawn += 1;
+      ly -= 11;
     }
+
+    ly -= 3;
+    if (ly < minY) return;
   }
 }
 
@@ -393,7 +518,7 @@ function drawSectionIntro(page: any, text: string, x: number, y: number, font: a
       y: cy,
       size: 10.5,
       font,
-      color: rgb(0.15, 0.15, 0.15),
+      color: BRAND.text,
     });
     cy -= 14;
   }
@@ -435,10 +560,10 @@ function drawTrafficLight(page: any, x: number, y: number, band: ReturnType<type
   const gap = 18;
 
   const colors = {
-    red: rgb(0.95, 0.35, 0.35),
-    amber: rgb(0.98, 0.78, 0.30),
-    green: rgb(0.36, 0.84, 0.46),
-    grey: rgb(0.80, 0.80, 0.80),
+    red: BRAND.risk,
+    amber: BRAND.med,
+    green: BRAND.good,
+    grey: rgb(0.82, 0.84, 0.88),
   };
 
   const active =
@@ -462,7 +587,7 @@ function drawTrafficLight(page: any, x: number, y: number, band: ReturnType<type
 
   page.drawCircle({ x: x + r, y, size: r, color: c1 });
   page.drawCircle({ x: x + r + gap, y, size: r, color: c2 });
-  page.drawCircle({ x: x + r + gap * 2, y, size: r, color: c3 });
+  page.drawCircle({ x: x + r + gap * 2, y: y, size: r, color: c3 });
 
   const label =
     active === "red"
@@ -844,32 +969,32 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       );
     }
 
-   if (assessment.reportUrl) {
+//   if (assessment.reportUrl) {
 
-  if (!supabase) {
-    throw new Error("Supabase client not configured");
-  }
+//  if (!supabase) {
+//    throw new Error("Supabase client not configured");
+//  }
 
-  const existing = await supabase.storage
-    .from("reports")
-    .download(assessment.reportUrl);
+//  const existing = await supabase.storage
+//    .from("reports")
+//    .download(assessment.reportUrl);
 
-   if (!existing.error && existing.data) {
-     const existingBytes = await existing.data.arrayBuffer();
+//   if (!existing.error && existing.data) {
+//     const existingBytes = await existing.data.arrayBuffer();
 
-     const existingFilename =
-       assessment.reportUrl.split("/").pop() || `resiliscore-${assessment.id}.pdf`;
+//     const existingFilename =
+//       assessment.reportUrl.split("/").pop() || `resiliscore-${assessment.id}.pdf`;
 
-     return new NextResponse(existingBytes, {
-       status: 200,
-       headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${existingFilename}"`,
-        "Cache-Control": "no-store",
-      },
-    });
-  }
-}
+//     return new NextResponse(existingBytes, {
+//       status: 200,
+//       headers: {
+//        "Content-Type": "application/pdf",
+//        "Content-Disposition": `attachment; filename="${existingFilename}"`,
+//        "Cache-Control": "no-store",
+//      },
+//    });
+//   }
+// }
 
     const overall = Number(assessment.overallScore ?? 0);
     const grade = sanitizeText(String(assessment.grade ?? "-"));
@@ -924,7 +1049,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
     let pageNum = 1;
 
-    /**
+        /**
      * ------------------------------
      * Cover page
      * ------------------------------
@@ -941,7 +1066,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
         y: 0,
         width,
         height,
-        color: BRAND.white,
+        color: BRAND.bg,
       });
 
       drawBrandHeader(page, shieldImg);
@@ -1015,19 +1140,55 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       let infoY = height - 304;
 
       if (companyName) {
-        page.drawText("Company", { x: 352, y: infoY, size: 9, font: fontBold, color: BRAND.muted });
-        page.drawText(companyName, { x: 430, y: infoY, size: 10.5, font, color: BRAND.text });
+        page.drawText("Company", {
+          x: 352,
+          y: infoY,
+          size: 9,
+          font: fontBold,
+          color: BRAND.muted,
+        });
+        page.drawText(companyName, {
+          x: 430,
+          y: infoY,
+          size: 10.5,
+          font,
+          color: BRAND.text,
+        });
         infoY -= 18;
       }
 
-      page.drawText("Date", { x: 352, y: infoY, size: 9, font: fontBold, color: BRAND.muted });
-      page.drawText(assessmentDate, { x: 430, y: infoY, size: 10.5, font, color: BRAND.text });
+      page.drawText("Date", {
+        x: 352,
+        y: infoY,
+        size: 9,
+        font: fontBold,
+        color: BRAND.muted,
+      });
+      page.drawText(assessmentDate, {
+        x: 430,
+        y: infoY,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
       infoY -= 18;
 
-      page.drawText("Reference", { x: 352, y: infoY, size: 9, font: fontBold, color: BRAND.muted });
-      page.drawText(reportRef, { x: 430, y: infoY, size: 10.5, font, color: BRAND.text });
+      page.drawText("Reference", {
+        x: 352,
+        y: infoY,
+        size: 9,
+        font: fontBold,
+        color: BRAND.muted,
+      });
+      page.drawText(reportRef, {
+        x: 430,
+        y: infoY,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
 
-      drawRoundedCard(page, 50, 168, 495, 86, {
+          drawRoundedCard(page, 50, 168, 495, 86, {
         fill: BRAND.card,
         border: BRAND.line,
         radius: 18,
@@ -1043,13 +1204,13 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
       const coverBullets = [
         "Overall resilience score, grade and maturity interpretation",
-        "Domain visuals showing stronger and weaker areas",
-        "Priority findings, practical actions and a 30 / 60 / 90 day plan",
+        "Priority risks and likely disruption areas",
+        "Practical actions and a 30 / 60 / 90 day plan",
       ];
 
       let cy = 208;
       for (const b of coverBullets) {
-        page.drawText(`• ${sanitizeText(b)}`, {
+        page.drawText(sanitizeText(b), {
           x: 64,
           y: cy,
           size: 10,
@@ -1059,95 +1220,37 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
         cy -= 16;
       }
 
-      drawFooter(page, pageNum++, font, reportRef);
-    }
+      drawRoundedCard(page, 50, 92, 495, 58, {
+        fill: BRAND.white,
+        border: BRAND.line,
+        radius: 18,
+      });
 
-    /**
-     * ------------------------------
-     * Key findings
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
-
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Key Findings", 50, y, fontBold);
-      y -= 30;
-
-      const strongestNames = topStrengths.map((d) => shortDomainLabel(d.domain_name || d.domain_code || "Domain"));
-      const weakestNames = topRisks.map((d) => shortDomainLabel(d.domain_name || d.domain_code || "Domain"));
-
-      const posture =
-        `Your organisation shows a ${scoreLabel(overall)} maturity level ` +
-        `(${overall.toFixed(2)} / 5). ` +
-        (strongestNames.length
-          ? `Relative strengths are currently more visible in ${strongestNames.join(", ")}. `
-          : "") +
-        (weakestNames.length
-          ? `Priority improvement areas are ${weakestNames.join(", ")}.`
-          : "");
-
-      page.drawText("Current resilience posture", {
-        x: 50,
-        y,
+      page.drawText("Business impact", {
+        x: 64,
+        y: 130,
         size: 11,
         font: fontBold,
         color: BRAND.text,
       });
-      y -= 16;
 
-      for (const line of wrapText(posture, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
+      const impactText =
+        overall < 2.5
+          ? "Current resilience gaps increase the likelihood of disruption, financial loss, and slower recovery from incidents."
+          : overall < 3.5
+          ? "The business has a working resilience base, but weaknesses may still lead to avoidable disruption under pressure."
+          : "The business shows a relatively strong resilience position, with lower likelihood of disruption compared to typical SMEs.";
 
-      y -= 10;
-
-      page.drawText("Highest priority improvements", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      for (const d of topRisks) {
-        const name = d.domain_name || d.domain_code || "Domain";
-        for (const line of wrapText(`• ${name} (${Number(d.score ?? 0).toFixed(2)} / 5)`, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-          y -= 14;
-        }
-      }
-
-      y -= 10;
-
-      page.drawText("Immediate actions", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      const immediateActions = keyFindingActions.length
-        ? keyFindingActions
-        : [
-            "Enforce MFA for privileged and cloud accounts.",
-            "Track vulnerabilities to closure.",
-            "Establish clear asset ownership.",
-          ];
-
-      for (const a of immediateActions) {
-        for (const line of wrapText(`• ${a}`, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-          y -= 14;
-        }
-        y -= 2;
+      let impactY = 112;
+      for (const line of wrapText(impactText, 92)) {
+        page.drawText(line, {
+          x: 64,
+          y: impactY,
+          size: 10,
+          font,
+          color: BRAND.text,
+        });
+        impactY -= 12;
       }
 
       drawFooter(page, pageNum++, font, reportRef);
@@ -1155,7 +1258,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
     /**
      * ------------------------------
-     * Executive summary
+     * How to use this report
      * ------------------------------
      */
     {
@@ -1165,140 +1268,821 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
       const { height } = page.getSize();
       let y = height - 96;
-      drawSectionTitle(page, "Executive Summary", 50, y, fontBold);
-      y -= 26;
 
-      y = drawSectionIntro(
-        page,
-        "This page gives a clean, leadership-ready summary of your current resilience position, what your score means, and where attention should go first.",
-        50,
-        y,
-        font
-      );
+      drawSectionTitle(page, "How to read and use this report", 50, y, fontBold);
+      y -= 28;
+
+      const intro = [
+        "This report provides a structured snapshot of your current cyber resilience position.",
+        "It is designed to help you quickly understand where disruption risk is most likely to occur and what to improve first.",
+      ];
+
+      for (const line of intro) {
+        for (const l of wrapText(line, 100)) {
+          page.drawText(l, {
+            x: 50,
+            y,
+            size: 10.5,
+            font,
+            color: BRAND.text,
+          });
+          y -= 14;
+        }
+        y -= 4;
+      }
 
       y -= 10;
 
-      drawMetricCard(page, 50, y - 104, 146, 104, "Overall score", `${overall.toFixed(2)} / 5`, "Out of 5", font, fontBold);
-      drawMetricCard(page, 208, y - 104, 146, 104, "Grade", grade, scoreLabel(overall), font, fontBold);
-      drawMetricCard(page, 366, y - 104, 179, 104, "Risk signal", scoreBand(overall).replace("_", " "), "Relative resilience position", font, fontBold);
-
-      y -= 126;
-
-      page.drawText("Interpretation", {
+      page.drawText("What this report shows", {
         x: 50,
         y,
         size: 11,
         font: fontBold,
         color: BRAND.text,
       });
+      y -= 18;
 
-      y -= 16;
+      const contains = [
+        "Your overall resilience score and maturity level",
+        "Stronger and weaker domains across your business",
+        "Priority risks and where disruption is most likely to originate",
+        "Clear actions to improve resilience over the next 30–90 days",
+      ];
 
-      const band = scoreBand(overall);
-      const execCopy =
-        band === "very_low"
-          ? [
-              "Controls are limited or not operating consistently day-to-day.",
-              "Fast wins are ownership, MFA, backup restore testing and a simple risk register.",
-              "Reduce disruption risk first, then turn improvements into repeatable routines.",
-            ]
-          : band === "low"
-          ? [
-              "Some controls exist, but consistency and evidence may still be patchy.",
-              "Prioritise the weakest 2–3 domains and make them routine, owned and evidenced.",
-              "Add simple measurement such as restore success and patch timeliness.",
-            ]
-          : band === "mid"
-          ? [
-              "Defined practices exist, but some domains need more consistency and proof.",
-              "Lift the weakest domains to reduce single points of failure.",
-              "Use testing, evidence and simple KPIs to stop maturity drift.",
-            ]
-          : band === "high"
-          ? [
-              "Good consistency exists across most domains.",
-              "Biggest gains now are tighter assurance, testing and exception control.",
-              "Keep standards strong through growth, supplier change and new systems.",
-            ]
-          : [
-              "Strong maturity foundations are in place.",
-              "Focus now is optimisation, assurance and reducing hidden risk.",
-              "Maintain resilience by embedding controls into business change.",
-            ];
+      for (const item of contains) {
+        for (const l of wrapText(item, 100)) {
+          page.drawText(l, {
+            x: 50,
+            y,
+            size: 10.5,
+            font,
+            color: BRAND.text,
+          });
+          y -= 14;
+        }
+        y -= 2;
+      }
 
-      drawInsightCard(page, 50, y - 138, 155, 126, "Overall meaning", execCopy.slice(0, 2), font, fontBold, BRAND.accent);
-      drawInsightCard(
-        page,
-        220,
-        y - 138,
-        155,
-        126,
-        "Top priorities",
-        topRisks.map((d) => `${d.domain_name || d.domain_code}: ${Number(d.score ?? 0).toFixed(2)} / 5`),
-        font,
-        fontBold,
-        BRAND.risk
-      );
-      drawInsightCard(
-        page,
-        390,
-        y - 138,
-        155,
-        126,
-        "Top strengths",
-        topStrengths.map((d) => `${d.domain_name || d.domain_code}: ${Number(d.score ?? 0).toFixed(2)} / 5`),
-        font,
-        fontBold,
-        BRAND.good
-      );
+      y -= 10;
 
-      y -= 164;
-
-      page.drawText("Weakest domains ranked", {
+      page.drawText("What your score means", {
         x: 50,
         y,
         size: 11,
         font: fontBold,
         color: BRAND.text,
       });
+      y -= 18;
 
-      y -= 16;
+      const scoreMeaning = [
+        "The score reflects how consistently controls are applied across your business.",
+        "It is not about having everything in place, but about reliability, ownership, and evidence.",
+        "Lower scores typically indicate higher dependency on individuals or informal processes.",
+      ];
 
-      for (const d of topRisks) {
-        const name = d.domain_name || d.domain_code || "Domain";
-        const score = Number(d.score ?? 0);
-        const color = severityColor(score);
+      for (const item of scoreMeaning) {
+        for (const l of wrapText(item, 100)) {
+          page.drawText(l, {
+            x: 50,
+            y,
+            size: 10.5,
+            font,
+            color: BRAND.text,
+          });
+          y -= 14;
+        }
+        y -= 2;
+      }
 
-        page.drawText(sanitizeText(name), {
-          x: 50,
-          y,
-          size: 10.5,
-          font,
-          color: BRAND.text,
-        });
+      y -= 10;
 
-        drawBar(page, 285, y - 2, 175, 8, score / 5);
+      page.drawText("How to use this report", {
+        x: 50,
+        y,
+        size: 11,
+        font: fontBold,
+        color: BRAND.text,
+      });
+      y -= 18;
 
-        page.drawText(sanitizeText(score.toFixed(2)), {
-          x: 470,
-          y,
-          size: 10.5,
-          font: fontBold,
-          color: BRAND.text,
-        });
+      const usage = [
+        "Focus first on your lowest 2–3 domains rather than trying to improve everything at once.",
+        "Prioritise ownership, routine, and evidence before introducing complexity.",
+        "Use this report to guide internal discussions and prioritise practical improvements.",
+      ];
 
-        page.drawCircle({
-          x: 530,
-          y: y + 4,
-          size: 4.5,
-          color,
-        });
-
-        y -= 20;
+      for (const item of usage) {
+        for (const l of wrapText(item, 100)) {
+          page.drawText(l, {
+            x: 50,
+            y,
+            size: 10.5,
+            font,
+            color: BRAND.text,
+          });
+          y -= 14;
+        }
+        y -= 2;
       }
 
       drawFooter(page, pageNum++, font, reportRef);
     }
+
+    /**
+ * ------------------------------
+ * Key findings
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+  drawSectionTitle(page, "Key Findings", 50, y, fontBold);
+  y -= 30;
+
+  const strongestNames = topStrengths.map((d) =>
+    shortDomainLabel(d.domain_name || d.domain_code || "Domain")
+  );
+  const weakestNames = topRisks.map((d) =>
+    shortDomainLabel(d.domain_name || d.domain_code || "Domain")
+  );
+
+  const posture =
+    `Your organisation currently sits at ${overall.toFixed(2)} / 5, which places it in the ${scoreLabel(overall)} maturity range. ` +
+    (strongestNames.length
+      ? `Relative strengths are more visible in ${strongestNames.join(", ")}. `
+      : "") +
+    (weakestNames.length
+      ? `The greatest resilience pressure is currently concentrated in ${weakestNames.join(", ")}.`
+      : "There are weaker domains that should be treated as priority areas.");
+
+  page.drawText("Current resilience position", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 16;
+
+  for (const line of wrapText(posture, 102)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: rgb(0.15, 0.15, 0.15),
+    });
+    y -= 14;
+  }
+
+  y -= 12;
+
+      drawInsightCard(
+    page,
+    50,
+    y - 156,
+    155,
+    144,
+    "What stands out",
+    [
+      "The results suggest resilience is uneven across the business rather than uniformly weak or strong.",
+      "This usually means disruption risk is concentrated in a few avoidable areas rather than everywhere at once.",
+    ],
+    font,
+    fontBold,
+    BRAND.accent
+  );
+
+  drawInsightCard(
+    page,
+    220,
+    y - 156,
+    155,
+    144,
+    "Main pressure points",
+    topRisks.map(
+      (d) =>
+        `${shortDomainLabel(d.domain_name || d.domain_code || "Domain")} (${Number(
+          d.score ?? 0
+        ).toFixed(2)} / 5)`
+    ),
+    font,
+    fontBold,
+    BRAND.risk
+  );
+
+  drawInsightCard(
+    page,
+    390,
+    y - 156,
+    155,
+    144,
+    "Stronger areas",
+    topStrengths.map(
+      (d) =>
+        `${shortDomainLabel(d.domain_name || d.domain_code || "Domain")} (${Number(
+          d.score ?? 0
+        ).toFixed(2)} / 5)`
+    ),
+    font,
+    fontBold,
+    BRAND.good
+  );
+
+  y -= 194;
+
+  page.drawText("What this means in practice", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const meaning = [
+    "The business is unlikely to be equally exposed everywhere. The main risk is that one or two weaker areas create avoidable disruption first.",
+    "Where resilience is stronger, the business is more likely to respond consistently and provide evidence quickly when asked.",
+    "Where resilience is weaker, there is usually more dependence on memory, informal routines, or individual effort rather than repeatable process.",
+  ];
+
+  for (const m of meaning) {
+    for (const line of wrapText(m, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  y -= 8;
+
+  page.drawText("Highest priority improvements", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  for (const d of topRisks) {
+    const name = d.domain_name || d.domain_code || "Domain";
+    const score = Number(d.score ?? 0);
+
+    page.drawText(sanitizeText(name), {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+
+    drawBar(page, 285, y - 2, 175, 8, score / 5);
+
+    page.drawText(sanitizeText(score.toFixed(2)), {
+      x: 470,
+      y,
+      size: 10.5,
+      font: fontBold,
+      color: BRAND.text,
+    });
+
+    page.drawCircle({
+      x: 530,
+      y: y + 4,
+      size: 4.5,
+      color: severityColor(score),
+    });
+
+    y -= 20;
+  }
+
+  y -= 10;
+
+  page.drawText("Immediate management actions", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const immediateActions = keyFindingActions.length
+    ? keyFindingActions
+    : [
+        "Enforce MFA for privileged and cloud accounts.",
+        "Track vulnerabilities to closure.",
+        "Establish clear asset ownership.",
+      ];
+
+  for (const a of immediateActions) {
+    for (const line of wrapText(a, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
+
+    /**
+ * ------------------------------
+ * Executive summary
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.08);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+  drawSectionTitle(page, "Executive Summary", 50, y, fontBold);
+  y -= 26;
+
+  const weakestNames = topRisks.map((d) => shortDomainLabel(d.domain_name || d.domain_code || "Domain"));
+  const strongestNames = topStrengths.map((d) => shortDomainLabel(d.domain_name || d.domain_code || "Domain"));
+
+  y = drawSectionIntro(
+    page,
+    "This page gives a leadership-ready summary of your current resilience position, where the greatest exposure sits, and what should be prioritised first.",
+    50,
+    y,
+    font
+  );
+
+  y -= 10;
+
+  drawMetricCard(
+    page,
+    50,
+    y - 104,
+    146,
+    104,
+    "Overall score",
+    `${overall.toFixed(2)} / 5`,
+    "Out of 5",
+    font,
+    fontBold
+  );
+
+  drawMetricCard(
+    page,
+    208,
+    y - 104,
+    146,
+    104,
+    "Grade",
+    grade,
+    scoreLabel(overall),
+    font,
+    fontBold
+  );
+
+  drawMetricCard(
+    page,
+    366,
+    y - 104,
+    179,
+    104,
+    "Risk signal",
+    scoreBand(overall).replace("_", " "),
+    "Relative resilience position",
+    font,
+    fontBold
+  );
+
+  y -= 126;
+
+  page.drawText("Interpretation", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  y -= 16;
+
+  const posture =
+    `This assessment indicates that your organisation currently operates at a ${scoreLabel(overall)} maturity level ` +
+    `(${overall.toFixed(2)} / 5), with the most significant exposure concentrated in ` +
+    `${weakestNames.length ? weakestNames.join(", ") : "its weaker domains"}. ` +
+    `These areas are the most likely sources of disruption if not addressed.`;
+
+  for (const line of wrapText(posture, 102)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 10;
+
+  const band = scoreBand(overall);
+  const execCopy =
+    band === "very_low"
+      ? [
+          "Controls are limited or not operating consistently day-to-day.",
+          "Fast wins usually come from ownership, MFA, backup restore testing, and a simple risk register.",
+          "Reduce disruption risk first, then turn improvements into repeatable routines.",
+        ]
+      : band === "low"
+      ? [
+          "Some controls exist, but consistency and evidence may still be patchy.",
+          "Prioritise the weakest 2-3 domains and make them routine, owned, and evidenced.",
+          "Add simple measurement such as restore success and patch timeliness.",
+        ]
+      : band === "mid"
+      ? [
+          "Defined practices exist, but some domains still need more consistency and proof.",
+          "Lift the weakest domains first to reduce single points of failure.",
+          "Use testing, evidence, and simple KPIs to stop maturity drift.",
+        ]
+      : band === "high"
+      ? [
+          "Good consistency exists across most domains.",
+          "Biggest gains now are tighter assurance, testing, and exception control.",
+          "Keep standards strong through growth, supplier change, and new systems.",
+        ]
+      : [
+          "Strong maturity foundations are in place.",
+          "Focus now is optimisation, assurance, and reducing hidden risk.",
+          "Maintain resilience by embedding controls into business change.",
+        ];
+
+  drawInsightCard(
+    page,
+    50,
+    y - 146,
+    155,
+    134,
+    "Overall meaning",
+    execCopy.slice(0, 2),
+    font,
+    fontBold,
+    BRAND.accent
+  );
+
+  drawInsightCard(
+    page,
+    220,
+    y - 146,
+    155,
+    134,
+    "Top priorities",
+    topRisks.map(
+      (d) => `${shortDomainLabel(d.domain_name || d.domain_code || "Domain")}: ${Number(d.score ?? 0).toFixed(2)} / 5`
+    ),
+    font,
+    fontBold,
+    BRAND.risk
+  );
+
+  drawInsightCard(
+    page,
+    390,
+    y - 146,
+    155,
+    134,
+    "Top strengths",
+    topStrengths.map(
+      (d) => `${shortDomainLabel(d.domain_name || d.domain_code || "Domain")}: ${Number(d.score ?? 0).toFixed(2)} / 5`
+    ),
+    font,
+    fontBold,
+    BRAND.good
+  );
+
+  y -= 182;
+
+  page.drawText("What this means in practice", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  y -= 16;
+
+  const practicalPoints = [
+    weakestNames.length
+      ? `The greatest risk to business continuity is currently concentrated in ${weakestNames.join(", ")}.`
+      : "The greatest risk to business continuity is concentrated in the lowest-scoring domains.",
+    strongestNames.length
+      ? `Relative stability is more visible in ${strongestNames.join(", ")}.`
+      : "Some domains are stronger and can be used as a baseline for improvement elsewhere.",
+    "The fastest improvement usually comes from lifting the weakest areas first rather than trying to improve everything at once.",
+  ];
+
+  for (const p of practicalPoints) {
+    for (const line of wrapText(p, 102)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  y -= 4;
+
+  page.drawText("Weakest domains ranked", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  y -= 16;
+
+  for (const d of topRisks) {
+    const name = d.domain_name || d.domain_code || "Domain";
+    const score = Number(d.score ?? 0);
+    const color = severityColor(score);
+
+    page.drawText(sanitizeText(name), {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+
+    drawBar(page, 285, y - 2, 175, 8, score / 5);
+
+    page.drawText(sanitizeText(score.toFixed(2)), {
+      x: 470,
+      y,
+      size: 10.5,
+      font: fontBold,
+      color: BRAND.text,
+    });
+
+    page.drawCircle({
+      x: 530,
+      y: y + 4,
+      size: 4.5,
+      color,
+    });
+
+    y -= 20;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
+
+/**
+ * ------------------------------
+ * Business Risk Summary & Estimated Impact
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.10);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+
+  drawSectionTitle(page, "Business Risk Summary & Estimated Impact", 50, y, fontBold);
+  y -= 28;
+
+  const weakest = topRisks.map((d) => d.domain_name || d.domain_code || "Domain");
+  const weakestShort = topRisks.map((d) =>
+    shortDomainLabel(d.domain_name || d.domain_code || "Domain")
+  );
+  const breach = estimateBreachCost(overall, weakest);
+
+  const intro =
+    "This section translates the assessment into business-facing risk. It highlights where disruption is most likely to begin, what that could mean commercially, and why the weakest domains matter first.";
+
+  for (const line of wrapText(intro, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 12;
+
+  const exposureCardY = y - 140;
+
+  drawRoundedCard(page, 50, exposureCardY, 495, 106, {
+    fill: BRAND.white,
+    border: BRAND.line,
+    radius: 18,
+  });
+
+  page.drawText("Estimated financial exposure", {
+    x: 64,
+    y: exposureCardY + 78,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  page.drawText(`£${breach.low.toLocaleString()} - £${breach.high.toLocaleString()}`, {
+    x: 64,
+    y: exposureCardY + 46,
+    size: 24,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  const exposureCopy =
+    "Indicative range based on your current resilience level and the areas most likely to create disruption if left unchanged.";
+
+  let ecy = exposureCardY + 18;
+  for (const line of wrapText(exposureCopy, 88)) {
+    page.drawText(line, {
+      x: 64,
+      y: ecy,
+      size: 9.5,
+      font,
+      color: BRAND.muted,
+    });
+    ecy -= 12;
+  }
+
+  y = exposureCardY - 20;
+
+  drawInsightCard(
+    page,
+    50,
+    y - 140,
+    155,
+    128,
+    "Main pressure points",
+    weakestShort.length
+      ? weakestShort.map((d) => `Higher exposure: ${d}`)
+      : ["Exposure is concentrated in the lowest-scoring domains."],
+    font,
+    fontBold,
+    BRAND.risk
+  );
+
+  drawInsightCard(
+    page,
+    220,
+    y - 140,
+    155,
+    128,
+    "Commercial effect",
+    [
+      "More downtime and slower decisions during disruption.",
+      "Higher recovery effort and rework.",
+      "More difficulty answering external assurance questions.",
+    ],
+    font,
+    fontBold,
+    BRAND.med
+  );
+
+  drawInsightCard(
+    page,
+    390,
+    y - 140,
+    155,
+    128,
+    "What improves this",
+    [
+      "Lift the weakest domains first.",
+      "Make controls routine, owned, and evidenced.",
+      "Prove that recovery and response work in practice.",
+    ],
+    font,
+    fontBold,
+    BRAND.good
+  );
+
+  y -= 172;
+
+  page.drawText("Likely business disruption scenarios", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  y -= 16;
+
+  const disruptionScenarios = topRisks.map((d) => {
+    const name = shortDomainLabel(d.domain_name || d.domain_code || "Domain");
+    const key = `${d.domain_name || d.domain_code || ""}`.toLowerCase();
+
+    if (key.includes("identity") || key.includes("access")) {
+      return `${name}: account compromise or poor access control could disrupt email, cloud systems, or privileged access.`;
+    }
+    if (key.includes("recovery") || key.includes("resilience")) {
+      return `${name}: weak recovery arrangements could increase downtime and make restoration slower or less certain.`;
+    }
+    if (key.includes("incident") || key.includes("response")) {
+      return `${name}: unclear response roles or escalation could delay containment and increase disruption impact.`;
+    }
+    if (key.includes("operations")) {
+      return `${name}: inconsistent day-to-day controls could allow routine weaknesses to become visible only when something goes wrong.`;
+    }
+    if (key.includes("supplier") || key.includes("third")) {
+      return `${name}: supplier or third-party weaknesses could create service interruption or assurance issues.`;
+    }
+    if (key.includes("threat") || key.includes("vulnerability")) {
+      return `${name}: unresolved technical weaknesses could leave the business open to preventable attack paths.`;
+    }
+    if (key.includes("asset") || key.includes("data")) {
+      return `${name}: weak visibility over critical systems or data could slow protection and recovery decisions.`;
+    }
+    if (key.includes("governance")) {
+      return `${name}: weak ownership or leadership cadence could allow important issues to remain unresolved for too long.`;
+    }
+    if (key.includes("risk")) {
+      return `${name}: known issues may stay open too long if they are not tracked clearly enough.`;
+    }
+
+    return `${name}: this lower-scoring area is more likely to contribute to disruption if not improved.`;
+  });
+
+  for (const item of disruptionScenarios) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  y -= 6;
+
+  page.drawText("How to read this page", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  y -= 14;
+
+  const closing = [
+    "This estimate is indicative, not a guaranteed loss figure.",
+    "Its purpose is to help leadership understand that weaker resilience areas often translate into real operational and financial consequences.",
+    "The best way to reduce this exposure is usually to improve the weakest 2-3 domains first, rather than trying to improve everything at once.",
+  ];
+
+  for (const item of closing) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
 
     /**
      * ------------------------------
@@ -1425,521 +2209,618 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     }
 
     /**
-     * ------------------------------
-     * Framework mapping explained
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+ * ------------------------------
+ * Framework mapping explained
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Framework mapping (plain English)", 50, y, fontBold);
-      y -= 30;
+  const { height } = page.getSize();
+  let y = height - 96;
+  drawSectionTitle(page, "Framework alignment (plain English)", 50, y, fontBold);
+  y -= 30;
 
-      const intro =
-        "Resiliscore includes framework mapping to help SMEs translate improvements into language that customers, auditors, insurers, and procurement teams recognise. This is not a certification. It is guidance to support alignment and reporting.";
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-      y -= 10;
-
-      page.drawText("Why these frameworks were selected", { x: 50, y, size: 11, font: fontBold, color: BRAND.text });
-      y -= 14;
-
-      const why = [
-        "NIST CSF is widely understood as a practical structure for cyber outcomes (identify, protect, detect, respond, recover).",
-        "ISO 27001 / 27002 themes are common reference points for policies and controls, especially for supplier assurance and audits.",
-        "Using familiar language reduces the friction of questionnaires and improves the quality of due diligence conversations.",
-      ];
-
-      for (const b of why) {
-        for (const line of wrapText(`- ${b}`, 102)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 8;
-
-      page.drawText("How mapping is implemented in Resiliscore (in practice)", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      const how = [
-        "Each question is tagged to one or more framework themes (for example: access control, backups, incident response, supplier assurance).",
-        "When you improve a control in the 30/60/90 plan, you are also improving the related framework themes that buyers and auditors ask about.",
-        "Mapping is used to support reporting and evidence, not to replace formal compliance work or audits.",
-      ];
-
-      for (const b of how) {
-        for (const line of wrapText(`- ${b}`, 102)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 8;
-
-      page.drawText("How this affects SMEs (the benefit)", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      const sme = [
-        "Faster questionnaires: reuse a consistent evidence set instead of answering from scratch each time.",
-        "Clearer priorities: improvements tie back to recognised themes, making investment easier to justify.",
-        "Better credibility: you can explain controls in a way that procurement teams recognise without needing heavy compliance overhead.",
-        "Reduced panic: evidence and ownership means you can respond quickly to customer security questions.",
-      ];
-
-      for (const b of sme) {
-        for (const line of wrapText(`- ${b}`, 102)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 8;
-
-      page.drawText("Important note", { x: 50, y, size: 11, font: fontBold, color: BRAND.text });
-      y -= 14;
-
-      const note =
-        "Framework mapping is guidance. Resiliscore is designed as an SME resilience tool and does not provide certification. If you need formal compliance or audit outputs, use these mappings as a starting point for structured work with an expert.";
-      for (const line of wrapText(note, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
-    }
-
-    /**
-     * ------------------------------
-     * Visuals page
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.08);
-
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Results Visuals", 50, y, fontBold);
-      y -= 24;
-
-      y = drawSectionIntro(
-        page,
-        "This page mirrors the dashboard view: a clear radar visual for balance across domains, plus ranked scores showing where resilience is strongest and where risk is highest.",
-        50,
-        y,
-        font
-      );
-
-      const radarCardX = 50;
-      const radarCardY = 350;
-      const radarCardW = 245;
-      const radarCardH = 290;
-
-      const rankedCardX = 315;
-      const rankedCardY = 350;
-      const rankedCardW = 230;
-      const rankedCardH = 290;
-
-      drawRoundedCard(page, radarCardX, radarCardY, radarCardW, radarCardH, {
-        fill: BRAND.white,
-        border: BRAND.line,
-        radius: 20,
-      });
-
-      drawRoundedCard(page, rankedCardX, rankedCardY, rankedCardW, rankedCardH, {
-        fill: BRAND.white,
-        border: BRAND.line,
-        radius: 20,
-      });
-
-      page.drawText("Radar profile", {
-        x: radarCardX + 16,
-        y: radarCardY + radarCardH - 24,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-
-      page.drawText("Ranked domain scores", {
-        x: rankedCardX + 16,
-        y: rankedCardY + rankedCardH - 24,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-
-      const radarCx = radarCardX + 122;
-      const radarCy = radarCardY + 136;
-      const radarR = 74;
-
-      const RADAR_ORDER = ["Response", "Recovery", "Operations", "Identity", "Governance", "Asset", "Threat", "Suppliers", "Risk"];
-
-      const radarDomains = [...domainScores]
-        .map((d) => ({
-          ...d,
-          short: shortDomainLabel(d.domain_name || d.domain_code || ""),
-        }))
-        .sort((a, b) => RADAR_ORDER.indexOf(a.short) - RADAR_ORDER.indexOf(b.short))
-        .slice(0, 9);
-
-      const labels = radarDomains.map((d) => d.short);
-      const values01 = radarDomains.map((d) => Number(d.score ?? 0) / 5);
-
-      {
-  const n = Math.max(3, Math.min(values01.length, 12));
-  const vals = values01.slice(0, n).map((v) => clamp(v, 0, 1));
-  const ang0 = -Math.PI / 2;
-
-  for (const t of [0.25, 0.5, 0.75, 1]) {
-    const rr = radarR * t;
-    page.drawCircle({
-      x: radarCx,
-      y: radarCy,
-      size: rr,
-      borderWidth: 1,
-      borderColor: rgb(0.90, 0.90, 0.90),
-    });
-  }
-
-  for (let i = 0; i < n; i++) {
-    const a = ang0 + (i * 2 * Math.PI) / n;
-    const x = radarCx + Math.cos(a) * radarR;
-    const yy = radarCy + Math.sin(a) * radarR;
-
-    page.drawLine({
-      start: { x: radarCx, y: radarCy },
-      end: { x, y: yy },
-      thickness: 1,
-      color: rgb(0.92, 0.92, 0.92),
-    });
-  }
-
-  const pts = vals.map((v, i) => {
-    const a = ang0 + (i * 2 * Math.PI) / n;
-    return {
-      x: radarCx + Math.cos(a) * radarR * v,
-      y: radarCy + Math.sin(a) * radarR * v,
-    };
-  });
-
-  const pathD =
-    "M " + pts.map((p) => `${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(" L ") + " Z";
-
-  page.drawSvgPath(pathD, {
-    color: BRAND.accent,
-    opacity: 0.14,
-    borderColor: BRAND.accent,
-    borderWidth: 2,
-  });
-
-  for (let i = 0; i < pts.length; i++) {
-    const p1 = pts[i];
-    const p2 = pts[(i + 1) % pts.length];
-
-    page.drawLine({
-      start: { x: p1.x, y: p1.y },
-      end: { x: p2.x, y: p2.y },
-      thickness: 1.4,
-      color: BRAND.accent,
-      opacity: 0.45 as any,
-    });
-  }
-
-  for (const p of pts) {
-    page.drawCircle({
-      x: p.x,
-      y: p.y,
-      size: 3.2,
-      color: BRAND.accent,
-      opacity: 0.95,
-    });
-
-    page.drawCircle({
-      x: p.x,
-      y: p.y,
-      size: 4.8,
-      borderWidth: 1,
-      borderColor: BRAND.accent,
-      opacity: 0.35,
-    });
-  }
-
-  for (let i = 0; i < n; i++) {
-    const a = ang0 + (i * 2 * Math.PI) / n;
-    const lab = sanitizeText(labels[i] ?? "");
-    if (!lab) continue;
-
-    const lx = radarCx + Math.cos(a) * (radarR + 10);
-    const ly = radarCy + Math.sin(a) * (radarR + 10);
-
-    const leftSide = Math.cos(a) < -0.2;
-    const rightSide = Math.cos(a) > 0.2;
-
-    const size = 6.3;
-    const x = rightSide ? lx - 8 : leftSide ? lx - 28 : lx - 18;
-
-    page.drawText(lab, {
-      x,
-      y: ly - 4,
-      size,
+  const intro =
+    "Resiliscore includes framework alignment so SMEs can translate resilience improvements into language that customers, insurers, auditors, and procurement teams recognise. This is not a certification page. It is here to show how practical resilience work can also support external assurance.";
+  for (const line of wrapText(intro, 102)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
       font,
-      color: BRAND.muted,
+      color: rgb(0.15, 0.15, 0.15),
     });
+    y -= 14;
+  }
+  y -= 10;
+
+  page.drawText("Why framework alignment matters", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const why = [
+    "Many SMEs are asked security questions by clients, partners, insurers, or procurement teams before work can progress.",
+    "Recognised framework language helps explain your controls in a way external stakeholders already understand.",
+    "This makes it easier to reuse evidence, answer due diligence questions faster, and justify improvement priorities internally.",
+  ];
+
+  for (const b of why) {
+    for (const line of wrapText(b, 102)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: rgb(0.15, 0.15, 0.15),
+      });
+      y -= 14;
+    }
+    y -= 2;
   }
 
-  page.drawText("Scale: 0-5", {
-    x: 85,
-    y: 380,
+  y -= 8;
+
+  page.drawText("How the alignment works in practice", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const how = [
+    "Each assessment area is linked in the background to recognised framework themes such as access control, backups, incident response, supplier assurance, and recovery.",
+    "When you improve one of the actions in your report, you are usually strengthening a recognised control area at the same time.",
+    "This means the report can support both internal resilience planning and external assurance conversations without turning the whole exercise into a compliance project.",
+  ];
+
+  for (const b of how) {
+    for (const line of wrapText(b, 102)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: rgb(0.15, 0.15, 0.15),
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  y -= 10;
+
+      drawInsightCard(
+    page,
+    50,
+    y - 154,
+    155,
+    142,
+    "NIST CSF",
+    [
+      "Useful for explaining cyber outcomes in a practical structure.",
+      "Helps frame work around identify, protect, detect, respond, and recover.",
+    ],
+    font,
+    fontBold,
+    BRAND.accent
+  );
+
+  drawInsightCard(
+    page,
+    220,
+    y - 154,
+    155,
+    142,
+    "ISO themes",
+    [
+      "Useful for showing recognised control areas such as policy, access, operations, suppliers, and incident handling.",
+      "Helpful in client and supplier assurance discussions.",
+    ],
+    font,
+    fontBold,
+    BRAND.med
+  );
+
+  drawInsightCard(
+    page,
+    390,
+    y - 154,
+    155,
+    142,
+    "Commercial benefit",
+    [
+      "Helps SMEs answer questions faster, reuse evidence, and present a more credible security position.",
+      "Supports due diligence without making the report feel compliance-led.",
+    ],
+    font,
+    fontBold,
+    BRAND.good
+  );
+
+  y -= 190;
+
+  page.drawText("What this means for an SME", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const sme = [
+    "You do not need to become a framework expert to benefit from this alignment.",
+    "The main value is that your practical improvements can also be described in a more recognised and credible way.",
+    "This reduces friction when buyers, insurers, or partners ask how your business manages cyber risk.",
+  ];
+
+  for (const b of sme) {
+    for (const line of wrapText(b, 102)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: rgb(0.15, 0.15, 0.15),
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  y -= 8;
+
+  page.drawText("Important note", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const note =
+    "Framework alignment is included to support reporting, communication, and credibility. Resiliscore is not a certification, formal audit, or replacement for specialist compliance advice. It is a practical resilience tool with recognised structure in the background.";
+  for (const line of wrapText(note, 102)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: rgb(0.15, 0.15, 0.15),
+    });
+    y -= 14;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
+
+/**
+ * ------------------------------
+ * How You Compare
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.10);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+
+  drawSectionTitle(page, "How You Compare", 50, y, fontBold);
+  y -= 28;
+
+  const lessSecureThan = Math.max(5, Math.min(95, Math.round((1 - overall / 5) * 100)));
+  const moreSecureThan = 100 - lessSecureThan;
+
+  let benchmarkLabel = "";
+  let benchmarkDesc = "";
+
+  if (overall < 2.0) {
+    benchmarkLabel = `You are currently less secure than ${lessSecureThan}% of similar businesses.`;
+    benchmarkDesc =
+      "Your current resilience position appears weaker than most comparable SMEs, which suggests the business is more exposed to disruption if common weaknesses are exploited.";
+  } else if (overall < 3.0) {
+    benchmarkLabel = `You are currently less secure than ${lessSecureThan}% of similar businesses.`;
+    benchmarkDesc =
+      "Your current position suggests a mixed resilience profile. Some controls exist, but enough gaps remain to place the business below many similar organisations.";
+  } else if (overall < 4.0) {
+    benchmarkLabel = `You are currently ahead of ${moreSecureThan}% of similar businesses.`;
+    benchmarkDesc =
+      "Your current resilience position appears stronger than many comparable SMEs, although some weaker domains still need attention to avoid drift or avoidable disruption.";
+  } else {
+    benchmarkLabel = `You are currently ahead of ${moreSecureThan}% of similar businesses.`;
+    benchmarkDesc =
+      "Your current resilience position appears stronger than most comparable SMEs, suggesting a more mature and more consistent operating baseline than many peers.";
+  }
+
+  page.drawText("Your position relative to SMEs", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  y -= 20;
+
+  for (const line of wrapText(benchmarkLabel, 52)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 18,
+      font: fontBold,
+      color: BRAND.text,
+    });
+    y -= 22;
+  }
+
+  y -= 6;
+
+  for (const line of wrapText(benchmarkDesc, 96)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 22;
+
+  page.drawText("Relative benchmark view", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  y -= 18;
+
+  drawBar(page, 50, y, 430, 16, lessSecureThan / 100);
+
+  page.drawText(`${lessSecureThan}%`, {
+    x: 490,
+    y: y + 2,
+    size: 10,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  page.drawText("Lower risk", {
+    x: 50,
+    y: y - 16,
     size: 9,
     font,
     color: BRAND.muted,
   });
+
+  page.drawText("Higher risk", {
+    x: 420,
+    y: y - 16,
+    size: 9,
+    font,
+    color: BRAND.muted,
+  });
+
+  y -= 42;
+
+  drawInsightCard(
+    page,
+    50,
+    y - 138,
+    155,
+    126,
+    "What this means",
+    [
+      "This benchmark is designed to make the result easier to interpret.",
+      "It shows your position in simple business terms rather than technical language.",
+    ],
+    font,
+    fontBold,
+    BRAND.accent
+  );
+
+  drawInsightCard(
+    page,
+    220,
+    y - 138,
+    155,
+    126,
+    "How to improve it",
+    [
+      "The fastest gains usually come from lifting the weakest 2-3 domains first.",
+      "Consistency, ownership, and evidence usually improve your position fastest.",
+    ],
+    font,
+    fontBold,
+    BRAND.med
+  );
+
+  drawInsightCard(
+    page,
+    390,
+    y - 138,
+    155,
+    126,
+    "Important caution",
+    [
+      "This is an indicative benchmark, not a formal industry ranking.",
+      "It supports decision-making but does not replace detailed assurance work.",
+    ],
+    font,
+    fontBold,
+    BRAND.good
+  );
+
+  y -= 170;
+
+  page.drawText("How to use this benchmark", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  y -= 16;
+
+  const explanation = [
+    "Use it as a reference point rather than a technical scorecard.",
+    "Most SMEs tend to cluster in the middle range because some controls exist, but evidence and consistency are often weaker than expected.",
+    "The goal is not to chase a number on its own. The goal is to reduce the likelihood and cost of disruption by improving the areas that matter most first.",
+  ];
+
+  for (const e of explanation) {
+    for (const line of wrapText(e, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
 }
 
-      page.drawText("Scale: 0–5", {
-        x: radarCardX + 16,
-        y: radarCardY + 16,
-        size: 8.5,
+/**
+ * ------------------------------
+ * Domain risk priority (RAG view)
+ * ------------------------------
+ */
+{
+  let page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
+
+  const pageHeight = page.getSize().height;
+  let y = pageHeight - 96;
+
+  const startNewRagPage = (title?: string) => {
+    drawFooter(page, pageNum++, font, reportRef);
+    page = addPage(pdfDoc);
+    drawBrandHeader(page, shieldImg);
+    drawWatermark(page, watermarkImg, 0.12);
+    y = pageHeight - 96;
+
+    if (title) {
+      drawSectionTitle(page, title, 50, y, fontBold);
+      y -= 28;
+    }
+  };
+
+  drawSectionTitle(page, "Domain Risk Priority (RAG View)", 50, y, fontBold);
+  y -= 28;
+
+  const intro =
+    "This view highlights which resilience domains require the most immediate attention. Domains are grouped using a Red-Amber-Green model so it is easier to see where disruption risk is most concentrated.";
+
+  for (const line of wrapText(intro, 102)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 10;
+
+  const redDomains = ranked.filter((d) => Number(d.score ?? 0) < 2.0);
+  const amberDomains = ranked.filter(
+    (d) => Number(d.score ?? 0) >= 2.0 && Number(d.score ?? 0) < 3.5
+  );
+  const greenDomains = ranked.filter((d) => Number(d.score ?? 0) >= 3.5);
+
+  const ensureSpace = (needed: number, continuationTitle?: string) => {
+    if (y < needed) {
+      startNewRagPage(continuationTitle || "Domain Risk Priority (RAG View) - Continued");
+    }
+  };
+
+  const drawRagGroup = (
+    title: string,
+    subtitle: string,
+    interpretation: string,
+    color: ReturnType<typeof rgb>,
+    domains: { domain_name: string; domain_code: string; score: number }[]
+  ) => {
+    ensureSpace(190, "Domain Risk Priority (RAG View) - Continued");
+
+    page.drawText(sanitizeText(title), {
+      x: 50,
+      y,
+      size: 11,
+      font: fontBold,
+      color,
+    });
+    y -= 14;
+
+    for (const line of wrapText(subtitle, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10,
         font,
         color: BRAND.muted,
       });
-
-      let by = rankedCardY + rankedCardH - 50;
-      const rankedForBars = [...ranked]
-        .map((d) => ({
-          ...d,
-          short: shortDomainLabel(d.domain_name || d.domain_code || ""),
-        }))
-        .slice(0, 9);
-
-      for (const d of rankedForBars) {
-        const label = d.short || "Domain";
-        const score = Number(d.score ?? 0);
-
-        page.drawText(label, {
-          x: rankedCardX + 16,
-          y: by,
-          size: 9.4,
-          font,
-          color: BRAND.text,
-        });
-
-        drawBar(page, rankedCardX + 92, by - 2, 92, 8, score / 5);
-
-        page.drawText(sanitizeText(score.toFixed(2)), {
-          x: rankedCardX + 186,
-          y: by,
-          size: 9.2,
-          font: fontBold,
-          color: BRAND.text,
-        });
-
-        page.drawCircle({
-          x: rankedCardX + 214,
-          y: by + 4,
-          size: 3.6,
-          color: severityColor(score),
-        });
-
-        by -= 24;
-      }
-
-      const insightY = 282;
-      page.drawText("What this means", {
-        x: 50,
-        y: insightY,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-
-      const visualBullets = [
-        "The radar shows balance across domains. A larger, more even shape indicates stronger operating consistency.",
-        "The ranked view shows where disruption risk is most likely to come from first.",
-        "Improving the lowest 2–3 domains usually raises resilience fastest.",
-      ];
-
-      let vy = insightY - 16;
-      for (const b of visualBullets) {
-        for (const line of wrapText(`• ${b}`, 100)) {
-          page.drawText(line, {
-            x: 50,
-            y: vy,
-            size: 10.3,
-            font,
-            color: BRAND.text,
-          });
-          vy -= 14;
-        }
-        vy -= 2;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
+      y -= 13;
     }
 
-    /**
-     * ------------------------------
-     * Domain risk priority (RAG view)
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+    y -= 2;
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Domain Risk Priority (RAG View)", 50, y, fontBold);
-      y -= 28;
+    for (const line of wrapText(`Interpretation: ${interpretation}`, 100)) {
+      page.drawText(sanitizeText(line), {
+        x: 50,
+        y,
+        size: 9.5,
+        font: fontBold,
+        color,
+      });
+      y -= 12;
+    }
 
-      const intro =
-        "This view highlights which resilience domains require the most immediate attention. Domains are grouped using a Red-Amber-Green (RAG) model based on maturity scores.";
+    y -= 8;
 
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, {
+    if (!domains.length) {
+      ensureSpace(110, "Domain Risk Priority (RAG View) - Continued");
+
+      page.drawText("None at present.", {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 18;
+    } else {
+      for (const d of domains) {
+        ensureSpace(120, "Domain Risk Priority (RAG View) - Continued");
+
+        const name = d.domain_name || d.domain_code || "Domain";
+        const score = Number(d.score ?? 0);
+
+        page.drawText(sanitizeText(name), {
           x: 50,
           y,
           size: 10.5,
           font,
-          color: rgb(0.15, 0.15, 0.15),
+          color: BRAND.text,
         });
-        y -= 14;
-      }
 
-      y -= 10;
+        drawBar(page, 270, y - 2, 145, 8, score / 5);
 
-      const redDomains = ranked.filter((d) => Number(d.score ?? 0) < 2.0);
-      const amberDomains = ranked.filter((d) => Number(d.score ?? 0) >= 2.0 && Number(d.score ?? 0) < 3.5);
-      const greenDomains = ranked.filter((d) => Number(d.score ?? 0) >= 3.5);
-
-      const drawRagGroup = (
-        title: string,
-        subtitle: string,
-        color: ReturnType<typeof rgb>,
-        domains: { domain_name: string; domain_code: string; score: number }[]
-      ) => {
-        page.drawText(sanitizeText(title), {
-          x: 50,
+        page.drawText(sanitizeText(score.toFixed(2)), {
+          x: 430,
           y,
-          size: 11,
+          size: 10.5,
           font: fontBold,
-          color,
+          color: BRAND.text,
         });
-        y -= 14;
 
-        for (const line of wrapText(subtitle, 100)) {
-          page.drawText(line, { x: 50, y, size: 10, font, color: BRAND.muted });
-          y -= 13;
-        }
+        const shortName = shortDomainLabel(name);
+        let note = "";
 
-        y -= 4;
-
-        if (!domains.length) {
-          page.drawText("None at present.", {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: rgb(0.15, 0.15, 0.15),
-          });
-          y -= 18;
+        if (title.startsWith("Red")) {
+          note = `${shortName} is currently a priority exposure and is more likely to contribute to disruption if left unchanged.`;
+        } else if (title.startsWith("Amber")) {
+          note = `${shortName} shows some maturity, but consistency or evidence may still be too weak for confidence under pressure.`;
         } else {
-          for (const d of domains) {
-            const name = d.domain_name || d.domain_code || "Domain";
-
-            page.drawText(sanitizeText(name), {
-              x: 50,
-              y,
-              size: 10.5,
-              font,
-              color: BRAND.text,
-            });
-
-            page.drawText(sanitizeText(Number(d.score ?? 0).toFixed(2)), {
-              x: 430,
-              y,
-              size: 10.5,
-              font: fontBold,
-              color: BRAND.text,
-            });
-
-            drawBar(page, 270, y - 2, 145, 8, Number(d.score ?? 0) / 5);
-            y -= 18;
-          }
+          note = `${shortName} is relatively stronger, but still needs routine monitoring so standards do not drift.`;
         }
 
-        y -= 8;
-        page.drawLine({
-          start: { x: 50, y },
-          end: { x: 545, y },
-          thickness: 1,
-          color: rgb(0.92, 0.92, 0.92),
-        });
         y -= 14;
-      };
 
-      drawRagGroup(
-        "Red - Priority attention",
-        "These domains represent the greatest resilience exposure and should typically be prioritised for improvement.",
-        rgb(0.88, 0.30, 0.30),
-        redDomains
-      );
-
-      drawRagGroup(
-        "Amber - Improvement needed",
-        "Controls exist but may lack consistency, ownership, or supporting evidence.",
-        rgb(0.90, 0.62, 0.18),
-        amberDomains
-      );
-
-      drawRagGroup(
-        "Green - Relative strength",
-        "These domains demonstrate stronger operating practices relative to the rest of the organisation.",
-        rgb(0.24, 0.68, 0.34),
-        greenDomains
-      );
-
-      if (y > 110) {
-        const guidance =
-          "Priority guidance: focus improvement efforts first on Red domains, then stabilise Amber domains, while maintaining Green domains through routine monitoring.";
-
-        for (const line of wrapText(guidance, 102)) {
+        for (const line of wrapText(note, 96)) {
           page.drawText(line, {
-            x: 50,
+            x: 62,
             y,
-            size: 10.5,
+            size: 9.4,
             font,
-            color: rgb(0.15, 0.15, 0.15),
+            color: BRAND.muted,
           });
-          y -= 14;
+          y -= 12;
         }
-      }
 
-      drawFooter(page, pageNum++, font, reportRef);
+        y -= 6;
+      }
     }
+
+    ensureSpace(90, "Domain Risk Priority (RAG View) - Continued");
+
+    y -= 4;
+    page.drawLine({
+      start: { x: 50, y },
+      end: { x: 545, y },
+      thickness: 1,
+      color: BRAND.line,
+    });
+    y -= 14;
+  };
+
+  drawRagGroup(
+    "Red - Priority attention",
+    "These domains represent the greatest resilience exposure and should typically be prioritised first.",
+    "Immediate resilience risk. These areas are most likely to create business disruption if not improved.",
+    BRAND.risk,
+    redDomains
+  );
+
+  drawRagGroup(
+    "Amber - Improvement needed",
+    "Controls exist, but they may still lack consistency, ownership, or supporting evidence.",
+    "Moderate risk. These areas are partly in place but may still be fragile under pressure.",
+    BRAND.med,
+    amberDomains
+  );
+
+  drawRagGroup(
+    "Green - Relative strength",
+    "These domains demonstrate stronger operating practices relative to the rest of the organisation.",
+    "Relatively stable. These areas are stronger, but still need monitoring and periodic review.",
+    BRAND.good,
+    greenDomains
+  );
+
+  if (y > 120) {
+    const guidance =
+      "Priority guidance: focus improvement efforts first on Red domains, then stabilise Amber domains, while maintaining Green domains through routine monitoring and evidence collection.";
+
+    for (const line of wrapText(guidance, 102)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
 
     /**
      * ------------------------------
@@ -2033,7 +2914,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
         const acts = (cfg.actions[band] ?? []).slice(0, 3).map(sanitizeText);
         for (const a of acts) {
-          for (const line of wrapText(`• ${a}`, 105)) {
+          for (const line of wrapText(a, 105)) {
             page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
             y -= 14;
           }
@@ -2049,511 +2930,985 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     }
 
     /**
-     * ------------------------------
-     * 30/60/90 day plan
-     * ------------------------------
-     */
+ * ------------------------------
+ * 30/60/90 day plan
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+  drawSectionTitle(page, "30 / 60 / 90 Day Improvement Plan", 50, y, fontBold);
+  y -= 30;
+
+  const intro =
+    "This plan is designed to reduce real-world disruption risk as quickly as possible. The first 30 days focus on stabilising obvious weaknesses, the next 30 days focus on proving controls work in practice, and the final 30 days focus on embedding consistency, evidence, and measurement.";
+  for (const line of wrapText(intro, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: rgb(0.15, 0.15, 0.15),
+    });
+    y -= 14;
+  }
+  y -= 12;
+
+  const blocks = [
     {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+      title: "Days 0-30 - Stabilise",
+      subtitle:
+        "Focus on immediate control gaps, ownership, and the basic actions that reduce exposure fastest.",
+      items: plan306090.d30,
+      accent: BRAND.risk,
+    },
+    {
+      title: "Days 31-60 - Control & Prove",
+      subtitle:
+        "Move from intention to routine. Confirm that controls are working consistently and can be evidenced.",
+      items: plan306090.d60,
+      accent: BRAND.med,
+    },
+    {
+      title: "Days 61-90 - Embed & Measure",
+      subtitle:
+        "Turn short-term fixes into repeatable operating practice, with simple evidence and reporting in place.",
+      items: plan306090.d90,
+      accent: BRAND.good,
+    },
+  ];
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "30 / 60 / 90 Day Improvement Plan", 50, y, fontBold);
-      y -= 30;
+  for (const b of blocks) {
+    if (y < 180) break;
 
-      const intro =
-        "This plan is designed to reduce disruption risk quickly. Day 30 focuses on quick wins and control basics, Day 60 adds testing and routine, and Day 90 strengthens evidence, suppliers, and measurement.";
-      for (const line of wrapText(intro, 100)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-      y -= 10;
+    page.drawText(sanitizeText(b.title), {
+      x: 50,
+      y,
+      size: 11,
+      font: fontBold,
+      color: b.accent,
+    });
+    y -= 14;
 
-      const blocks = [
-        { title: "Days 0-30 (stabilise)", items: plan306090.d30 },
-        { title: "Days 31-60 (prove + test)", items: plan306090.d60 },
-        { title: "Days 61-90 (embed + measure)", items: plan306090.d90 },
-      ];
-
-      for (const b of blocks) {
-        page.drawText(sanitizeText(b.title), { x: 50, y, size: 11, font: fontBold, color: BRAND.text });
-        y -= 16;
-
-        for (const item of b.items) {
-          for (const line of wrapText(`• ${item}`, 104)) {
-            page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-            y -= 14;
-          }
-          y -= 2;
-          if (y < 110) break;
-        }
-
-        y -= 10;
-        page.drawLine({ start: { x: 50, y }, end: { x: 545, y }, thickness: 1, color: rgb(0.92, 0.92, 0.92) });
-        y -= 14;
-        if (y < 110) break;
-      }
-
-      if (y > 150 && actions90.length) {
-        page.drawText("Recommended actions (from your domain profile)", {
-          x: 50,
-          y,
-          size: 11,
-          font: fontBold,
-          color: BRAND.text,
-        });
-        y -= 14;
-
-        let i = 1;
-        for (const a of actions90) {
-          for (const line of wrapText(`${i}. ${a}`, 102)) {
-            page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-            y -= 14;
-            if (y < 90) break;
-          }
-          if (y < 90) break;
-          y -= 2;
-          i += 1;
-        }
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
+    for (const line of wrapText(b.subtitle, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10,
+        font,
+        color: BRAND.muted,
+      });
+      y -= 13;
     }
 
-    /**
-     * ------------------------------
-     * Premium page 1: What this means for your business
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+    y -= 6;
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "What this means for your business", 50, y, fontBold);
-      y -= 28;
+    for (const item of b.items) {
+      const wrapped = wrapText(item, 94);
 
-      const overallBand = scoreBand(overall);
-      const weakestNames = topRisks.map((d) => d.domain_name || d.domain_code || "Domain");
-
-      const intro =
-        overallBand === "very_low"
-          ? "Your assessment suggests resilience is currently dependent on individuals, informal workarounds, or assumptions rather than consistent operating practice. In this state, issues may remain hidden until they become disruptive."
-          : overallBand === "low"
-          ? "Your assessment suggests some controls exist, but resilience may still depend too heavily on whether the right people remember to do the right things at the right time. This creates avoidable fragility."
-          : overallBand === "mid"
-          ? "Your assessment suggests there is a meaningful baseline in place, but some domains may still be too inconsistent to give leadership full confidence during a real incident or disruption."
-          : overallBand === "high"
-          ? "Your assessment suggests the business has a solid resilience foundation. The main challenge now is proving consistency, reducing exceptions, and making sure growth or change does not weaken control maturity."
-          : "Your assessment suggests strong resilience foundations. The opportunity now is to preserve that maturity through business growth, supplier change, and continuous assurance.";
-
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-
-      y -= 10;
-
-      page.drawText("What stands out from your profile", {
+      page.drawText("•", {
         x: 50,
         y,
         size: 11,
         font: fontBold,
         color: BRAND.text,
       });
-      y -= 14;
 
-      const profilePoints = [
-        weakestNames.length
-          ? `Your current profile suggests the greatest pressure is likely to come from these weaker areas: ${weakestNames.join(", ")}.`
-          : "Your current profile suggests there are weaker domains that should be treated as priority areas.",
-        "This usually means the business may believe some controls exist, but they may not yet be routine, owned, evidenced, or tested strongly enough.",
-        "In practice, the commercial risk is not only a cyber incident itself, but delay, confusion, rework, weak evidence, and slower recovery when something goes wrong.",
-        "The fastest improvement usually comes from lifting the weakest domains first rather than trying to improve everything at once.",
-      ];
-
-      for (const p of profilePoints) {
-        for (const line of wrapText(`• ${p}`, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-          y -= 14;
-        }
-        y -= 2;
+      let lineY = y;
+      for (const line of wrapped) {
+        page.drawText(line, {
+          x: 64,
+          y: lineY,
+          size: 10.5,
+          font,
+          color: BRAND.text,
+        });
+        lineY -= 14;
       }
 
-      y -= 8;
+      y = lineY - 2;
 
-      page.drawText("Consultant view", {
+      if (y < 120) break;
+    }
+
+    y -= 6;
+    page.drawLine({
+      start: { x: 50, y },
+      end: { x: 545, y },
+      thickness: 1,
+      color: rgb(0.92, 0.92, 0.92),
+    });
+    y -= 16;
+  }
+
+  if (y > 170 && actions90.length) {
+    page.drawText("Additional recommended actions", {
+      x: 50,
+      y,
+      size: 11,
+      font: fontBold,
+      color: BRAND.text,
+    });
+    y -= 14;
+
+    const extraIntro =
+      "These actions are pulled from your domain profile and provide additional depth where follow-through or evidence may still be weak.";
+    for (const line of wrapText(extraIntro, 100)) {
+      page.drawText(line, {
         x: 50,
         y,
-        size: 11,
-        font: fontBold,
+        size: 10,
+        font,
+        color: BRAND.muted,
+      });
+      y -= 13;
+    }
+
+    y -= 6;
+
+    let i = 1;
+    for (const a of actions90) {
+      for (const line of wrapText(`${i}. ${a}`, 100)) {
+        page.drawText(line, {
+          x: 50,
+          y,
+          size: 10.5,
+          font,
+          color: BRAND.text,
+        });
+        y -= 14;
+        if (y < 90) break;
+      }
+      if (y < 90) break;
+      y -= 2;
+      i += 1;
+    }
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
+
+    /**
+ * ------------------------------
+ * Premium page 1: What this means for your business
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+  drawSectionTitle(page, "What this means for your business", 50, y, fontBold);
+  y -= 28;
+
+  const overallBand = scoreBand(overall);
+  const weakestNames = topRisks.map((d) =>
+    shortDomainLabel(d.domain_name || d.domain_code || "Domain")
+  );
+  const strongestNames = topStrengths.map((d) =>
+    shortDomainLabel(d.domain_name || d.domain_code || "Domain")
+  );
+
+  const intro =
+    overallBand === "very_low"
+      ? "Your assessment suggests resilience is currently too dependent on individuals, informal workarounds, or assumptions rather than consistent operating practice. In this position, issues may remain hidden until they become commercially disruptive."
+      : overallBand === "low"
+      ? "Your assessment suggests some controls exist, but resilience may still depend too heavily on whether the right people remember to do the right things at the right time. This creates avoidable fragility and increases the chance of preventable disruption."
+      : overallBand === "mid"
+      ? "Your assessment suggests there is a meaningful baseline in place, but some domains may still be too inconsistent to give leadership full confidence during a real incident, outage, or supplier-led disruption."
+      : overallBand === "high"
+      ? "Your assessment suggests the business has a solid resilience foundation. The main challenge now is proving consistency, reducing exceptions, and making sure growth or operational change does not weaken control maturity."
+      : "Your assessment suggests strong resilience foundations. The opportunity now is to preserve that maturity through growth, supplier change, and ongoing assurance so standards do not drift over time.";
+
+  for (const line of wrapText(intro, 102)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: rgb(0.15, 0.15, 0.15),
+    });
+    y -= 14;
+  }
+
+  y -= 12;
+
+  drawInsightCard(
+    page,
+    50,
+    y - 152,
+    155,
+    140,
+    "Current position",
+    [
+      `Overall score: ${overall.toFixed(2)} / 5`,
+      `Grade: ${grade}`,
+      `Maturity level: ${scoreLabel(overall)}`,
+    ],
+    font,
+    fontBold,
+    BRAND.accent
+  );
+
+  drawInsightCard(
+    page,
+    220,
+    y - 152,
+    155,
+    140,
+    "Pressure points",
+    weakestNames.length
+      ? weakestNames.map((n) => `Priority area: ${n}`)
+      : ["There are weaker domains that should be treated as priority areas."],
+    font,
+    fontBold,
+    BRAND.risk
+  );
+
+  drawInsightCard(
+    page,
+    390,
+    y - 152,
+    155,
+    140,
+    "Relative strengths",
+    strongestNames.length
+      ? strongestNames.map((n) => `Stronger area: ${n}`)
+      : ["No clear strengths identified."],
+    font,
+    fontBold,
+    BRAND.good
+  );
+
+  y -= 178;
+
+  page.drawText("What stands out from your profile", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const profilePoints = [
+    weakestNames.length
+      ? `The greatest resilience pressure is currently likely to come from ${weakestNames.join(", ")}.`
+      : "There are weaker domains that should be treated as the main priority areas.",
+    "This usually means some controls may exist in principle, but they may not yet be routine, owned clearly enough, evidenced reliably enough, or tested strongly enough.",
+    "In practice, the commercial risk is not only the cyber event itself. It is also delay, confusion, rework, poor communication, weak evidence, and slower recovery when something goes wrong.",
+    strongestNames.length
+      ? `The stronger parts of your profile, such as ${strongestNames.join(", ")}, suggest there are already some foundations the business can build on.`
+      : "There may still be useful foundations in place, even if they are not yet consistent enough across the whole business.",
+    "The fastest improvement usually comes from lifting the weakest domains first rather than trying to improve everything at once.",
+  ];
+
+  for (const p of profilePoints) {
+    for (const line of wrapText(p, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
         color: BRAND.text,
       });
       y -= 14;
-
-      const consultantView = [
-        "At this stage, the business does not need complexity. It needs clarity on ownership, operating rhythm, and evidence.",
-        "If the weakest areas are stabilised and made repeatable, overall resilience maturity usually improves faster than expected.",
-        `Your current overall score of ${overall.toFixed(2)} / 5 indicates a maturity level of ${scoreLabel(overall)}. The next step is not more theory - it is more consistency.`,
-      ];
-
-      for (const p of consultantView) {
-        for (const line of wrapText(`• ${p}`, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
     }
+    y -= 2;
+  }
+
+  y -= 8;
+
+  page.drawText("What this means commercially", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const businessImpactPoints = [
+    "Where resilience is weaker, the business is more likely to suffer avoidable downtime, slower decision-making, and higher recovery cost during a disruption.",
+    "Where resilience is stronger, the business is more likely to respond consistently, recover faster, and answer insurer, client, or partner questions with greater confidence.",
+    "For most SMEs, the key issue is not technical perfection. It is whether the business could keep operating effectively if a common cyber or operational problem occurred tomorrow.",
+  ];
+
+  for (const p of businessImpactPoints) {
+    for (const line of wrapText(p, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  y -= 8;
+
+  page.drawText("Consultant view", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const consultantView = [
+    "At this stage, the business does not need complexity. It needs clarity on ownership, operating rhythm, and evidence.",
+    "If the weakest areas are stabilised and made repeatable, overall resilience maturity usually improves faster than expected.",
+    `Your current overall score of ${overall.toFixed(2)} / 5 and grade ${grade} indicate a maturity level of ${scoreLabel(overall)}. The next step is not more theory - it is more consistency, clearer ownership, and stronger follow-through.`,
+  ];
+
+  for (const p of consultantView) {
+    for (const line of wrapText(p, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
 
     /**
-     * ------------------------------
-     * Premium page 2: Likely failure scenarios and exposure
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+ * ------------------------------
+ * Premium page 2: Likely failure scenarios and exposure
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Likely failure scenarios and exposure", 50, y, fontBold);
-      y -= 28;
+  const { height } = page.getSize();
+  let y = height - 96;
+  drawSectionTitle(page, "Likely failure scenarios and exposure", 50, y, fontBold);
+  y -= 28;
 
-      const scenarioForDomain = (name: string) => {
-        const n = name.toLowerCase();
+  const scenarioForDomain = (name: string) => {
+    const n = name.toLowerCase();
 
-        if (n.includes("identity") || n.includes("access")) {
-          return [
-            "Access is removed late, MFA coverage is inconsistent, or admin privileges remain wider than they should be.",
-            "This can lead to account misuse, avoidable exposure, or dependency on manual memory rather than process.",
-          ];
-        }
-
-        if (n.includes("recovery") || n.includes("resilience")) {
-          return [
-            "Backups may exist, but recovery confidence is lower than assumed because restore testing or dependency planning is limited.",
-            "This can lead to longer downtime, uncertainty during disruption, or delayed restoration of critical services.",
-          ];
-        }
-
-        if (n.includes("incident") || n.includes("response")) {
-          return [
-            "An incident occurs, but roles, escalation or contacts are not clear enough at the moment they are needed.",
-            "This can lead to slower containment, delayed decisions, and unnecessary operational confusion.",
-          ];
-        }
-
-        if (n.includes("supplier") || n.includes("third-party")) {
-          return [
-            "A supplier issue creates disruption because critical dependencies, access paths, or security expectations are not well enough controlled.",
-            "This can lead to service interruption, weak assurance, or slower recovery when a supplier problem occurs.",
-          ];
-        }
-
-        if (n.includes("operations")) {
-          return [
-            "Routine controls such as patching, backup monitoring, logging, or change discipline are not operating as consistently as the business assumes.",
-            "This can create hidden weakness that only becomes visible during failure, outage, or incident investigation.",
-          ];
-        }
-
-        if (n.includes("risk")) {
-          return [
-            "Key issues may be known informally but not tracked, owned, or reviewed consistently enough to drive action.",
-            "This can lead to recurring issues, delayed remediation, and weak visibility for leadership.",
-          ];
-        }
-
-        if (n.includes("governance")) {
-          return [
-            "Leadership may support resilience in principle, but accountability, cadence, or decision structure may not be formal enough.",
-            "This can lead to drift, unclear priorities, and controls that weaken over time.",
-          ];
-        }
-
-        if (n.includes("asset") || n.includes("data")) {
-          return [
-            "Critical systems, data sets, or ownership may not be defined clearly enough for rapid protection or recovery decisions.",
-            "This can lead to confusion during incidents, inconsistent protection, or gaps in evidence.",
-          ];
-        }
-
-        if (n.includes("threat") || n.includes("vulnerability")) {
-          return [
-            "Exposure may remain open longer than intended because vulnerability identification, prioritisation, or closure is not yet disciplined enough.",
-            "This can increase preventable attack surface and create avoidable operational risk.",
-          ];
-        }
-
-        return [
-          "This domain may be operating more informally than expected, increasing the chance of inconsistency under pressure.",
-          "This can lead to avoidable disruption, weak evidence, or slower response when something goes wrong.",
-        ];
+    if (n.includes("identity") || n.includes("access")) {
+      return {
+        scenario:
+          "Email, cloud, or admin accounts are not protected consistently enough. Access may stay active too long, MFA may not be universal, or privilege levels may be broader than the business realises.",
+        exposure:
+          "This can lead to account takeover, unauthorised access, internal confusion, and avoidable business disruption before the issue is fully understood.",
+        fastestFix:
+          "Tighten access ownership, apply MFA consistently, and make joiners, movers, and leavers a repeatable routine.",
       };
+    }
 
-      const intro =
-        "Lower-scoring domains do not guarantee failure, but they do indicate where real-world disruption is more likely to originate. The scenarios below translate weaker domains into practical business exposure.";
+    if (n.includes("recovery") || n.includes("resilience")) {
+      return {
+        scenario:
+          "Backups may exist, but recovery confidence may be weaker than assumed because restore testing, service dependency planning, or recovery ownership is limited.",
+        exposure:
+          "This can lead to extended downtime, delayed recovery decisions, and greater financial damage when systems or data become unavailable.",
+        fastestFix:
+          "Test recovery properly, define recovery priorities, and prove that critical services can actually be restored.",
+      };
+    }
 
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-        y -= 14;
-      }
+    if (n.includes("incident") || n.includes("response")) {
+      return {
+        scenario:
+          "A cyber issue or operational incident occurs, but escalation routes, response roles, or decision points are not clear enough at the moment they are needed.",
+        exposure:
+          "This can lead to slower containment, confusion across teams, delayed communications, and a larger business impact than necessary.",
+        fastestFix:
+          "Define roles clearly, keep a simple response plan available, and run at least one realistic tabletop exercise.",
+      };
+    }
 
-      y -= 10;
+    if (n.includes("supplier") || n.includes("third-party")) {
+      return {
+        scenario:
+          "A supplier issue affects your business because dependencies, access paths, or minimum control expectations are not visible enough or not reviewed often enough.",
+        exposure:
+          "This can lead to service interruption, weaker assurance, and slower recovery when an external party becomes the source of disruption.",
+        fastestFix:
+          "Identify critical suppliers, review who has access to what, and document minimum expectations and fallback plans.",
+      };
+    }
 
-      const focusDomains = ranked.slice(0, 3);
+    if (n.includes("operations")) {
+      return {
+        scenario:
+          "Routine controls such as patching, backup monitoring, logging, or change discipline may not be operating as consistently as the business assumes.",
+        exposure:
+          "This can create hidden weaknesses that only become visible during an outage, incident, or urgent recovery situation.",
+        fastestFix:
+          "Turn day-to-day controls into tracked routines with owners, cadence, and visible evidence.",
+      };
+    }
 
-      for (const d of focusDomains) {
-        const name = d.domain_name || d.domain_code || "Domain";
-        const score = Number(d.score ?? 0);
-        const scenarios = scenarioForDomain(name);
+    if (n.includes("risk")) {
+      return {
+        scenario:
+          "Known resilience or security issues may exist informally, but are not being tracked, owned, or reviewed consistently enough to drive action.",
+        exposure:
+          "This can result in recurring weaknesses, delayed remediation, and limited visibility for leadership when priorities need to be set quickly.",
+        fastestFix:
+          "Use a simple risk register, assign owners, and review progress regularly rather than relying on informal awareness.",
+      };
+    }
 
-        if (y < 180) break;
+    if (n.includes("governance")) {
+      return {
+        scenario:
+          "Leadership may support resilience in principle, but accountability, review rhythm, or decision-making structure may not yet be formal enough.",
+        exposure:
+          "This can lead to drift, unclear priorities, and controls that weaken gradually as the business changes.",
+        fastestFix:
+          "Set clear ownership, create a simple leadership review cadence, and make follow-up actions visible.",
+      };
+    }
 
-        page.drawText(sanitizeText(name), { x: 50, y, size: 11, font: fontBold, color: BRAND.text });
-        page.drawText(sanitizeText(`${score.toFixed(2)} / 5`), {
-          x: 470,
+    if (n.includes("asset") || n.includes("data")) {
+      return {
+        scenario:
+          "Critical systems, sensitive data, or ownership of important business assets may not be defined clearly enough for rapid protection or recovery decisions.",
+        exposure:
+          "This can lead to confusion during incidents, slower response, weak prioritisation, and avoidable evidence gaps.",
+        fastestFix:
+          "Identify critical systems and data clearly, assign owners, and make sure the business knows what matters most first.",
+      };
+    }
+
+    if (n.includes("threat") || n.includes("vulnerability")) {
+      return {
+        scenario:
+          "Exposure may remain open longer than intended because vulnerability identification, prioritisation, or closure is not yet disciplined enough.",
+        exposure:
+          "This can increase preventable attack surface and allow known weaknesses to remain exploitable for longer than the business expects.",
+        fastestFix:
+          "Create a regular remediation routine, prioritise higher-risk issues first, and track exceptions visibly.",
+      };
+    }
+
+    return {
+      scenario:
+        "This domain may be operating more informally than expected, increasing the chance of inconsistency under pressure.",
+      exposure:
+        "This can lead to avoidable disruption, weaker evidence, slower response, and higher effort when something goes wrong.",
+      fastestFix:
+        "Clarify ownership, create a repeatable routine, and keep evidence that the control has actually operated.",
+    };
+  };
+
+  const intro =
+    "Lower-scoring domains do not guarantee failure, but they do indicate where real-world disruption is more likely to originate. This page translates weaker areas into practical business exposure so the report feels relevant beyond scoring alone.";
+
+  for (const line of wrapText(intro, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 12;
+
+  const focusDomains = ranked.slice(0, 3);
+
+  for (const d of focusDomains) {
+    const name = d.domain_name || d.domain_code || "Domain";
+    const score = Number(d.score ?? 0);
+    const detail = scenarioForDomain(name);
+
+    const cardHeight = 182;
+
+    if (y - cardHeight < 105) break;
+
+    drawRoundedCard(page, 50, y - cardHeight, 495, cardHeight, {
+      fill: BRAND.white,
+      border: BRAND.line,
+      radius: 18,
+    });
+
+    page.drawText(sanitizeText(name), {
+      x: 64,
+      y: y - 20,
+      size: 11,
+      font: fontBold,
+      color: BRAND.text,
+    });
+
+    drawMiniScorePill(
+      page,
+      448,
+      y - 30,
+      `${score.toFixed(2)} / 5`,
+      fontBold,
+      score < 2
+        ? rgb(0.99, 0.93, 0.93)
+        : score < 3.5
+        ? rgb(0.99, 0.97, 0.90)
+        : BRAND.accentSoft,
+      BRAND.text
+    );
+
+    drawBar(page, 64, y - 44, 467, 8, score / 5);
+
+    page.drawText("Likely scenario", {
+      x: 64,
+      y: y - 64,
+      size: 9.5,
+      font: fontBold,
+      color: BRAND.muted,
+    });
+
+    let textY = y - 78;
+    for (const line of wrapText(detail.scenario, 84)) {
+      page.drawText(line, {
+        x: 64,
+        y: textY,
+        size: 10,
+        font,
+        color: BRAND.text,
+      });
+      textY -= 12;
+    }
+
+    textY -= 4;
+    page.drawText("Business exposure", {
+      x: 64,
+      y: textY,
+      size: 9.5,
+      font: fontBold,
+      color: BRAND.muted,
+    });
+
+    textY -= 14;
+    for (const line of wrapText(detail.exposure, 84)) {
+      page.drawText(line, {
+        x: 64,
+        y: textY,
+        size: 10,
+        font,
+        color: BRAND.text,
+      });
+      textY -= 12;
+    }
+
+    textY -= 4;
+    page.drawText("Fastest way to reduce this risk", {
+      x: 64,
+      y: textY,
+      size: 9.5,
+      font: fontBold,
+      color: BRAND.muted,
+    });
+
+    textY -= 14;
+    for (const line of wrapText(detail.fastestFix, 84)) {
+      page.drawText(line, {
+        x: 64,
+        y: textY,
+        size: 10,
+        font: fontBold,
+        color: BRAND.text,
+      });
+      textY -= 12;
+    }
+
+    y -= cardHeight + 14;
+  }
+
+  if (y > 130) {
+    page.drawText("Overall interpretation", {
+      x: 50,
+      y,
+      size: 11,
+      font: fontBold,
+      color: BRAND.text,
+    });
+    y -= 14;
+
+    const overallLines = [
+      "The purpose of this page is not to predict a single event. It is to show where disruption is most likely to begin if current weaknesses remain unchanged.",
+      "In most SMEs, better outcomes come from improving ownership, repeatability, and evidence in the weakest areas before investing in complexity elsewhere.",
+      "The business does not need every domain to be perfect. It needs the weakest domains to become reliable enough that they no longer create avoidable commercial exposure.",
+    ];
+
+    for (const item of overallLines) {
+      for (const line of wrapText(item, 100)) {
+        page.drawText(line, {
+          x: 50,
           y,
-          size: 11,
-          font: fontBold,
+          size: 10.5,
+          font,
           color: BRAND.text,
         });
         y -= 14;
-
-        drawBar(page, 50, y, 495, 8, score / 5);
-        y -= 18;
-
-        for (const s of scenarios) {
-          for (const line of wrapText(`• ${s}`, 100)) {
-            page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-            y -= 14;
-          }
-          y -= 2;
-        }
-
-        const exposureLine =
-          "What would reduce this risk fastest: named ownership, a repeatable routine, and evidence that the control has actually operated.";
-
-        for (const line of wrapText(exposureLine, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.2, font: fontBold, color: BRAND.muted });
-          y -= 14;
-        }
-
-        y -= 10;
-        page.drawLine({
-          start: { x: 50, y },
-          end: { x: 545, y },
-          thickness: 1,
-          color: rgb(0.92, 0.92, 0.92),
-        });
-        y -= 14;
       }
-
-      drawFooter(page, pageNum++, font, reportRef);
+      y -= 2;
     }
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
 
     /**
-     * ------------------------------
-     * Premium page 3: Next-level target state and evidence to prioritise
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+ * ------------------------------
+ * Premium page 3: Next-level target state and evidence to prioritise
+ * ------------------------------
+ */
+{
+  const nextStateForDomain = (name: string) => {
+    const n = name.toLowerCase();
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Next-level target state and evidence to prioritise", 50, y, fontBold);
-      y -= 28;
-
-      const intro =
-        "The aim is not perfection. The aim is to move the weakest domains to the next credible level of maturity. This page explains what better would look like next, and what evidence would give confidence that progress is real.";
-
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-        y -= 14;
-      }
-
-      y -= 10;
-
-      const nextStateForDomain = (name: string) => {
-        const n = name.toLowerCase();
-
-        if (n.includes("identity") || n.includes("access")) {
-          return {
-            state: "MFA is consistently applied, admin access is reviewed, and joiners/movers/leavers are no longer dependent on memory.",
-            evidence: [
-              "MFA evidence for key accounts",
-              "Leavers checklist with completed examples",
-              "List of admin accounts with review date",
-            ],
-          };
-        }
-
-        if (n.includes("recovery") || n.includes("resilience")) {
-          return {
-            state: "Critical services are defined, restore confidence is proven, and recovery is no longer assumed.",
-            evidence: [
-              "Restore test result",
-              "Critical services list",
-              "Recovery runbook or simple recovery steps",
-            ],
-          };
-        }
-
-        if (n.includes("incident") || n.includes("response")) {
-          return {
-            state: "Escalation is clearer, contacts are available, and the business has practiced at least one realistic scenario.",
-            evidence: [
-              "1-page response plan",
-              "Exercise notes or tabletop output",
-              "Incident log or lessons learned tracker",
-            ],
-          };
-        }
-
-        if (n.includes("supplier") || n.includes("third-party")) {
-          return {
-            state: "Critical suppliers are known, access is controlled, and expectations are documented well enough for due diligence.",
-            evidence: [
-              "Critical supplier list",
-              "Supplier security clauses or expectations",
-              "Supplier access review or owner list",
-            ],
-          };
-        }
-
-        if (n.includes("operations")) {
-          return {
-            state: "Operational routines are regular, measurable, and no longer informal.",
-            evidence: [
-              "Patch or maintenance routine evidence",
-              "Backup success reports",
-              "Logging or monitoring confirmation for key systems",
-            ],
-          };
-        }
-
-        if (n.includes("risk")) {
-          return {
-            state: "Top risks are visible, owned, and reviewed in a way that drives action rather than discussion alone.",
-            evidence: [
-              "Risk register",
-              "Action tracker with owners and dates",
-              "Leadership review notes",
-            ],
-          };
-        }
-
-        if (n.includes("governance")) {
-          return {
-            state: "Leadership ownership is explicit, review cadence exists, and resilience decisions are easier to evidence.",
-            evidence: ["Named owner", "Review meeting notes", "Core policy set"],
-          };
-        }
-
-        if (n.includes("asset") || n.includes("data")) {
-          return {
-            state: "Critical assets and data are identifiable quickly enough to support protection, response and recovery decisions.",
-            evidence: [
-              "Critical asset register",
-              "Data classification labels or guidance",
-              "Owner list for key systems/data",
-            ],
-          };
-        }
-
-        if (n.includes("threat") || n.includes("vulnerability")) {
-          return {
-            state: "Vulnerabilities are found, prioritised and closed more predictably, with fewer silent exceptions.",
-            evidence: [
-              "Recent scan output",
-              "Closure tracking for higher-risk items",
-              "Exception or sign-off record",
-            ],
-          };
-        }
-
-        return {
-          state: "The domain operates more consistently, with clearer ownership and stronger proof of operation.",
-          evidence: ["Named owner", "Routine/checklist", "Evidence the routine has actually happened"],
-        };
+    if (n.includes("identity") || n.includes("access")) {
+      return {
+        targetState:
+          "Access is controlled more consistently, MFA is applied where it matters most, and account changes are no longer dependent on memory or informal requests.",
+        whyItMatters:
+          "This reduces one of the most common breach routes for smaller businesses: account misuse, stale access, and weak protection around email or admin accounts.",
+        evidence: [
+          "MFA enabled for key accounts",
+          "Leavers / joiners / movers checklist with examples",
+          "Admin access list with review date",
+        ],
       };
+    }
 
-      const focusDomains = ranked.slice(0, 3);
+    if (n.includes("recovery") || n.includes("resilience")) {
+      return {
+        targetState:
+          "Critical services are identified, recovery priorities are clear, and the business has proof that important systems or data can actually be restored.",
+        whyItMatters:
+          "This reduces downtime, improves decision-making during disruption, and gives greater confidence that backups are useful rather than assumed.",
+        evidence: [
+          "Restore test result",
+          "Critical services or systems list",
+          "Recovery runbook or simple recovery steps",
+        ],
+      };
+    }
 
-      for (const d of focusDomains) {
-        const name = d.domain_name || d.domain_code || "Domain";
-        const score = Number(d.score ?? 0);
-        const next = nextStateForDomain(name);
+    if (n.includes("incident") || n.includes("response")) {
+      return {
+        targetState:
+          "Response roles are clearer, escalation is faster, and the business has practiced what it would do if something important went wrong.",
+        whyItMatters:
+          "This reduces delay, confusion, and avoidable commercial impact when an issue needs to be contained quickly.",
+        evidence: [
+          "1-page response plan",
+          "Exercise notes or tabletop output",
+          "Incident log or lessons learned tracker",
+        ],
+      };
+    }
 
-        if (y < 190) break;
+    if (n.includes("supplier") || n.includes("third-party")) {
+      return {
+        targetState:
+          "Critical suppliers are known, access is controlled, and minimum expectations are clear enough to support due diligence and practical oversight.",
+        whyItMatters:
+          "This reduces the chance that a supplier becomes a hidden single point of failure for your business.",
+        evidence: [
+          "Critical supplier list",
+          "Supplier security clauses or expectations",
+          "Supplier access review or named owner list",
+        ],
+      };
+    }
 
-        page.drawText(sanitizeText(name), { x: 50, y, size: 11, font: fontBold, color: BRAND.text });
-        page.drawText(sanitizeText(`${score.toFixed(2)} / 5`), {
-          x: 470,
-          y,
-          size: 11,
-          font: fontBold,
+    if (n.includes("operations")) {
+      return {
+        targetState:
+          "Day-to-day controls such as patching, backups, logging, and change discipline operate as regular routines rather than one-off activity.",
+        whyItMatters:
+          "This reduces hidden weaknesses and helps the business avoid preventable disruption from routine control failures.",
+        evidence: [
+          "Patch or maintenance routine evidence",
+          "Backup success reports",
+          "Logging or monitoring confirmation for key systems",
+        ],
+      };
+    }
+
+    if (n.includes("risk")) {
+      return {
+        targetState:
+          "Top risks are visible, owned, and reviewed regularly enough that they drive action instead of sitting informally in the background.",
+        whyItMatters:
+          "This helps leadership prioritise properly and reduces the chance that known issues stay open too long.",
+        evidence: [
+          "Risk register",
+          "Action tracker with owners and target dates",
+          "Leadership review notes",
+        ],
+      };
+    }
+
+    if (n.includes("governance")) {
+      return {
+        targetState:
+          "Leadership ownership is clear, follow-up happens to a set rhythm, and resilience decisions are easier to explain and evidence.",
+        whyItMatters:
+          "This reduces drift and makes it easier to keep priorities moving when other business pressures compete for attention.",
+        evidence: [
+          "Named owner",
+          "Review meeting notes",
+          "Core policy or decision set",
+        ],
+      };
+    }
+
+    if (n.includes("asset") || n.includes("data")) {
+      return {
+        targetState:
+          "Critical systems and important data can be identified quickly enough to support better protection, faster response, and more confident recovery decisions.",
+        whyItMatters:
+          "This helps the business focus on what matters most first, instead of losing time during an incident trying to work that out.",
+        evidence: [
+          "Critical asset register",
+          "Data classification labels or guidance",
+          "Owner list for key systems or data",
+        ],
+      };
+    }
+
+    if (n.includes("threat") || n.includes("vulnerability")) {
+      return {
+        targetState:
+          "Known weaknesses are found, prioritised, and closed more predictably, with clearer visibility of what is open and why.",
+        whyItMatters:
+          "This reduces preventable attack surface and lowers the chance that known issues remain exposed for too long.",
+        evidence: [
+          "Recent scan output",
+          "Closure tracking for higher-risk items",
+          "Exception or sign-off record",
+        ],
+      };
+    }
+
+    return {
+      targetState:
+        "The domain operates more consistently, with clearer ownership, a stronger routine, and better proof that the control is actually happening.",
+      whyItMatters:
+        "This reduces uncertainty and helps the business move from intention to something more reliable and repeatable.",
+      evidence: [
+        "Named owner",
+        "Routine or checklist",
+        "Evidence the routine has actually happened",
+      ],
+    };
+  };
+
+  let page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+
+  const startNewPage = () => {
+    drawFooter(page, pageNum++, font, reportRef);
+    page = addPage(pdfDoc);
+    drawBrandHeader(page, shieldImg);
+    drawWatermark(page, watermarkImg, 0.12);
+    y = height - 96;
+  };
+
+  drawSectionTitle(page, "Next-level target state and evidence to prioritise", 50, y, fontBold);
+  y -= 28;
+
+  const intro =
+    "The aim is not perfection. The aim is to move the weakest domains to the next credible level of maturity. This page shows what a stronger position would look like next, and the evidence that would give real confidence that progress is happening.";
+
+  for (const line of wrapText(intro, 102)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 12;
+
+  const focusDomains = ranked.slice(0, 3);
+
+  for (const d of focusDomains) {
+    const name = d.domain_name || d.domain_code || "Domain";
+    const score = Number(d.score ?? 0);
+    const next = nextStateForDomain(name);
+
+    const targetLines = wrapText(next.targetState, 88);
+    const whyLines = wrapText(next.whyItMatters, 88);
+    const evidenceLines = next.evidence.flatMap((item) => wrapText(item, 86));
+
+    const cardHeight =
+      88 +
+      targetLines.length * 12 +
+      whyLines.length * 12 +
+      evidenceLines.length * 12 +
+      28;
+
+    if (y - cardHeight < 95) {
+      startNewPage();
+    }
+
+    drawRoundedCard(page, 50, y - cardHeight, 495, cardHeight, {
+      fill: BRAND.white,
+      border: BRAND.line,
+      radius: 18,
+    });
+
+    page.drawText(sanitizeText(name), {
+      x: 64,
+      y: y - 18,
+      size: 11,
+      font: fontBold,
+      color: BRAND.text,
+    });
+
+    drawMiniScorePill(
+      page,
+      448,
+      y - 28,
+      `${score.toFixed(2)} / 5`,
+      fontBold,
+      score < 2 ? rgb(0.99, 0.93, 0.93) : score < 3.5 ? rgb(0.99, 0.97, 0.90) : BRAND.accentSoft,
+      BRAND.text
+    );
+
+    drawBar(page, 64, y - 42, 467, 8, score / 5);
+
+    let cy = y - 62;
+
+    page.drawText("What better looks like next", {
+      x: 64,
+      y: cy,
+      size: 9.5,
+      font: fontBold,
+      color: BRAND.muted,
+    });
+    cy -= 14;
+
+    for (const line of targetLines) {
+      page.drawText(line, {
+        x: 64,
+        y: cy,
+        size: 10,
+        font,
+        color: BRAND.text,
+      });
+      cy -= 12;
+    }
+
+    cy -= 4;
+
+    page.drawText("Why this matters commercially", {
+      x: 64,
+      y: cy,
+      size: 9.5,
+      font: fontBold,
+      color: BRAND.muted,
+    });
+    cy -= 14;
+
+    for (const line of whyLines) {
+      page.drawText(line, {
+        x: 64,
+        y: cy,
+        size: 10,
+        font,
+        color: BRAND.text,
+      });
+      cy -= 12;
+    }
+
+    cy -= 4;
+
+    page.drawText("Evidence to prioritise next", {
+      x: 64,
+      y: cy,
+      size: 9.5,
+      font: fontBold,
+      color: BRAND.muted,
+    });
+    cy -= 14;
+
+    for (const item of next.evidence) {
+      const wrapped = wrapText(item, 86);
+      for (const line of wrapped) {
+        page.drawText(line, {
+          x: 64,
+          y: cy,
+          size: 10,
+          font,
           color: BRAND.text,
         });
-        y -= 14;
-
-        drawBar(page, 50, y, 495, 8, score / 5);
-        y -= 18;
-
-        page.drawText("What better looks like next", {
-          x: 50,
-          y,
-          size: 10,
-          font: fontBold,
-          color: BRAND.muted,
-        });
-        y -= 12;
-
-        for (const line of wrapText(next.state, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-          y -= 14;
-        }
-
-        y -= 4;
-        page.drawText("Evidence we would want to see next", {
-          x: 50,
-          y,
-          size: 10,
-          font: fontBold,
-          color: BRAND.muted,
-        });
-        y -= 12;
-
-        for (const e of next.evidence) {
-          for (const line of wrapText(`• ${e}`, 100)) {
-            page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-            y -= 14;
-          }
-        }
-
-        y -= 8;
-        page.drawLine({
-          start: { x: 50, y },
-          end: { x: 545, y },
-          thickness: 1,
-          color: rgb(0.92, 0.92, 0.92),
-        });
-        y -= 14;
+        cy -= 12;
       }
-
-      drawFooter(page, pageNum++, font, reportRef);
+      cy -= 2;
     }
+
+    y -= cardHeight + 14;
+  }
+
+  if (y < 170) {
+    startNewPage();
+  }
+
+  page.drawText("How to use this page", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 14;
+
+  const closing = [
+    "Use this section to define what better should look like before starting more work.",
+    "The target state helps set direction; the evidence list helps prove whether that direction is becoming real.",
+    "For most SMEs, the best improvement path is not more complexity. It is stronger ownership, simpler routines, and clearer proof.",
+  ];
+
+  for (const item of closing) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
 
     /**
      * ------------------------------
@@ -2603,7 +3958,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       ];
 
       for (const item of immediate) {
-        for (const line of wrapText(`• ${item}`, 100)) {
+        for (const line of wrapText(item, 100)) {
           page.drawText(line, {
             x: 50,
             y,
@@ -2635,7 +3990,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       ];
 
       for (const item of operational) {
-        for (const line of wrapText(`• ${item}`, 100)) {
+        for (const line of wrapText(item, 100)) {
           page.drawText(line, {
             x: 50,
             y,
@@ -2667,7 +4022,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       ];
 
       for (const item of questions) {
-        for (const line of wrapText(`• ${item}`, 100)) {
+        for (const line of wrapText(item, 100)) {
           page.drawText(line, {
             x: 50,
             y,
@@ -2698,7 +4053,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       ];
 
       for (const item of ownership) {
-        for (const line of wrapText(`• ${item}`, 100)) {
+        for (const line of wrapText(item, 100)) {
           page.drawText(line, {
             x: 50,
             y,
@@ -2757,7 +4112,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       ];
 
       for (const item of supportItems) {
-        for (const line of wrapText(`• ${item}`, 100)) {
+        for (const line of wrapText(item, 100)) {
           page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
           y -= 14;
         }
@@ -2819,7 +4174,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       ];
 
       for (const t of triggers) {
-        for (const line of wrapText(`• ${t}`, 100)) {
+        for (const line of wrapText(t, 100)) {
           page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
           y -= 14;
         }
@@ -3018,14 +4373,14 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 	});
 
 	if (lines[1]) {
-  	  page.drawText(lines[1], {
-    	  x: 90,
-    	  y: y - 12,
-    	  size: 8.5,
-    	  font,
-    	  color: BRAND.muted,
-  	});
-      }
+  page.drawText(lines[1], {
+    x: 90,
+    y: y - 12,
+    size: 10,
+    font,
+    color: BRAND.text,
+  });
+}
 
 	page.drawLine({
   	  start: { x: 400, y: y - 2 },
@@ -3068,99 +4423,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       drawFooter(page, pageNum++, font, reportRef);
     }
 
-    /**
-     * ------------------------------
-     * About Resiliscore
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
-
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "About Resiliscore", 50, y, fontBold);
-      y -= 30;
-
-      const intro =
-        "Resiliscore is a cyber resilience maturity assessment designed for SMEs. It helps organisations understand their current resilience posture, prioritise improvements, and communicate control maturity in a clearer, more structured way.";
-
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-
-      y -= 10;
-
-      page.drawText("Resiliscore helps organisations:", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      const helps = [
-        "Understand their current resilience posture",
-        "Prioritise improvements that reduce disruption risk",
-        "Translate controls into recognised frameworks",
-        "Demonstrate security maturity to customers and suppliers",
-      ];
-
-      for (const item of helps) {
-        for (const line of wrapText(`• ${item}`, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-          y -= 14;
-        }
-      }
-
-      y -= 10;
-
-      page.drawText("How to use this report:", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      const services = [
-        "Use it to understand your current resilience posture",
-        "Use it to prioritise the next improvements that matter most",
-        "Use it to support internal planning and decision-making",
-        "Use it to respond to customer and supplier assurance questions with more confidence",
-      ];
-
-      for (const item of services) {
-        for (const line of wrapText(`• ${item}`, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-          y -= 14;
-        }
-      }
-
-      y -= 12;
-      page.drawText("Contact", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 16;
-      page.drawText("hello@resiliscore.co.uk", {
-        x: 50,
-        y,
-        size: 10.5,
-        font,
-        color: BRAND.text,
-      });
-
-      drawFooter(page, pageNum++, font, reportRef);
-    }
-
     const pdfBytes = await pdfDoc.save();
 
     const safeCompany = companyName
@@ -3178,11 +4440,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     }
 
     const uploadResult = await supabase.storage
-	.from("reports")
-	.upload(filePath, pdfBytes, {
-          contentType: "application/pdf",
-          upsert: true,
-    });
+      .from("reports")
+      .upload(filePath, pdfBytes, {
+        contentType: "application/pdf",
+        upsert: true,
+      });
 
     if (uploadResult.error) {
       throw new Error(`Supabase upload failed: ${uploadResult.error.message}`);
