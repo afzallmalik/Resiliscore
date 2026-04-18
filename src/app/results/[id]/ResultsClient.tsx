@@ -86,6 +86,17 @@ type NormalizedDomainScore = {
   breachRoute: string | null;
 };
 
+type NormalizedFinancialImpact = {
+  min: number;
+  max: number;
+  breakdown: {
+    downtime: [number, number];
+    lostRevenue: [number, number];
+    recovery: [number, number];
+    reputational: [number, number];
+  };
+};
+
 function toNum(v: unknown, fallback = 0) {
   const n = Number(v);
   return Number.isFinite(n) ? n : fallback;
@@ -187,7 +198,11 @@ function getBusinessSizeBand(companyName: string | null, industry: string | null
   return "small";
 }
 
-function estimateFinancialImpact(overall: number, industry: string | null, companyName: string | null) {
+function estimateFinancialImpact(
+  overall: number,
+  industry: string | null,
+  companyName: string | null
+): NormalizedFinancialImpact {
   const sizeBand = getBusinessSizeBand(companyName, industry);
 
   let min = 8000;
@@ -216,10 +231,10 @@ function estimateFinancialImpact(overall: number, industry: string | null, compa
     min,
     max,
     breakdown: {
-      downtime: [Math.round(min * 0.22), Math.round(max * 0.24)] as [number, number],
-      lostRevenue: [Math.round(min * 0.28), Math.round(max * 0.3)] as [number, number],
-      recovery: [Math.round(min * 0.32), Math.round(max * 0.34)] as [number, number],
-      reputational: [Math.round(min * 0.18), Math.round(max * 0.12)] as [number, number],
+      downtime: [Math.round(min * 0.22), Math.round(max * 0.24)],
+      lostRevenue: [Math.round(min * 0.28), Math.round(max * 0.3)],
+      recovery: [Math.round(min * 0.32), Math.round(max * 0.34)],
+      reputational: [Math.round(min * 0.18), Math.round(max * 0.12)],
     },
   };
 }
@@ -660,7 +675,7 @@ export default function ResultsClient({ id }: { id: string }) {
             cache: "no-store",
           });
         } catch {
-          // ignore; polling below may still succeed
+          // ignore
         }
 
         if (cancelled) return;
@@ -687,7 +702,7 @@ export default function ResultsClient({ id }: { id: string }) {
               cache: "no-store",
             });
           } catch {
-            // ignore transient errors
+            // ignore
           }
 
           try {
@@ -698,7 +713,7 @@ export default function ResultsClient({ id }: { id: string }) {
               return;
             }
           } catch {
-            // ignore transient errors
+            // ignore
           }
         }
 
@@ -717,7 +732,10 @@ export default function ResultsClient({ id }: { id: string }) {
     const overall = toNum(data?.overall_score ?? data?.overallScore ?? 0, 0);
     const raw = (data?.domain_scores ?? data?.domainScores ?? []) as DomainScoreRaw[];
 
-    const scoreByKey = new Map<string, { score: number; riskScore: number | null; breachRoute: string | null }>();
+    const scoreByKey = new Map<
+      string,
+      { score: number; riskScore: number | null; breachRoute: string | null }
+    >();
 
     for (const d of raw) {
       const key = String(
@@ -734,7 +752,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
       scoreByKey.set(key, {
         score: clamp(toNum(d.score, 0), 0, 5),
-        riskScore: d.risk_score === null || d.risk_score === undefined ? null : toNum(d.risk_score, 0),
+        riskScore: d.risk_score == null ? null : toNum(d.risk_score, 0),
         breachRoute: d.breach_route ? String(d.breach_route) : null,
       });
     }
@@ -758,38 +776,36 @@ export default function ResultsClient({ id }: { id: string }) {
     const ranked = [...domainScores].sort((a, b) => a.score - b.score);
     const tier = (data?.report_tier ?? data?.reportTier ?? "free") as "free" | "premium";
 
-    const riskLevel =
-      data?.risk_level ??
-      getRiskLevel(overall);
+    const riskLevel = data?.risk_level ?? getRiskLevel(overall);
 
     const riskSummary =
-      data?.report_summary?.headline?.trim() ||
-      getRiskSummary(overall);
+      data?.report_summary?.headline?.trim() || getRiskSummary(overall);
 
     const topBreachRoutes =
       Array.isArray(data?.top_breach_routes) && data.top_breach_routes.length
         ? uniqueStrings(data.top_breach_routes)
         : getTopBreachRoutes(ranked);
 
-    const impact =
-      data?.financial_impact?.min != null && data?.financial_impact?.max != null
-        ? {
-            min: toNum(data.financial_impact.min, 0),
-            max: toNum(data.financial_impact.max, 0),
-            downtime:
-              data.financial_impact.breakdown?.downtime ?? [0, 0],
-            lostRevenue:
-              data.financial_impact.breakdown?.lostRevenue ?? [0, 0],
-            recovery:
-              data.financial_impact.breakdown?.recovery ?? [0, 0],
-            reputational:
-              data.financial_impact.breakdown?.reputational ?? [0, 0],
-          }
-        : estimateFinancialImpact(
-            overall,
-            data?.industry ?? null,
-            data?.company_name ?? data?.companyName ?? null
-          );
+    let impact: NormalizedFinancialImpact;
+
+    if (data?.financial_impact?.min != null && data?.financial_impact?.max != null) {
+      impact = {
+        min: toNum(data.financial_impact.min, 0),
+        max: toNum(data.financial_impact.max, 0),
+        breakdown: {
+          downtime: data.financial_impact.breakdown?.downtime ?? [0, 0],
+          lostRevenue: data.financial_impact.breakdown?.lostRevenue ?? [0, 0],
+          recovery: data.financial_impact.breakdown?.recovery ?? [0, 0],
+          reputational: data.financial_impact.breakdown?.reputational ?? [0, 0],
+        },
+      };
+    } else {
+      impact = estimateFinancialImpact(
+        overall,
+        data?.industry ?? null,
+        data?.company_name ?? data?.companyName ?? null
+      );
+    }
 
     const benchmark =
       data?.benchmark?.less_secure_than != null
@@ -870,7 +886,7 @@ export default function ResultsClient({ id }: { id: string }) {
             <h2 style={{ marginTop: 0 }}>Risk report</h2>
             <p className="rs-muted rs-mutedDark">{err ?? "Result not found."}</p>
             <Link className="rs-btn rs-btnPrimary" href="/assessment">
-             Start a new assessment
+              Start a new assessment
             </Link>
           </div>
         </div>
@@ -1054,19 +1070,19 @@ export default function ResultsClient({ id }: { id: string }) {
               <div className="rr-costRows">
                 <div className="rr-costRow">
                   <span>Downtime</span>
-                  <strong>{fmtRange(impact.downtime[0], impact.downtime[1])}</strong>
+                  <strong>{fmtRange(impact.breakdown.downtime[0], impact.breakdown.downtime[1])}</strong>
                 </div>
                 <div className="rr-costRow">
                   <span>Lost revenue</span>
-                  <strong>{fmtRange(impact.lostRevenue[0], impact.lostRevenue[1])}</strong>
+                  <strong>{fmtRange(impact.breakdown.lostRevenue[0], impact.breakdown.lostRevenue[1])}</strong>
                 </div>
                 <div className="rr-costRow">
                   <span>Recovery costs</span>
-                  <strong>{fmtRange(impact.recovery[0], impact.recovery[1])}</strong>
+                  <strong>{fmtRange(impact.breakdown.recovery[0], impact.breakdown.recovery[1])}</strong>
                 </div>
                 <div className="rr-costRow">
                   <span>Reputational impact</span>
-                  <strong>Harder to measure</strong>
+                  <strong>{fmtRange(impact.breakdown.reputational[0], impact.breakdown.reputational[1])}</strong>
                 </div>
               </div>
             </div>
@@ -1180,7 +1196,9 @@ export default function ResultsClient({ id }: { id: string }) {
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
                 <div className="rr-sectionTitle">5. What you can show others</div>
-                <div className="rr-sectionSub">Useful for insurers, clients, partners, and due diligence conversations.</div>
+                <div className="rr-sectionSub">
+                  Useful for insurers, clients, partners, and due diligence conversations.
+                </div>
               </div>
 
               <div className="rr-assuranceStack">
