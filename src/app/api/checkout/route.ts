@@ -16,6 +16,14 @@ function getStripe() {
   });
 }
 
+function getBaseUrl(req: Request) {
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (envUrl) return envUrl.replace(/\/+$/, "");
+
+  const url = new URL(req.url);
+  return `${url.protocol}//${url.host}`;
+}
+
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -25,27 +33,55 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Missing assessmentId" }, { status: 400 });
     }
 
-    const priceId = process.env.STRIPE_PRICE_ID;
+    const priceId = process.env.STRIPE_PRICE_ID?.trim();
     if (!priceId) {
-      return NextResponse.json({ error: "Missing STRIPE_PRICE_ID in env" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Missing STRIPE_PRICE_ID in env" },
+        { status: 500 }
+      );
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const baseUrl = getBaseUrl(req);
     const stripe = getStripe();
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
+
       line_items: [
         {
           price: priceId,
           quantity: 1,
         },
       ],
-      success_url: `${baseUrl}/results/${assessmentId}?upgraded=1`,
-      cancel_url: `${baseUrl}/results/${assessmentId}`,
+
+      success_url: `${baseUrl}/results/${encodeURIComponent(assessmentId)}?upgraded=1`,
+      cancel_url: `${baseUrl}/results/${encodeURIComponent(assessmentId)}`,
+
+      allow_promotion_codes: true,
+
+      billing_address_collection: "auto",
+
       metadata: {
         assessmentId,
+        purchaseType: "full_report_unlock",
+        product: "resiliscore_full_business_risk_report",
+      },
+
+      payment_intent_data: {
+        metadata: {
+          assessmentId,
+          purchaseType: "full_report_unlock",
+          product: "resiliscore_full_business_risk_report",
+        },
+        description: "Resiliscore Full Business Risk Report",
+      },
+
+      custom_text: {
+        submit: {
+          message:
+            "One-time payment. No subscription. Unlock your full Resiliscore business risk report instantly after checkout.",
+        },
       },
     });
 
@@ -59,6 +95,7 @@ export async function GET(req: Request) {
     return NextResponse.redirect(session.url, 303);
   } catch (err: any) {
     console.error("Checkout route error:", err);
+
     return NextResponse.json(
       {
         error: "Checkout creation failed",

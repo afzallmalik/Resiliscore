@@ -643,3 +643,29 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== FIX LIGHT SECTION TEXT CONTRAST ===== */
+
+.sectionCardLight .sectionEyebrow {
+  color: rgba(15, 20, 40, 0.6) !important;
+}
+
+.sectionCardLight .featureText {
+  color: rgba(15, 20, 40, 0.75) !important;
+}
+
+.sectionCardLight .samplePanel h3 {
+  color: var(--text) !important;
+}
+
+.sectionCardLight .samplePanel p {
+  color: rgba(15, 20, 40, 0.7) !important;
+}
+
+.sectionCardLight .samplePanelLabel {
+  color: rgba(15, 20, 40, 0.6) !important;
+}
+
+.sectionCardLight h2 {
+  color: var(--text) !important;
+}

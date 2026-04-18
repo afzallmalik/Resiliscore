@@ -431,7 +431,8 @@ function Icon({
     | "risk"
     | "arrow"
     | "money"
-    | "shield";
+    | "shield"
+    | "lock";
   size?: number;
 }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24", "aria-hidden": true };
@@ -509,6 +510,17 @@ function Icon({
     );
   }
 
+  if (name === "lock") {
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M17 8h-1V6a4 4 0 1 0-8 0v2H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Zm-6 0V6a2 2 0 1 1 4 0v2h-4Zm1 8.73V18h2v-1.27a2 2 0 1 0-2 0Z"
+        />
+      </svg>
+    );
+  }
+
   return (
     <svg {...common}>
       <path fill="currentColor" d="M12 4 10.59 5.41 16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8Z" />
@@ -535,14 +547,16 @@ function ActionCard({
   index,
   title,
   why,
+  locked = false,
 }: {
   index: number;
   title: string;
   why: string;
+  locked?: boolean;
 }) {
   return (
-    <div className="rr-actionCard">
-      <div className="rr-actionNo">{index}</div>
+    <div className={`rr-actionCard ${locked ? "locked" : ""}`}>
+      <div className="rr-actionNo">{locked ? <Icon name="lock" size={16} /> : index}</div>
       <div>
         <div className="rr-actionTitle">{title}</div>
         <div className="rr-actionWhy">{why}</div>
@@ -554,16 +568,26 @@ function ActionCard({
 function AssuranceItem({
   label,
   status,
+  locked = false,
 }: {
   label: string;
   status: string;
+  locked?: boolean;
 }) {
   const ready = status === "Ready to show";
 
   return (
-    <div className={`rr-assuranceItem ${ready ? "ready" : "needs"}`}>
-      <div className="rr-assuranceLabel">{label}</div>
-      <div className="rr-assuranceStatus">{status}</div>
+    <div className={`rr-assuranceItem ${ready ? "ready" : "needs"} ${locked ? "locked" : ""}`}>
+      <div className="rr-assuranceLabel">
+        {locked ? (
+          <>
+            <Icon name="lock" size={14} /> {label}
+          </>
+        ) : (
+          label
+        )}
+      </div>
+      <div className="rr-assuranceStatus">{locked ? "Full report" : status}</div>
     </div>
   );
 }
@@ -590,6 +614,46 @@ function DomainCard({
 
       <div className="rs-domainTrack">
         <div className={`rs-domainFill ${sev}`} style={{ width: pct }} />
+      </div>
+    </div>
+  );
+}
+
+function LockedPanel({
+  title,
+  text,
+  bullets,
+  onUnlock,
+}: {
+  title: string;
+  text: string;
+  bullets: string[];
+  onUnlock: () => void;
+}) {
+  return (
+    <div className="rs-panel rs-upsell">
+      <div className="rs-upsellKicker">Full report available</div>
+      <div className="rs-upsellTitle">{title}</div>
+      <div className="rs-upsellText">{text}</div>
+
+      <div className="rs-featureList">
+        {bullets.map((item) => (
+          <div key={item} className="rs-featureItem">
+            <Icon name="check" />
+            {item}
+          </div>
+        ))}
+      </div>
+
+      <div className="rs-upsellActions">
+        <button className="rs-btn rs-btnPrimary" type="button" onClick={onUnlock}>
+          <Icon name="bolt" />
+          Unlock full report — £99
+        </button>
+      </div>
+
+      <div className="rs-upsellFoot">
+        One-time payment. No subscription. Use it before spending thousands on an audit or consultancy.
       </div>
     </div>
   );
@@ -674,9 +738,7 @@ export default function ResultsClient({ id }: { id: string }) {
             method: "POST",
             cache: "no-store",
           });
-        } catch {
-          // ignore
-        }
+        } catch {}
 
         if (cancelled) return;
 
@@ -701,9 +763,7 @@ export default function ResultsClient({ id }: { id: string }) {
               method: "POST",
               cache: "no-store",
             });
-          } catch {
-            // ignore
-          }
+          } catch {}
 
           try {
             const latest = await load();
@@ -712,9 +772,7 @@ export default function ResultsClient({ id }: { id: string }) {
               setNotice("Premium report unlocked ✅");
               return;
             }
-          } catch {
-            // ignore
-          }
+          } catch {}
         }
 
         setNotice("If your report is still locked, refresh once — payment may still be confirming.");
@@ -914,6 +972,9 @@ export default function ResultsClient({ id }: { id: string }) {
   } = normalized;
 
   const isPremium = reportTier === "premium";
+  const freeRoutes = topBreachRoutes.slice(0, 2);
+  const weakestDomains = ranked.slice(0, 3);
+  const previewActions = actions.slice(0, 2);
 
   return (
     <main>
@@ -925,9 +986,11 @@ export default function ResultsClient({ id }: { id: string }) {
               Resiliscore Risk Report
             </div>
 
-            <h1>Find out how your business could be breached — before it happens</h1>
+            <h1>See where cyber disruption is most likely to start in your business.</h1>
 
-            <p className="rs-heroLead">{riskSummary}</p>
+            <p className="rs-heroLead">
+              {riskSummary}
+            </p>
 
             <div className="rs-metaRow">
               {email ? (
@@ -951,7 +1014,7 @@ export default function ResultsClient({ id }: { id: string }) {
                 </div>
               ) : null}
               <div className="rs-pill">
-                Report <span>{isPremium ? "Premium" : "Free report"}</span>
+                Report <span>{isPremium ? "Premium" : "Free preview"}</span>
               </div>
             </div>
 
@@ -989,21 +1052,27 @@ export default function ResultsClient({ id }: { id: string }) {
           <div className="rr-heroCard">
             <div className={`rr-riskBadge ${riskLevel.toLowerCase()}`}>{riskLevel} risk</div>
 
-            <div className="rr-impactLabel">Estimated impact</div>
+            <div className="rr-impactLabel">Indicative business impact</div>
             <div className="rr-impactValue">{fmtRange(impact.min, impact.max)}</div>
 
             <div className="rr-impactNote">
-              Includes downtime, lost revenue, recovery costs, and business disruption.
+              This is an indicative range based on your current answers and the areas most likely to create disruption first.
             </div>
 
             <div className="rr-breachList">
-              {topBreachRoutes.map((route) => (
+              {freeRoutes.map((route) => (
                 <div key={route} className="rr-breachItem">
                   <Icon name="risk" size={16} />
                   <span>{route}</span>
                 </div>
               ))}
             </div>
+
+            {!isPremium ? (
+              <div className="rr-heroLockNote">
+                The full report includes the complete breach route view, fuller cost breakdown, and a practical action plan.
+              </div>
+            ) : null}
           </div>
         </section>
 
@@ -1029,31 +1098,40 @@ export default function ResultsClient({ id }: { id: string }) {
         <section className="rr-sectionGrid">
           <div className="rs-panel rs-panelLight">
             <div className="rr-sectionHead">
-              <div className="rr-sectionTitle">1. How your business is most likely to be breached</div>
-              <div className="rr-sectionSub">Plain-English summary of your top likely breach routes.</div>
+              <div className="rr-sectionTitle">1. Your most likely breach routes</div>
+              <div className="rr-sectionSub">
+                These are the areas most likely to create disruption if left unchanged.
+              </div>
             </div>
 
             <div className="rr-riskGrid">
-              {topBreachRoutes.map((route, i) => (
+              {freeRoutes.map((route, i) => (
                 <RiskCard
                   key={route}
                   title={route}
                   detail={
                     i === 0
-                      ? "This appears to be your highest-priority weakness right now."
-                      : i === 1
-                      ? "This is another common route attackers use against small businesses."
-                      : "This may not be the first issue hit, but it can still cause major disruption."
+                      ? "This appears to be the highest-priority exposure visible in your current answers."
+                      : "This is another common route small businesses are breached when weaknesses remain unresolved."
                   }
                 />
               ))}
             </div>
+
+            {!isPremium ? (
+              <div className="rr-miniLocked">
+                <Icon name="lock" size={14} />
+                Full report unlocks the complete route analysis and wider context.
+              </div>
+            ) : null}
           </div>
 
           <div className="rs-panel rs-panelLight">
             <div className="rr-sectionHead">
-              <div className="rr-sectionTitle">2. What a breach could cost</div>
-              <div className="rr-sectionSub">Indicative range based on your current answers.</div>
+              <div className="rr-sectionTitle">2. What this could cost</div>
+              <div className="rr-sectionSub">
+                Indicative business impact based on your current resilience position.
+              </div>
             </div>
 
             <div className="rr-moneyCard">
@@ -1062,7 +1140,7 @@ export default function ResultsClient({ id }: { id: string }) {
                   <Icon name="money" size={20} />
                 </div>
                 <div>
-                  <div className="rr-moneyLabel">Estimated business impact</div>
+                  <div className="rr-moneyLabel">Estimated financial exposure</div>
                   <div className="rr-moneyValue">{fmtRange(impact.min, impact.max)}</div>
                 </div>
               </div>
@@ -1076,14 +1154,33 @@ export default function ResultsClient({ id }: { id: string }) {
                   <span>Lost revenue</span>
                   <strong>{fmtRange(impact.breakdown.lostRevenue[0], impact.breakdown.lostRevenue[1])}</strong>
                 </div>
-                <div className="rr-costRow">
-                  <span>Recovery costs</span>
-                  <strong>{fmtRange(impact.breakdown.recovery[0], impact.breakdown.recovery[1])}</strong>
-                </div>
-                <div className="rr-costRow">
-                  <span>Reputational impact</span>
-                  <strong>{fmtRange(impact.breakdown.reputational[0], impact.breakdown.reputational[1])}</strong>
-                </div>
+                {isPremium ? (
+                  <>
+                    <div className="rr-costRow">
+                      <span>Recovery costs</span>
+                      <strong>{fmtRange(impact.breakdown.recovery[0], impact.breakdown.recovery[1])}</strong>
+                    </div>
+                    <div className="rr-costRow">
+                      <span>Reputational impact</span>
+                      <strong>{fmtRange(impact.breakdown.reputational[0], impact.breakdown.reputational[1])}</strong>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="rr-costRow rr-costRowLocked">
+                      <span>
+                        <Icon name="lock" size={14} /> Recovery costs
+                      </span>
+                      <strong>Full report</strong>
+                    </div>
+                    <div className="rr-costRow rr-costRowLocked">
+                      <span>
+                        <Icon name="lock" size={14} /> Reputational impact
+                      </span>
+                      <strong>Full report</strong>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -1093,12 +1190,18 @@ export default function ResultsClient({ id }: { id: string }) {
           <div className="rs-column">
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
-                <div className="rr-sectionTitle">3. What to fix in the next 90 days</div>
-                <div className="rr-sectionSub">Top 5 practical actions for a non-technical business owner.</div>
+                <div className="rr-sectionTitle">
+                  {isPremium ? "3. What to fix first" : "3. Initial actions you can take"}
+                </div>
+                <div className="rr-sectionSub">
+                  {isPremium
+                    ? "A practical action plan based on your current results."
+                    : "A small preview of the practical action plan included in the full report."}
+                </div>
               </div>
 
               <div className="rr-actionStack">
-                {actions.map((action, i) => (
+                {previewActions.map((action, i) => (
                   <ActionCard
                     key={action.title}
                     index={i + 1}
@@ -1106,62 +1209,78 @@ export default function ResultsClient({ id }: { id: string }) {
                     why={action.why}
                   />
                 ))}
+
+                {!isPremium &&
+                  actions.slice(2, 5).map((action, i) => (
+                    <ActionCard
+                      key={action.title}
+                      index={i + 3}
+                      title="Detailed action locked in full report"
+                      why="Unlock the full report to see the remaining priority actions, sequencing, and practical rationale."
+                      locked
+                    />
+                  ))}
               </div>
             </div>
 
             {!isPremium ? (
-              <div className="rs-panel rs-upsell">
-                <div className="rs-upsellKicker">Your free report is ready</div>
-                <div className="rs-upsellTitle">Unlock the full business risk report — £99</div>
-                <div className="rs-upsellText">
-                  Get the full PDF version with deeper analysis, risk detail, a clearer 90-day action plan, and a shareable report for clients, insurers, or partners.
-                </div>
-
-                <div className="rs-featureList">
-                  <div className="rs-featureItem">
-                    <Icon name="check" />
-                    Full downloadable PDF report
-                  </div>
-                  <div className="rs-featureItem">
-                    <Icon name="check" />
-                    Deeper explanation of likely business risk
-                  </div>
-                  <div className="rs-featureItem">
-                    <Icon name="check" />
-                    Clearer 90-day improvement plan
-                  </div>
-                  <div className="rs-featureItem">
-                    <Icon name="check" />
-                    Evidence and assurance checklist
-                  </div>
-                  <div className="rs-featureItem">
-                    <Icon name="check" />
-                    Report you can share internally or externally
-                  </div>
-                </div>
-
-                <div className="rs-upsellActions">
-                  <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
-                    <Icon name="bolt" />
-                    Unlock full report — £99
-                  </button>
-                </div>
-
-                <div className="rs-upsellFoot">One-time payment. Instant access after checkout.</div>
-              </div>
+              <LockedPanel
+                title="Get the full business risk report before spending thousands on an audit."
+                text="This report is designed to give you clarity first — so you can see where disruption is most likely to start, what it could cost, and whether you need a deeper audit or specialist support."
+                bullets={[
+                  "Full downloadable PDF report",
+                  "Complete 90-day action plan",
+                  "Full assurance and evidence checklist",
+                  "Complete benchmark context",
+                  "Useful before insurers, clients, or consultants ask questions",
+                ]}
+                onUnlock={goCheckout}
+              />
             ) : null}
           </div>
 
           <div className="rs-column">
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
-                <div className="rr-sectionTitle">4. How you compare</div>
-                <div className="rr-sectionSub">Simple benchmark view for businesses like yours.</div>
+                <div className="rr-sectionTitle">4. Risk areas by topic</div>
+                <div className="rr-sectionSub">
+                  These are the weakest areas visible in your current answers.
+                </div>
+              </div>
+
+              <div className="rs-domainGrid">
+                {(isPremium ? ranked : weakestDomains).map((d) => (
+                  <DomainCard key={d.code} name={d.name} score={d.score} />
+                ))}
+              </div>
+
+              {!isPremium ? (
+                <div className="rr-miniLocked">
+                  <Icon name="lock" size={14} />
+                  Full report includes the complete domain view and broader context.
+                </div>
+              ) : null}
+            </div>
+
+            <div className="rs-panel rs-panelLight">
+              <div className="rr-sectionHead">
+                <div className="rr-sectionTitle">5. Benchmark view</div>
+                <div className="rr-sectionSub">
+                  A simple comparison point to help interpret your current result.
+                </div>
               </div>
 
               <div className="rr-benchmarkWrap">
                 <div className="rr-benchmarkValue">
-                  You are less secure than <strong>{benchmark.lessSecureThan}%</strong> of similar businesses
+                  {isPremium ? (
+                    <>
+                      You are less secure than <strong>{benchmark.lessSecureThan}%</strong> of similar businesses
+                    </>
+                  ) : (
+                    <>
+                      Your current result suggests the business is <strong>below the typical SME baseline</strong> in some important resilience areas.
+                    </>
+                  )}
                 </div>
 
                 <div className="rr-benchmarkTrack">
@@ -1176,39 +1295,41 @@ export default function ResultsClient({ id }: { id: string }) {
                   <span>Higher risk</span>
                 </div>
               </div>
-            </div>
 
-            <div className="rs-panel rs-panelDark">
-              <div className="rs-panelHead">
-                <div>
-                  <div className="rs-panelTitle rs-panelTitleLight">Risk areas by topic</div>
-                  <div className="rs-panelSub">Lower scores mean the gap is more likely to matter commercially.</div>
+              {!isPremium ? (
+                <div className="rr-miniLocked">
+                  <Icon name="lock" size={14} />
+                  Full report includes fuller benchmark wording and interpretation.
                 </div>
-              </div>
-
-              <div className="rs-domainGrid">
-                {ranked.map((d) => (
-                  <DomainCard key={d.code} name={d.name} score={d.score} />
-                ))}
-              </div>
+              ) : null}
             </div>
 
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
-                <div className="rr-sectionTitle">5. What you can show others</div>
+                <div className="rr-sectionTitle">6. What you can show others</div>
                 <div className="rr-sectionSub">
-                  Useful for insurers, clients, partners, and due diligence conversations.
+                  Useful before conversations with insurers, clients, partners, or consultants.
                 </div>
               </div>
 
               <div className="rr-assuranceStack">
-                {assurance.map((item) => (
+                {(isPremium ? assurance : assurance.slice(0, 2)).map((item) => (
                   <AssuranceItem
                     key={item.label}
                     label={item.label}
                     status={item.status}
                   />
                 ))}
+
+                {!isPremium &&
+                  assurance.slice(2).map((item) => (
+                    <AssuranceItem
+                      key={item.label}
+                      label={item.label}
+                      status={item.status}
+                      locked
+                    />
+                  ))}
               </div>
             </div>
 
@@ -1233,9 +1354,9 @@ export default function ResultsClient({ id }: { id: string }) {
                 </>
               ) : (
                 <>
-                  <div className="rs-deliverablesTitle">Full report available</div>
+                  <div className="rs-deliverablesTitle">Your free preview is ready</div>
                   <div className="rs-deliverablesText">
-                    Unlock the downloadable PDF version of your business risk report.
+                    Unlock the full report for a complete breakdown, fuller actions, benchmark context, and a downloadable PDF you can actually use.
                   </div>
                   <div className="rs-deliverablesActions">
                     <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
@@ -1243,7 +1364,9 @@ export default function ResultsClient({ id }: { id: string }) {
                       Unlock full report — £99
                     </button>
                   </div>
-                  <div className="rs-deliverablesFoot">One-time payment. Instant access after checkout.</div>
+                  <div className="rs-deliverablesFoot">
+                    One-time payment. No subscription. Built as a practical step before larger cyber spend.
+                  </div>
                 </>
               )}
             </div>
@@ -1499,6 +1622,17 @@ export default function ResultsClient({ id }: { id: string }) {
           color: #061b22;
         }
 
+        .rr-heroLockNote,
+        .rr-miniLocked {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin-top: 6px;
+          color: rgba(6,27,34,0.64);
+          font-size: 13px;
+          font-weight: 600;
+        }
+
         .rs-kpiGrid {
           display: grid;
           grid-template-columns: 1fr 1fr 1.6fr;
@@ -1597,10 +1731,35 @@ export default function ResultsClient({ id }: { id: string }) {
         }
 
         .rs-panelSub {
-          margin-top: 6px;
-          color: rgba(255,255,255,0.66);
-          line-height: 1.6;
-        }
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
+.rs-panelDark .rs-panelSub {
+  color: rgba(255,255,255,0.66);
+}
+
+.rs-panelLight .rs-panelSub {
+  color: rgba(6,27,34,0.68);
+}
+
+.rs-panelLight .rs-domainName {
+  color: #061b22;
+}
+
+.rs-panelLight .rs-domainLabel {
+  color: rgba(6,27,34,0.62);
+}
+
+.rs-panelLight .rs-domainCard {
+  background: #fbfcfd;
+  border: 1px solid rgba(6,27,34,0.08);
+}
+
+.rs-panelLight .rs-domainTrack {
+  background: #edf2f4;
+  border: 1px solid rgba(6,27,34,0.08);
+}
 
         .rr-sectionHead {
           display: grid;
@@ -1697,9 +1856,19 @@ export default function ResultsClient({ id }: { id: string }) {
           color: rgba(6,27,34,0.82);
         }
 
+        .rr-costRow span {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+
         .rr-costRow:last-child {
           border-bottom: 0;
           padding-bottom: 0;
+        }
+
+        .rr-costRowLocked {
+          color: rgba(6,27,34,0.54);
         }
 
         .rr-actionStack {
@@ -1716,6 +1885,11 @@ export default function ResultsClient({ id }: { id: string }) {
           padding: 16px;
           background: #fbfcfd;
           border: 1px solid rgba(6,27,34,0.08);
+        }
+
+        .rr-actionCard.locked {
+          background: #f7f8fa;
+          border-style: dashed;
         }
 
         .rr-actionNo {
@@ -1894,10 +2068,18 @@ export default function ResultsClient({ id }: { id: string }) {
           background: rgba(255,193,7,0.08);
         }
 
+        .rr-assuranceItem.locked {
+          background: #f7f8fa;
+          border-style: dashed;
+        }
+
         .rr-assuranceLabel {
           color: #061b22;
           font-weight: 700;
           line-height: 1.5;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
         }
 
         .rr-assuranceStatus {
@@ -1961,6 +2143,7 @@ export default function ResultsClient({ id }: { id: string }) {
           margin-top: 12px;
           color: rgba(255,255,255,0.62);
           font-size: 13px;
+          line-height: 1.6;
         }
 
         .rs-deliverablesTitle {
@@ -1986,6 +2169,7 @@ export default function ResultsClient({ id }: { id: string }) {
           margin-top: 10px;
           color: rgba(6,27,34,0.60);
           font-size: 13px;
+          line-height: 1.6;
         }
 
         .rs-support {
