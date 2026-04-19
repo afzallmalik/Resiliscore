@@ -549,6 +549,89 @@ function drawMiniScorePill(
   });
 }
 
+function getActionExplanation(item: string, phase: "d30" | "d60" | "d90") {
+  const t = sanitizeText(item).toLowerCase();
+
+  if (t.includes("assign owners")) {
+    return "Ownership is the fastest way to turn risk discussion into delivery. Without named owners, important actions usually drift.";
+  }
+  if (t.includes("mfa")) {
+    return "Multi-factor authentication reduces the likelihood of account compromise, which remains one of the most common SME breach routes.";
+  }
+  if (t.includes("restore test") || t.includes("backups run")) {
+    return "Backups only reduce business risk if recovery actually works in practice. Testing removes false confidence.";
+  }
+  if (t.includes("risk register")) {
+    return "A simple risk register gives leadership a shared view of what matters most, who owns it, and what is still unresolved.";
+  }
+  if (t.includes("tabletop exercise") || t.includes("exercise")) {
+    return "Testing scenarios exposes ambiguity before a real incident does. It improves response speed and decision-making under pressure.";
+  }
+  if (t.includes("patch") || t.includes("vulnerability")) {
+    return "A defined remediation routine reduces preventable exposure and shows that weaknesses are being tracked to closure.";
+  }
+  if (t.includes("evidence")) {
+    return "Evidence is what turns claimed controls into credible controls. It also helps with insurers, clients, and audit conversations.";
+  }
+  if (t.includes("supplier")) {
+    return "Third-party weaknesses can still disrupt your business. Supplier visibility and review help reduce inherited risk.";
+  }
+  if (t.includes("access review")) {
+    return "Access reviews reduce unnecessary privilege and help confirm that sensitive systems are not relying on outdated permissions.";
+  }
+  if (t.includes("inventory") || t.includes("asset")) {
+    return "You cannot prioritise protection or recovery properly if critical systems and data are not clearly identified.";
+  }
+
+  if (phase === "d30") {
+    return "This action is intended to reduce immediate exposure and create enough structure to start moving the weakest areas upward quickly.";
+  }
+  if (phase === "d60") {
+    return "This action helps move from intention to operating discipline, so that controls can be shown to work consistently in practice.";
+  }
+
+  return "This action is aimed at embedding stronger routines, clearer evidence, and simple measurement so progress can be sustained over time.";
+}
+
+function drawExplanatoryPlanItem(
+  page: any,
+  item: string,
+  phase: "d30" | "d60" | "d90",
+  x: number,
+  y: number,
+  widthChars: number,
+  font: any,
+  fontBold: any
+) {
+  let cy = y;
+
+  const titleLines = wrapText(item, widthChars);
+  for (const line of titleLines) {
+    page.drawText(`• ${sanitizeText(line)}`, {
+      x,
+      y: cy,
+      size: 10.5,
+      font: fontBold,
+      color: BRAND.text,
+    });
+    cy -= 14;
+  }
+
+  const explainer = getActionExplanation(item, phase);
+  for (const line of wrapText(explainer, widthChars - 4)) {
+    page.drawText(line, {
+      x: x + 14,
+      y: cy,
+      size: 9.5,
+      font,
+      color: BRAND.muted,
+    });
+    cy -= 12;
+  }
+
+  return cy - 4;
+}
+
 function severityColor(score: number) {
   if (score < 1.5) return BRAND.risk;
   if (score < 2.5) return BRAND.med;
@@ -1049,344 +1132,280 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
     let pageNum = 1;
 
-        /**
-     * ------------------------------
-     * Cover page
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.06);
+/**
+ * ------------------------------
+ * Cover page
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.06);
 
-      const { height, width } = page.getSize();
+  const { height, width } = page.getSize();
 
-      page.drawRectangle({
-        x: 0,
-        y: 0,
-        width,
-        height,
-        color: BRAND.bg,
-      });
+  page.drawRectangle({
+    x: 0,
+    y: 0,
+    width,
+    height,
+    color: BRAND.bg,
+  });
 
-      drawBrandHeader(page, shieldImg);
+  drawBrandHeader(page, shieldImg);
 
-      page.drawText("RESILISCORE", {
+  page.drawText("RESILISCORE", {
+    x: 50,
+    y: height - 142,
+    size: 30,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  page.drawText("Cyber Resilience Assessment Report", {
+    x: 50,
+    y: height - 178,
+    size: 19,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  page.drawText("A structured maturity snapshot designed for SMEs", {
+    x: 50,
+    y: height - 198,
+    size: 10.5,
+    font,
+    color: BRAND.muted,
+  });
+
+  page.drawRectangle({
+    x: 50,
+    y: height - 220,
+    width: 220,
+    height: 5,
+    color: BRAND.accent,
+  });
+
+  drawMetricCard(
+    page,
+    50,
+    height - 348,
+    150,
+    108,
+    "Overall score",
+    `${overall.toFixed(2)} / 5`,
+    scoreLabel(overall),
+    font,
+    fontBold
+  );
+
+  drawMetricCard(
+    page,
+    214,
+    height - 348,
+    110,
+    108,
+    "Grade",
+    grade,
+    "Maturity band",
+    font,
+    fontBold
+  );
+
+  drawRoundedCard(page, 338, height - 348, 207, 108, {
+    fill: BRAND.white,
+    border: BRAND.line,
+    radius: 18,
+  });
+
+  drawLabel(page, "Assessment details", 352, height - 258, fontBold);
+
+  let infoY = height - 282;
+
+  if (companyName) {
+    page.drawText("Company", {
+      x: 352,
+      y: infoY,
+      size: 9,
+      font: fontBold,
+      color: BRAND.muted,
+    });
+    page.drawText(companyName, {
+      x: 430,
+      y: infoY,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    infoY -= 18;
+  }
+
+  page.drawText("Date", {
+    x: 352,
+    y: infoY,
+    size: 9,
+    font: fontBold,
+    color: BRAND.muted,
+  });
+  page.drawText(assessmentDate, {
+    x: 430,
+    y: infoY,
+    size: 10.5,
+    font,
+    color: BRAND.text,
+  });
+  infoY -= 18;
+
+  page.drawText("Reference", {
+    x: 352,
+    y: infoY,
+    size: 9,
+    font: fontBold,
+    color: BRAND.muted,
+  });
+  page.drawText(reportRef, {
+    x: 430,
+    y: infoY,
+    size: 10.5,
+    font,
+    color: BRAND.text,
+  });
+
+  // Start the explanatory section directly under the 3 score cards
+  let y = 430;
+
+  page.drawText("How to read and use this report", {
+    x: 50,
+    y,
+    size: 12,
+    font: fontBold,
+    color: BRAND.text,
+  });
+
+  page.drawLine({
+    start: { x: 50, y: y - 8 },
+    end: { x: 545, y: y - 8 },
+    thickness: 1,
+    color: BRAND.line,
+  });
+
+  y -= 26;
+
+  const intro = [
+    "This report provides a structured snapshot of your current cyber resilience position.",
+    "It is designed to help you quickly understand where disruption risk is most likely to occur and what to improve first.",
+  ];
+
+  for (const paragraph of intro) {
+    for (const line of wrapText(paragraph, 100)) {
+      page.drawText(line, {
         x: 50,
-        y: height - 142,
-        size: 30,
-        font: fontBold,
-        color: BRAND.text,
-      });
-
-      page.drawText("Cyber Resilience Assessment Report", {
-        x: 50,
-        y: height - 178,
-        size: 19,
-        font: fontBold,
-        color: BRAND.text,
-      });
-
-      page.drawText("A structured maturity snapshot designed for SMEs", {
-        x: 50,
-        y: height - 198,
+        y,
         size: 10.5,
         font,
-        color: BRAND.muted,
-      });
-
-      page.drawRectangle({
-        x: 50,
-        y: height - 220,
-        width: 220,
-        height: 5,
-        color: BRAND.accent,
-      });
-
-      drawMetricCard(
-        page,
-        50,
-        height - 370,
-        150,
-        108,
-        "Overall score",
-        `${overall.toFixed(2)} / 5`,
-        scoreLabel(overall),
-        font,
-        fontBold
-      );
-
-      drawMetricCard(
-        page,
-        214,
-        height - 370,
-        110,
-        108,
-        "Grade",
-        grade,
-        "Maturity band",
-        font,
-        fontBold
-      );
-
-      drawRoundedCard(page, 338, height - 370, 207, 108, {
-        fill: BRAND.white,
-        border: BRAND.line,
-        radius: 18,
-      });
-
-      drawLabel(page, "Assessment details", 352, height - 280, fontBold);
-
-      let infoY = height - 304;
-
-      if (companyName) {
-        page.drawText("Company", {
-          x: 352,
-          y: infoY,
-          size: 9,
-          font: fontBold,
-          color: BRAND.muted,
-        });
-        page.drawText(companyName, {
-          x: 430,
-          y: infoY,
-          size: 10.5,
-          font,
-          color: BRAND.text,
-        });
-        infoY -= 18;
-      }
-
-      page.drawText("Date", {
-        x: 352,
-        y: infoY,
-        size: 9,
-        font: fontBold,
-        color: BRAND.muted,
-      });
-      page.drawText(assessmentDate, {
-        x: 430,
-        y: infoY,
-        size: 10.5,
-        font,
         color: BRAND.text,
       });
-      infoY -= 18;
-
-      page.drawText("Reference", {
-        x: 352,
-        y: infoY,
-        size: 9,
-        font: fontBold,
-        color: BRAND.muted,
-      });
-      page.drawText(reportRef, {
-        x: 430,
-        y: infoY,
-        size: 10.5,
-        font,
-        color: BRAND.text,
-      });
-
-          drawRoundedCard(page, 50, 168, 495, 86, {
-        fill: BRAND.card,
-        border: BRAND.line,
-        radius: 18,
-      });
-
-      page.drawText("What this report contains", {
-        x: 64,
-        y: 228,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-
-      const coverBullets = [
-        "Overall resilience score, grade and maturity interpretation",
-        "Priority risks and likely disruption areas",
-        "Practical actions and a 30 / 60 / 90 day plan",
-      ];
-
-      let cy = 208;
-      for (const b of coverBullets) {
-        page.drawText(sanitizeText(b), {
-          x: 64,
-          y: cy,
-          size: 10,
-          font,
-          color: BRAND.text,
-        });
-        cy -= 16;
-      }
-
-      drawRoundedCard(page, 50, 92, 495, 58, {
-        fill: BRAND.white,
-        border: BRAND.line,
-        radius: 18,
-      });
-
-      page.drawText("Business impact", {
-        x: 64,
-        y: 130,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-
-      const impactText =
-        overall < 2.5
-          ? "Current resilience gaps increase the likelihood of disruption, financial loss, and slower recovery from incidents."
-          : overall < 3.5
-          ? "The business has a working resilience base, but weaknesses may still lead to avoidable disruption under pressure."
-          : "The business shows a relatively strong resilience position, with lower likelihood of disruption compared to typical SMEs.";
-
-      let impactY = 112;
-      for (const line of wrapText(impactText, 92)) {
-        page.drawText(line, {
-          x: 64,
-          y: impactY,
-          size: 10,
-          font,
-          color: BRAND.text,
-        });
-        impactY -= 12;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
+      y -= 14;
     }
+    y -= 4;
+  }
 
-    /**
-     * ------------------------------
-     * How to use this report
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.08);
+  y -= 4;
 
-      const { height } = page.getSize();
-      let y = height - 96;
+  page.drawText("What this report shows", {
+    x: 50,
+    y,
+    size: 10.5,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 18;
 
-      drawSectionTitle(page, "How to read and use this report", 50, y, fontBold);
-      y -= 28;
+  const shows = [
+    "Your overall resilience score and maturity level",
+    "Stronger and weaker domains across your business",
+    "Priority risks and where disruption is most likely to originate",
+    "Clear actions to improve resilience over the next 30-90 days",
+  ];
 
-      const intro = [
-        "This report provides a structured snapshot of your current cyber resilience position.",
-        "It is designed to help you quickly understand where disruption risk is most likely to occur and what to improve first.",
-      ];
-
-      for (const line of intro) {
-        for (const l of wrapText(line, 100)) {
-          page.drawText(l, {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: BRAND.text,
-          });
-          y -= 14;
-        }
-        y -= 4;
-      }
-
-      y -= 10;
-
-      page.drawText("What this report shows", {
+  for (const item of shows) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(line, {
         x: 50,
         y,
-        size: 11,
-        font: fontBold,
+        size: 10.5,
+        font,
         color: BRAND.text,
       });
-      y -= 18;
-
-      const contains = [
-        "Your overall resilience score and maturity level",
-        "Stronger and weaker domains across your business",
-        "Priority risks and where disruption is most likely to originate",
-        "Clear actions to improve resilience over the next 30–90 days",
-      ];
-
-      for (const item of contains) {
-        for (const l of wrapText(item, 100)) {
-          page.drawText(l, {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: BRAND.text,
-          });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 10;
-
-      page.drawText("What your score means", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 18;
-
-      const scoreMeaning = [
-        "The score reflects how consistently controls are applied across your business.",
-        "It is not about having everything in place, but about reliability, ownership, and evidence.",
-        "Lower scores typically indicate higher dependency on individuals or informal processes.",
-      ];
-
-      for (const item of scoreMeaning) {
-        for (const l of wrapText(item, 100)) {
-          page.drawText(l, {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: BRAND.text,
-          });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 10;
-
-      page.drawText("How to use this report", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 18;
-
-      const usage = [
-        "Focus first on your lowest 2–3 domains rather than trying to improve everything at once.",
-        "Prioritise ownership, routine, and evidence before introducing complexity.",
-        "Use this report to guide internal discussions and prioritise practical improvements.",
-      ];
-
-      for (const item of usage) {
-        for (const l of wrapText(item, 100)) {
-          page.drawText(l, {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: BRAND.text,
-          });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
+      y -= 14;
     }
+    y -= 2;
+  }
+
+  y -= 8;
+
+  page.drawText("What your score means", {
+    x: 50,
+    y,
+    size: 10.5,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 18;
+
+  const scoreMeaning = [
+    "The score reflects how consistently controls are applied across your business.",
+    "It is not about having everything in place, but about reliability, ownership, and evidence.",
+    "Lower scores typically indicate higher dependency on individuals or informal processes.",
+  ];
+
+  for (const item of scoreMeaning) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  y -= 8;
+
+  page.drawText("How to use this report", {
+    x: 50,
+    y,
+    size: 10.5,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 18;
+
+  const usage = [
+    "Focus first on your lowest 2-3 domains rather than trying to improve everything at once.",
+    "Prioritise ownership, routine, and evidence before introducing complexity.",
+    "Use this report to guide internal discussions and prioritise practical improvements.",
+  ];
+
+  for (const item of usage) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
 
     /**
  * ------------------------------
@@ -2952,19 +2971,26 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       y,
       size: 10.5,
       font,
-      color: rgb(0.15, 0.15, 0.15),
+      color: BRAND.text,
     });
     y -= 14;
   }
   y -= 12;
 
-  const blocks = [
+  const blocks: {
+    title: string;
+    subtitle: string;
+    items: string[];
+    accent: ReturnType<typeof rgb>;
+    phase: "d30" | "d60" | "d90";
+  }[] = [
     {
       title: "Days 0-30 - Stabilise",
       subtitle:
         "Focus on immediate control gaps, ownership, and the basic actions that reduce exposure fastest.",
       items: plan306090.d30,
       accent: BRAND.risk,
+      phase: "d30",
     },
     {
       title: "Days 31-60 - Control & Prove",
@@ -2972,6 +2998,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
         "Move from intention to routine. Confirm that controls are working consistently and can be evidenced.",
       items: plan306090.d60,
       accent: BRAND.med,
+      phase: "d60",
     },
     {
       title: "Days 61-90 - Embed & Measure",
@@ -2979,11 +3006,12 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
         "Turn short-term fixes into repeatable operating practice, with simple evidence and reporting in place.",
       items: plan306090.d90,
       accent: BRAND.good,
+      phase: "d90",
     },
   ];
 
   for (const b of blocks) {
-    if (y < 180) break;
+    if (y < 160) break;
 
     page.drawText(sanitizeText(b.title), {
       x: 50,
@@ -3005,92 +3033,20 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       y -= 13;
     }
 
-    y -= 6;
+    y -= 8;
 
-    for (const item of b.items) {
-      const wrapped = wrapText(item, 94);
-
-      page.drawText("•", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-
-      let lineY = y;
-      for (const line of wrapped) {
-        page.drawText(line, {
-          x: 64,
-          y: lineY,
-          size: 10.5,
-          font,
-          color: BRAND.text,
-        });
-        lineY -= 14;
-      }
-
-      y = lineY - 2;
-
-      if (y < 120) break;
+    for (const item of b.items.slice(0, 4)) {
+      y = drawExplanatoryPlanItem(page, item, b.phase, 50, y, 98, font, fontBold);
+      if (y < 150) break;
     }
 
-    y -= 6;
-    page.drawLine({
-      start: { x: 50, y },
-      end: { x: 545, y },
-      thickness: 1,
-      color: rgb(0.92, 0.92, 0.92),
-    });
-    y -= 16;
-  }
-
-  if (y > 170 && actions90.length) {
-    page.drawText("Additional recommended actions", {
-      x: 50,
-      y,
-      size: 11,
-      font: fontBold,
-      color: BRAND.text,
-    });
-    y -= 14;
-
-    const extraIntro =
-      "These actions are pulled from your domain profile and provide additional depth where follow-through or evidence may still be weak.";
-    for (const line of wrapText(extraIntro, 100)) {
-      page.drawText(line, {
-        x: 50,
-        y,
-        size: 10,
-        font,
-        color: BRAND.muted,
-      });
-      y -= 13;
-    }
-
-    y -= 6;
-
-    let i = 1;
-    for (const a of actions90) {
-      for (const line of wrapText(`${i}. ${a}`, 100)) {
-        page.drawText(line, {
-          x: 50,
-          y,
-          size: 10.5,
-          font,
-          color: BRAND.text,
-        });
-        y -= 14;
-        if (y < 90) break;
-      }
-      if (y < 90) break;
-      y -= 2;
-      i += 1;
-    }
+    y -= 8;
   }
 
   drawFooter(page, pageNum++, font, reportRef);
 }
+
+
 
     /**
  * ------------------------------
@@ -3911,289 +3867,166 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
     /**
-     * ------------------------------
-     * Premium page: Management actions and ownership
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+ * ------------------------------
+ * Management actions and ownership
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.10);
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Management actions and ownership", 50, y, fontBold);
-      y -= 28;
+  const { height } = page.getSize();
+  let y = height - 96;
 
-      const intro =
-        "This page translates the assessment into management actions. The aim is to make ownership clearer, reduce ambiguity, and help leadership turn the report into action rather than discussion alone.";
+  drawSectionTitle(page, "Management actions and ownership", 50, y, fontBold);
+  y -= 28;
 
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, {
-          x: 50,
-          y,
-          size: 10.5,
-          font,
-          color: BRAND.text,
-        });
-        y -= 14;
-      }
+  const intro =
+    "This page translates the assessment into management actions. The aim is to make ownership clearer, reduce ambiguity, and help leadership turn the report into action rather than discussion alone.";
+  for (const line of wrapText(intro, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
 
-      y -= 10;
+  y -= 10;
 
-      page.drawText("Immediate management actions", {
+  page.drawText("Immediate management actions", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 16;
+
+  const mgmtActions = [
+    "Assign a named owner for each of the weakest priority domains.",
+    "Set a review point within 30 days to check progress against the plan.",
+    "Require evidence for the most important basic controls: access, backups, incident response, and supplier visibility.",
+    "Use the Implementation Checklist on the next page as the live working sheet for tracking actions, evidence, and ownership.",
+    "Agree which issues need leadership support versus operational follow-through.",
+  ];
+
+  for (const item of mgmtActions) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(`• ${sanitizeText(line)}`, {
         x: 50,
         y,
-        size: 11,
-        font: fontBold,
+        size: 10.5,
+        font,
         color: BRAND.text,
       });
       y -= 14;
-
-      const immediate = [
-        "Assign a named owner for each of the weakest priority domains.",
-        "Set a review point within 30 days to check progress against the plan.",
-        "Require evidence for the most important basic controls: access, backups, incident response, and supplier visibility.",
-        "Agree which issues need leadership support versus operational follow-through.",
-      ];
-
-      for (const item of immediate) {
-        for (const line of wrapText(item, 100)) {
-          page.drawText(line, {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: BRAND.text,
-          });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 8;
-
-      page.drawText("Operational owner actions", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      const operational = [
-        "Complete the highest-priority remediation tasks in the lowest-scoring domains.",
-        "Create or update the evidence pack so actions can be demonstrated quickly.",
-        "Confirm which routines are recurring and who is responsible for maintaining them.",
-        "Escalate dependencies, blockers, or weak supplier controls early rather than late.",
-      ];
-
-      for (const item of operational) {
-        for (const line of wrapText(item, 100)) {
-          page.drawText(line, {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: BRAND.text,
-          });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 8;
-
-      page.drawText("Questions leadership should ask now", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      const questions = [
-        "Which of our weakest domains creates the greatest disruption risk if nothing changes?",
-        "What evidence do we have that critical controls are operating consistently today?",
-        "Where are we relying on memory, good intent, or key individuals instead of repeatable process?",
-        "Which supplier, system, or access weakness would hurt us most if it failed tomorrow?",
-      ];
-
-      for (const item of questions) {
-        for (const line of wrapText(item, 100)) {
-          page.drawText(line, {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: BRAND.text,
-          });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 8;
-
-      page.drawText("Suggested ownership model", {
-        x: 50,
-        y,
-        size: 11,
-        font: fontBold,
-        color: BRAND.text,
-      });
-      y -= 14;
-
-      const ownership = [
-        "Leadership: sponsor priorities, review progress, approve risk decisions, and challenge delays.",
-        "Operational owner: implement actions, maintain evidence, and report progress.",
-        "MSP or external support: provide technical execution, monitoring, remediation support, or specialist input where needed.",
-      ];
-
-      for (const item of ownership) {
-        for (const line of wrapText(item, 100)) {
-          page.drawText(line, {
-            x: 50,
-            y,
-            size: 10.5,
-            font,
-            color: BRAND.text,
-          });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
     }
+    y -= 2;
+  }
 
-    /**
-     * ------------------------------
-     * MSP / IT Partner Support
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+  y -= 8;
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "MSP / IT Partner Support", 50, y, fontBold);
-      y -= 28;
+  page.drawText("Operational owner actions", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 16;
 
-      const intro =
-        "Many organisations implement resilience improvements with the support of their internal IT team or external IT provider. This report can be used as a practical roadmap for remediation and operational follow-through.";
+  const ownerActions = [
+    "Complete the highest-priority remediation tasks in the lowest-scoring domains.",
+    "Create or update the evidence pack so actions can be demonstrated quickly.",
+    "Use the Implementation Checklist to confirm which routines are recurring, who owns them, and what proof is being retained.",
+    "Escalate dependencies, blockers, or weak supplier controls early rather than late.",
+  ];
 
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-
-      y -= 10;
-
-      page.drawText("Typical implementation areas", {
+  for (const item of ownerActions) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(`• ${sanitizeText(line)}`, {
         x: 50,
         y,
-        size: 11,
-        font: fontBold,
+        size: 10.5,
+        font,
         color: BRAND.text,
       });
       y -= 14;
-
-      const supportItems = [
-        "Identity and access management improvements",
-        "Backup testing and recovery validation",
-        "Vulnerability remediation",
-        "System hardening and patch routines",
-        "Supplier access review",
-      ];
-
-      for (const item of supportItems) {
-        for (const line of wrapText(item, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-          y -= 14;
-        }
-        y -= 2;
-      }
-
-      y -= 10;
-
-      const closing =
-        "If you work with an IT provider or MSP, this report can be used to structure improvements, agree ownership, and track delivery against the priority actions identified in the assessment.";
-
-      for (const line of wrapText(closing, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
     }
+    y -= 2;
+  }
 
-    /**
-     * ------------------------------
-     * Reassessment Recommendation
-     * ------------------------------
-     */
-    {
-      const page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
+  y -= 8;
 
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Reassessment Recommendation", 50, y, fontBold);
-      y -= 28;
+  page.drawText("Questions leadership should ask now", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 16;
 
-      const intro =
-        "Cyber resilience improves over time when controls become routine, measured, and evidence-based. Repeating the assessment helps leadership confirm that maturity is improving rather than drifting.";
+  const questions = [
+    "Which of our weakest domains creates the greatest disruption risk if nothing changes?",
+    "What evidence do we have that critical controls are operating consistently today?",
+    "Where are we relying on memory, good intent, or key individuals instead of repeatable process?",
+    "Which supplier, system, or access weakness would hurt us most if it failed tomorrow?",
+  ];
 
-      for (const line of wrapText(intro, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-
-      y -= 10;
-
-      page.drawText("Resiliscore recommends reassessment every 6-12 months, or after:", {
+  for (const item of questions) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(`• ${sanitizeText(line)}`, {
         x: 50,
         y,
-        size: 11,
-        font: fontBold,
+        size: 10.5,
+        font,
         color: BRAND.text,
       });
-      y -= 16;
-
-      const triggers = [
-        "New systems or cloud migrations",
-        "Significant supplier changes",
-        "Security incidents",
-        "Rapid business growth",
-      ];
-
-      for (const t of triggers) {
-        for (const line of wrapText(t, 100)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
-          y -= 14;
-        }
-      }
-
-      y -= 10;
-
-      const close =
-        "Tracking progress over time helps leadership, auditors, insurers, customers, and delivery teams understand whether resilience maturity is strengthening in the areas that matter most.";
-
-      for (const line of wrapText(close, 102)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
+      y -= 14;
     }
+    y -= 2;
+  }
 
-    /**
+  y -= 8;
+
+  page.drawText("Suggested ownership model", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 16;
+
+  const ownership = [
+    "Leadership: sponsor priorities, review progress, approve risk decisions, and challenge delays.",
+    "Operational owner: implement actions, maintain evidence, and report progress.",
+    "MSP or external support: provide technical execution, monitoring, remediation support, or specialist input where needed.",
+  ];
+
+  for (const item of ownership) {
+    for (const line of wrapText(item, 100)) {
+      page.drawText(`${sanitizeText(line)}`, {
+        x: 50,
+        y,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      y -= 14;
+    }
+    y -= 2;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
+
+/**
      * ------------------------------
      * Checklist page
      * ------------------------------
@@ -4422,6 +4255,145 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
       drawFooter(page, pageNum++, font, reportRef);
     }
+
+    /**
+ * ------------------------------
+ * MSP / IT Partner Support + Reassessment Recommendation
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.10);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+
+  drawSectionTitle(page, "MSP / IT Partner Support", 50, y, fontBold);
+  y -= 28;
+
+  const mspIntro =
+    "Many organisations implement resilience improvements with the support of their internal IT team or external IT provider. This report can be used as a practical roadmap for remediation and operational follow-through.";
+  for (const line of wrapText(mspIntro, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 10;
+
+  page.drawText("Typical implementation areas", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 16;
+
+  const mspAreas = [
+    "Identity and access management improvements",
+    "Backup testing and recovery validation",
+    "Vulnerability remediation",
+    "System hardening and patch routines",
+    "Supplier access review",
+  ];
+
+  for (const item of mspAreas) {
+    page.drawText(`• ${sanitizeText(item)}`, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 16;
+  }
+
+  y -= 6;
+
+  const mspClose =
+    "If you work with an IT provider or MSP, this report can be used to structure improvements, agree ownership, and track delivery against the priority actions identified in the assessment.";
+  for (const line of wrapText(mspClose, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 18;
+
+  drawSectionTitle(page, "Reassessment Recommendation", 50, y, fontBold);
+  y -= 28;
+
+  const reassessIntro =
+    "Cyber resilience improves over time when controls become routine, measured, and evidence-based. Repeating the assessment helps leadership confirm that maturity is improving rather than drifting.";
+  for (const line of wrapText(reassessIntro, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 10;
+
+  page.drawText("Resiliscore recommends reassessment every 6-12 months, or after:", {
+    x: 50,
+    y,
+    size: 10.5,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 18;
+
+  const reassessTriggers = [
+    "New systems or cloud migrations",
+    "Significant supplier changes",
+    "Security incidents",
+    "Rapid business growth",
+  ];
+
+  for (const item of reassessTriggers) {
+    page.drawText(`• ${sanitizeText(item)}`, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 16;
+  }
+
+  y -= 8;
+
+  const reassessClose =
+    "Tracking progress over time helps leadership, auditors, insurers, customers, and delivery teams understand whether resilience maturity is strengthening in the areas that matter most.";
+  for (const line of wrapText(reassessClose, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
 
     const pdfBytes = await pdfDoc.save();
 
