@@ -1419,7 +1419,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   const { height } = page.getSize();
   let y = height - 96;
-  drawSectionTitle(page, "Key Findings", 50, y, fontBold);
+  drawSectionTitle(page, "Resilience diagnosis", 50, y, fontBold);
   y -= 30;
 
   const strongestNames = topStrengths.map((d) =>
@@ -1438,7 +1438,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       ? `The greatest resilience pressure is currently concentrated in ${weakestNames.join(", ")}.`
       : "There are weaker domains that should be treated as priority areas.");
 
-  page.drawText("Current resilience position", {
+  page.drawText("Current resilience diagnosis", {
     x: 50,
     y,
     size: 11,
@@ -1514,7 +1514,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   y -= 194;
 
-  page.drawText("What this means in practice", {
+  page.drawText("What is likely happening today", {
     x: 50,
     y,
     size: 11,
@@ -1634,7 +1634,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   const { height } = page.getSize();
   let y = height - 96;
-  drawSectionTitle(page, "Executive Summary", 50, y, fontBold);
+  drawSectionTitle(page, "Brutal truth", 50, y, fontBold);
   y -= 26;
 
   const weakestNames = topRisks.map((d) => shortDomainLabel(d.domain_name || d.domain_code || "Domain"));
@@ -1642,7 +1642,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   y = drawSectionIntro(
     page,
-    "This page gives a leadership-ready summary of your current resilience position, where the greatest exposure sits, and what should be prioritised first.",
+    "If nothing changes, the most likely outcome is not total collapse but avoidable disruption starting in one or two weak areas. This page shows where that pressure is most likely to surface first.",
     50,
     y,
     font
@@ -1691,7 +1691,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   y -= 126;
 
-  page.drawText("Interpretation", {
+  page.drawText("If nothing changes", {
     x: 50,
     y,
     size: 11,
@@ -1797,7 +1797,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   y -= 182;
 
-  page.drawText("What this means in practice", {
+  page.drawText("Why this creates pressure", {
     x: 50,
     y,
     size: 11,
@@ -1892,17 +1892,16 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   const { height } = page.getSize();
   let y = height - 96;
 
-  drawSectionTitle(page, "Business Risk Summary & Estimated Impact", 50, y, fontBold);
+  drawSectionTitle(page, "Business impact summary", 50, y, fontBold);
   y -= 28;
 
   const weakest = topRisks.map((d) => d.domain_name || d.domain_code || "Domain");
   const weakestShort = topRisks.map((d) =>
     shortDomainLabel(d.domain_name || d.domain_code || "Domain")
   );
-  const breach = estimateBreachCost(overall, weakest);
-
+  
   const intro =
-    "This section translates the assessment into business-facing risk. It highlights where disruption is most likely to begin, what that could mean commercially, and why the weakest domains matter first.";
+    "This section explains the operational pressure your current gaps are most likely to create. It focuses on downtime, slower decisions, recovery difficulty, and external assurance pressure rather than a made-up loss figure.";
 
   for (const line of wrapText(intro, 100)) {
     page.drawText(line, {
@@ -1925,7 +1924,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     radius: 18,
   });
 
-  page.drawText("Estimated financial exposure", {
+  page.drawText("Most likely business impact", {
     x: 64,
     y: exposureCardY + 78,
     size: 11,
@@ -1933,27 +1932,24 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     color: BRAND.text,
   });
 
-  page.drawText(`£${breach.low.toLocaleString()} - £${breach.high.toLocaleString()}`, {
-    x: 64,
-    y: exposureCardY + 46,
-    size: 24,
-    font: fontBold,
-    color: BRAND.text,
-  });
+  const impactLines = [
+    "More downtime than necessary.",
+    "Slower decisions during disruption.",
+    "More difficulty answering clients, insurers, or partners with confidence.",
+  ];
 
-  const exposureCopy =
-    "Indicative range based on your current resilience level and the areas most likely to create disruption if left unchanged.";
-
-  let ecy = exposureCardY + 18;
-  for (const line of wrapText(exposureCopy, 88)) {
-    page.drawText(line, {
-      x: 64,
-      y: ecy,
-      size: 9.5,
-      font,
-      color: BRAND.muted,
-    });
-    ecy -= 12;
+  let ecy = exposureCardY + 52;
+  for (const line of impactLines) {
+    for (const l of wrapText(line, 70)) {
+      page.drawText(l, {
+        x: 64,
+        y: ecy,
+        size: 10.5,
+        font,
+        color: BRAND.text,
+      });
+      ecy -= 14;
+    }
   }
 
   y = exposureCardY - 20;
@@ -2070,7 +2066,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   y -= 6;
 
-  page.drawText("How to read this page", {
+  page.drawText("How to use this page", {
     x: 50,
     y,
     size: 11,
@@ -2081,8 +2077,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   y -= 14;
 
   const closing = [
-    "This estimate is indicative, not a guaranteed loss figure.",
-    "Its purpose is to help leadership understand that weaker resilience areas often translate into real operational and financial consequences.",
+    "The purpose of this page is to show the type of pressure weak resilience usually creates in an SME.",
+    "Use it to focus leadership on practical disruption risk rather than theoretical cyber language.",
     "The best way to reduce this exposure is usually to improve the weakest 2-3 domains first, rather than trying to improve everything at once.",
   ];
 
@@ -2447,24 +2443,24 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   let benchmarkDesc = "";
 
   if (overall < 2.0) {
-    benchmarkLabel = `You are currently less secure than ${lessSecureThan}% of similar businesses.`;
+    benchmarkLabel = "Your current level appears below what is typically expected for a stable SME.";
     benchmarkDesc =
       "Your current resilience position appears weaker than most comparable SMEs, which suggests the business is more exposed to disruption if common weaknesses are exploited.";
   } else if (overall < 3.0) {
-    benchmarkLabel = `You are currently less secure than ${lessSecureThan}% of similar businesses.`;
+    benchmarkLabel = "Your current level appears below what is typically expected for a stable SME.";
     benchmarkDesc =
       "Your current position suggests a mixed resilience profile. Some controls exist, but enough gaps remain to place the business below many similar organisations.";
   } else if (overall < 4.0) {
-    benchmarkLabel = `You are currently ahead of ${moreSecureThan}% of similar businesses.`;
+    benchmarkLabel = "Your current level appears stronger than many SMEs, although some weaker domains still need attention.";
     benchmarkDesc =
       "Your current resilience position appears stronger than many comparable SMEs, although some weaker domains still need attention to avoid drift or avoidable disruption.";
   } else {
-    benchmarkLabel = `You are currently ahead of ${moreSecureThan}% of similar businesses.`;
+    benchmarkLabel = "Your current level appears stronger than many SMEs, although some weaker domains still need attention.";
     benchmarkDesc =
       "Your current resilience position appears stronger than most comparable SMEs, suggesting a more mature and more consistent operating baseline than many peers.";
   }
 
-  page.drawText("Your position relative to SMEs", {
+  page.drawText("Practical benchmark view", {
     x: 50,
     y,
     size: 11,
@@ -2546,8 +2542,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     126,
     "What this means",
     [
-      "This benchmark is designed to make the result easier to interpret.",
-      "It shows your position in simple business terms rather than technical language.",
+      "This benchmark is a practical reference point, not a formal ranking.",
+      "It is designed to make the result easier to interpret in business terms.",
     ],
     font,
     fontBold,
@@ -2578,8 +2574,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     126,
     "Important caution",
     [
-      "This is an indicative benchmark, not a formal industry ranking.",
-      "It supports decision-making but does not replace detailed assurance work.",
+      "This is not a formal industry league table or statistical claim.",
+      "Use it as a practical reference point when deciding what to improve first.",
     ],
     font,
     fontBold,
@@ -2599,8 +2595,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   y -= 16;
 
   const explanation = [
-    "Use it as a reference point rather than a technical scorecard.",
-    "Most SMEs tend to cluster in the middle range because some controls exist, but evidence and consistency are often weaker than expected.",
+    "Use it as a practical reference point rather than a technical scorecard.",
+    "The aim is to understand whether your resilience looks stable enough for a typical SME, not to chase a percentage for its own sake.",
     "The goal is not to chase a number on its own. The goal is to reduce the likelihood and cost of disruption by improving the areas that matter most first.",
   ];
 

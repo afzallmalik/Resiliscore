@@ -1,36 +1,85 @@
 import Link from "next/link";
 
+const coreSignals = [
+  {
+    title: "Plain-English resilience diagnosis",
+    text: "Understand where disruption is most likely to begin, why it matters, and what to improve first.",
+  },
+  {
+    title: "Built specifically for SMEs",
+    text: "Designed for smaller businesses that need clarity and action, without cyber jargon or enterprise complexity.",
+  },
+  {
+    title: "One-time report, no subscription",
+    text: "Use Resiliscore as a practical decision tool before larger spend on consultants, audits, or platforms.",
+  },
+];
+
+const reportHighlights = [
+  "A clear view of your current resilience position",
+  "Where disruption is most likely to start",
+  "Direct diagnosis of what is likely happening operationally today",
+  "A stronger 30 / 60 / 90 day improvement plan",
+  "Implementation checklist and management actions",
+  "A shareable PDF for leadership, clients, insurers, or partners",
+];
+
+const trustPoints = [
+  {
+    label: "Direct",
+    text: "The report is written to show what is most likely going wrong, not to hide behind consultant language.",
+  },
+  {
+    label: "Practical",
+    text: "The output is built around ownership, routine, recovery, and evidence — the areas SMEs usually struggle with most.",
+  },
+  {
+    label: "Commercial",
+    text: "Use it before spending thousands on a full audit, and before clients, insurers, or partners ask harder questions.",
+  },
+];
+
+const steps = [
+  {
+    title: "Complete the assessment",
+    text: "Answer structured questions covering governance, access, operations, response, recovery, suppliers, and resilience routines.",
+  },
+  {
+    title: "See where pressure is building",
+    text: "Get a clear results view showing where disruption is most likely to begin and what that means in practice.",
+  },
+  {
+    title: "Unlock the full report",
+    text: "Get the full PDF with sharper diagnosis, stronger actions, and a practical plan you can actually work through.",
+  },
+];
+
 export default function HomePage() {
   return (
     <main className="homePage">
-
-      {/* HERO */}
       <section className="heroWrap">
         <div className="heroBackdrop" />
         <div className="heroOverlay" />
 
         <div className="homeShell heroShell">
           <div className="heroGrid">
-
             <div className="heroCopy">
-              <div className="heroEyebrow">
-                Cyber resilience clarity for SMEs
-              </div>
+              <div className="heroEyebrow">Cyber resilience clarity for SMEs</div>
 
               <h1 className="heroTitle">
-                Understand your cyber risk — and what it means for your business.
+                Understand where cyber weakness is most likely to disrupt your business.
               </h1>
 
               <p className="heroLead">
-                Resiliscore gives business owners a clear, structured view of cyber resilience —
-                highlighting where disruption is most likely to start, what it could cost, and what to fix first.
+                Resiliscore helps SME owners and operational leaders see where resilience is weakest,
+                what is most likely happening today, and what to improve before disruption, client
+                pressure, or insurer questions force the issue.
               </p>
 
               <div className="heroActions">
                 <Link href="/assessment" className="btn btnPrimary">
                   Take free assessment
                 </Link>
-
                 <Link href="/methodology" className="btn btnSecondary">
                   How it works
                 </Link>
@@ -45,126 +94,100 @@ export default function HomePage() {
 
             <div className="heroPanel">
               <div className="heroCard heroCardPrimary">
-
-                <div className="heroCardKicker">Why businesses use Resiliscore</div>
+                <div className="heroCardKicker">What the report gives you</div>
 
                 <h2>
-                  Clarity first. Then decide what to invest in.
+                  A practical view of what is most likely to go wrong if nothing changes.
                 </h2>
 
                 <p>
-                  Most small businesses go straight into expensive audits without knowing
-                  where their real risks are. Resiliscore gives you that clarity first —
-                  so you can make better decisions.
+                  This is not a technical audit and it is not enterprise software. It is a
+                  one-time resilience report designed to help you understand your weak points,
+                  prioritise action, and decide what support you actually need next.
                 </p>
 
                 <div className="heroSignalGrid">
-                  <div className="heroSignalCard">
-                    <div className="heroSignalTitle">Avoid unnecessary spend</div>
-                    <p>Understand your position before committing to consultants or platforms.</p>
-                  </div>
-
-                  <div className="heroSignalCard">
-                    <div className="heroSignalTitle">Focus on real risks</div>
-                    <p>See where disruption is most likely to start in business terms.</p>
-                  </div>
-
-                  <div className="heroSignalCard">
-                    <div className="heroSignalTitle">Make better decisions</div>
-                    <p>Prioritise what actually matters instead of generic recommendations.</p>
-                  </div>
+                  {coreSignals.map((item) => (
+                    <div key={item.title} className="heroSignalCard">
+                      <div className="heroSignalTitle">{item.title}</div>
+                      <p>{item.text}</p>
+                    </div>
+                  ))}
                 </div>
-
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* MAIN CONTENT */}
       <div className="homeShell siteSections">
-
-        {/* WHY THIS EXISTS */}
-        <section className="sectionCard sectionCardLight">
-
+        <section className="sectionCard sectionCardLight introSection">
           <div className="sectionHeading">
-            <div className="sectionEyebrow">Why Resiliscore exists</div>
-
-            <h2>
-              Most cyber tools weren’t built for small businesses.
-            </h2>
-
+            <div className="sectionEyebrow">Why Resiliscore</div>
+            <h2>Most SMEs do not need more cyber jargon. They need sharper clarity.</h2>
             <p>
-              Traditional cyber security assessments are often expensive, technical,
-              and designed for larger organisations with dedicated teams.
-              For most SMEs, that creates a gap between knowing cyber risk matters
-              and actually understanding what to do about it.
+              Most smaller businesses already know cyber risk matters. The problem is that they
+              often do not know where the real operational weakness sits, what that means in
+              practice, or what to fix first.
             </p>
-
             <p>
-              Resiliscore closes that gap by providing a clear, structured view of your
-              resilience — without requiring technical expertise or long-term commitments.
+              Resiliscore is built to close that gap. It gives you a structured resilience view in
+              plain English, with practical next steps, without forcing you into an ongoing
+              subscription or a large consultancy commitment.
             </p>
           </div>
 
+          <div className="trustGrid">
+            {trustPoints.map((item) => (
+              <article key={item.label} className="trustCard">
+                <div className="trustLabel">{item.label}</div>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
-        {/* PRE-AUDIT POSITIONING */}
-        <section className="sectionCard sectionCardDark">
-
+        <section className="sectionCard sectionCardDark valueSection">
           <div className="sectionHeading sectionHeadingDark">
             <div className="sectionEyebrow">Before you spend thousands</div>
-
-            <h2>
-              A practical step before a full cyber audit.
-            </h2>
-
+            <h2>Use Resiliscore before a full audit, consultant engagement, or heavier cyber spend.</h2>
             <p>
-              Many businesses consider audits or consultancy without knowing where
-              their real risks sit. That often leads to unclear scope, unnecessary spend,
-              or work that doesn’t address the most important issues first.
+              Many SMEs know they should improve resilience, but do not yet know where to start.
+              That often leads to broad advice, unclear scope, or unnecessary spend. Resiliscore
+              gives you a practical baseline first.
             </p>
           </div>
 
           <div className="featureGrid">
-
-            <div className="featureCard">
+            <article className="featureCard">
               <div className="featureDot" />
               <div className="featureText">
-                Typical cyber audits can cost <strong>£5,000–£15,000+</strong>
+                A one-time report you can use before committing to a larger audit or security programme
               </div>
-            </div>
+            </article>
 
-            <div className="featureCard">
+            <article className="featureCard">
               <div className="featureDot" />
               <div className="featureText">
-                Scope and priorities are often unclear at the start
+                A clearer way to see where disruption is most likely to begin in your business
               </div>
-            </div>
+            </article>
 
-            <div className="featureCard">
+            <article className="featureCard">
               <div className="featureDot" />
               <div className="featureText">
-                Important risks may not be addressed first
+                A more credible starting point for leadership, insurers, clients, and IT partners
               </div>
-            </div>
-
+            </article>
           </div>
 
           <div className="samplePanel">
-
             <div>
-              <div className="samplePanelLabel">The Resiliscore approach</div>
-
-              <h3>
-                Start with clarity. Then decide what to invest in.
-              </h3>
-
+              <div className="samplePanelLabel">Positioning</div>
+              <h3>Clarity first. Then decide what needs investment.</h3>
               <p>
-                For a one-time cost, Resiliscore gives you a structured view of your
-                resilience, helping you decide whether you need further support —
-                and where it should be focused.
+                Resiliscore is designed as a practical resilience decision tool — not another
+                subscription platform, and not a vague security questionnaire.
               </p>
             </div>
 
@@ -173,79 +196,34 @@ export default function HomePage() {
                 Start assessment
               </Link>
             </div>
-
           </div>
-
         </section>
 
-        {/* WHAT YOU GET */}
-        <section className="sectionCard sectionCardLight">
-
+        <section className="sectionCard sectionCardLight valueSection">
           <div className="sectionHeading">
             <div className="sectionEyebrow">Report output</div>
-
-            <h2>
-              A report designed for real business decisions.
-            </h2>
-
+            <h2>A stronger report built around diagnosis, action, and usability.</h2>
             <p>
-              The output is structured to help you understand risk quickly,
-              communicate it clearly, and take practical action.
+              The output is designed to feel commercially useful: clear enough for leadership,
+              practical enough for delivery, and credible enough to support external conversations.
             </p>
           </div>
 
           <div className="featureGrid">
-
-            <div className="featureCard">
-              <div className="featureDot" />
-              <div className="featureText">
-                Priority risk areas and likely disruption routes
-              </div>
-            </div>
-
-            <div className="featureCard">
-              <div className="featureDot" />
-              <div className="featureText">
-                Indicative financial exposure in business terms
-              </div>
-            </div>
-
-            <div className="featureCard">
-              <div className="featureDot" />
-              <div className="featureText">
-                Clear 30 / 60 / 90 day improvement plan
-              </div>
-            </div>
-
-            <div className="featureCard">
-              <div className="featureDot" />
-              <div className="featureText">
-                Benchmark-style comparison for context
-              </div>
-            </div>
-
-            <div className="featureCard">
-              <div className="featureDot" />
-              <div className="featureText">
-                Plain-English explanation (no technical jargon)
-              </div>
-            </div>
-
-            <div className="featureCard">
-              <div className="featureDot" />
-              <div className="featureText">
-                Shareable PDF for leadership, clients, or insurers
-              </div>
-            </div>
-
+            {reportHighlights.map((item) => (
+              <article key={item} className="featureCard">
+                <div className="featureDot" />
+                <div className="featureText">{item}</div>
+              </article>
+            ))}
           </div>
 
           <div className="samplePanel">
             <div>
-              <div className="samplePanelLabel">Preview</div>
-              <h3>View a sample report</h3>
+              <div className="samplePanelLabel">See the output</div>
+              <h3>Preview the premium sample report</h3>
               <p>
-                See exactly how the report is structured before taking the assessment.
+                Review the structure, tone, and level of detail before taking the assessment.
               </p>
             </div>
 
@@ -255,69 +233,34 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-
         </section>
 
-        {/* HOW IT WORKS */}
-        <section className="sectionCard sectionCardLight">
-
+        <section className="sectionCard sectionCardLight processSection">
           <div className="sectionHeading">
             <div className="sectionEyebrow">How it works</div>
             <h2>A simple path from assessment to action.</h2>
           </div>
 
           <div className="stepsGrid">
-
-            <div className="stepCard">
-              <div className="stepNumber">01</div>
-              <div>
-                <h3>Complete the assessment</h3>
-                <p>
-                  Answer structured questions covering key resilience areas such as
-                  access, response, recovery, and suppliers.
-                </p>
-              </div>
-            </div>
-
-            <div className="stepCard">
-              <div className="stepNumber">02</div>
-              <div>
-                <h3>Understand your position</h3>
-                <p>
-                  See where your strongest and weakest areas are, and what they mean
-                  in real business terms.
-                </p>
-              </div>
-            </div>
-
-            <div className="stepCard">
-              <div className="stepNumber">03</div>
-              <div>
-                <h3>Decide what to do next</h3>
-                <p>
-                  Use the report to prioritise improvements or decide whether further
-                  support or audit is needed.
-                </p>
-              </div>
-            </div>
-
+            {steps.map((step, index) => (
+              <article key={step.title} className="stepCard">
+                <div className="stepNumber">0{index + 1}</div>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </article>
+            ))}
           </div>
-
         </section>
 
-        {/* FINAL CTA */}
         <section className="sectionCard sectionCardLight ctaSection">
-
           <div>
             <div className="sectionEyebrow">Start now</div>
-
-            <h2>
-              Get a clearer view of your cyber resilience in minutes.
-            </h2>
-
+            <h2>Get a clearer view of your resilience before it becomes a business problem.</h2>
             <p>
-              Understand your risk, prioritise improvements, and make better decisions
-              before committing to larger investments.
+              Take the free assessment, see where weakness is most likely to create disruption,
+              and unlock the full report for a one-time payment of £79.
             </p>
           </div>
 
@@ -325,14 +268,11 @@ export default function HomePage() {
             <Link href="/assessment" className="btn btnPrimary">
               Take free assessment
             </Link>
-
             <Link href="/methodology" className="btn btnSecondaryLight">
               Read methodology
             </Link>
           </div>
-
         </section>
-
       </div>
     </main>
   );

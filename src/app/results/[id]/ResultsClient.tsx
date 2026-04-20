@@ -648,12 +648,12 @@ function LockedPanel({
       <div className="rs-upsellActions">
         <button className="rs-btn rs-btnPrimary" type="button" onClick={onUnlock}>
           <Icon name="bolt" />
-          Unlock full report — £99
+          Unlock full report — £79
         </button>
       </div>
 
       <div className="rs-upsellFoot">
-        One-time payment. No subscription. Use it before spending thousands on an audit or consultancy.
+        One-time payment. No subscription. Use it before committing to more expensive cyber support.
       </div>
     </div>
   );
@@ -989,7 +989,7 @@ export default function ResultsClient({ id }: { id: string }) {
             <h1>See where cyber disruption is most likely to start in your business.</h1>
 
             <p className="rs-heroLead">
-              {riskSummary}
+              This shows where weaknesses are most likely to cause disruption, slow recovery, or create pressure from clients, suppliers, or insurers.
             </p>
 
             <div className="rs-metaRow">
@@ -1034,7 +1034,7 @@ export default function ResultsClient({ id }: { id: string }) {
               ) : (
                 <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
                   <Icon name="bolt" />
-                  Unlock full report — £99
+                  Unlock full report — £79
                 </button>
               )}
 
@@ -1052,11 +1052,17 @@ export default function ResultsClient({ id }: { id: string }) {
           <div className="rr-heroCard">
             <div className={`rr-riskBadge ${riskLevel.toLowerCase()}`}>{riskLevel} risk</div>
 
-            <div className="rr-impactLabel">Indicative business impact</div>
-            <div className="rr-impactValue">{fmtRange(impact.min, impact.max)}</div>
+            <div className="rr-impactLabel">If nothing changes</div>
+            <div className="rr-impactValue">
+              {riskLevel === "High"
+                ? "High likelihood of disruption"
+                : riskLevel === "Medium"
+                ? "Gaps likely to cause issues under pressure"
+                : "Stronger baseline, but still exposed in places"}
+            </div>
 
             <div className="rr-impactNote">
-              This is an indicative range based on your current answers and the areas most likely to create disruption first.
+              Weak areas usually only become visible during incidents. At that point, recovery is slower, decisions are harder, and external pressure increases.
             </div>
 
             <div className="rr-breachList">
@@ -1095,6 +1101,30 @@ export default function ResultsClient({ id }: { id: string }) {
           </div>
         </section>
 
+        <section className="rs-panel rs-panelLight">
+          <div className="rr-sectionHead">
+            <div className="rr-sectionTitle">What this likely looks like in practice</div>
+            <div className="rr-sectionSub">This is where weaker resilience usually becomes visible in real business terms.</div>
+          </div>
+
+          <div className="rr-riskGrid">
+            <RiskCard
+              title="Weak points may already exist unnoticed"
+              detail="Most small businesses only discover gaps when something goes wrong. Your lowest scoring areas are where this is most likely to happen."
+            />
+
+            <RiskCard
+              title="Recovery may be slower than expected"
+              detail="Without tested routines and clear ownership, incidents tend to create confusion, delay, and avoidable operational pressure."
+            />
+
+            <RiskCard
+              title="Harder to answer clients or insurers"
+              detail="If you cannot clearly show controls, evidence, and ownership, it creates friction in due diligence, client assurance, and insurance conversations."
+            />
+          </div>
+        </section>
+
         <section className="rr-sectionGrid">
           <div className="rs-panel rs-panelLight">
             <div className="rr-sectionHead">
@@ -1128,9 +1158,9 @@ export default function ResultsClient({ id }: { id: string }) {
 
           <div className="rs-panel rs-panelLight">
             <div className="rr-sectionHead">
-              <div className="rr-sectionTitle">2. What this could cost</div>
+              <div className="rr-sectionTitle">2. What this is most likely to affect</div>
               <div className="rr-sectionSub">
-                Indicative business impact based on your current resilience position.
+                Practical disruption pressure based on your current resilience position.
               </div>
             </div>
 
@@ -1140,42 +1170,42 @@ export default function ResultsClient({ id }: { id: string }) {
                   <Icon name="money" size={20} />
                 </div>
                 <div>
-                  <div className="rr-moneyLabel">Estimated financial exposure</div>
-                  <div className="rr-moneyValue">{fmtRange(impact.min, impact.max)}</div>
+                  <div className="rr-moneyLabel">Most likely pressure points</div>
+                  <div className="rr-moneyValue rr-moneyValueText">Downtime, slower recovery, and external pressure</div>
                 </div>
               </div>
 
               <div className="rr-costRows">
                 <div className="rr-costRow">
-                  <span>Downtime</span>
-                  <strong>{fmtRange(impact.breakdown.downtime[0], impact.breakdown.downtime[1])}</strong>
+                  <span>Downtime and interrupted operations</span>
+                  <strong>More likely</strong>
                 </div>
                 <div className="rr-costRow">
-                  <span>Lost revenue</span>
-                  <strong>{fmtRange(impact.breakdown.lostRevenue[0], impact.breakdown.lostRevenue[1])}</strong>
+                  <span>Slower decisions during incidents</span>
+                  <strong>More likely</strong>
                 </div>
                 {isPremium ? (
                   <>
                     <div className="rr-costRow">
-                      <span>Recovery costs</span>
-                      <strong>{fmtRange(impact.breakdown.recovery[0], impact.breakdown.recovery[1])}</strong>
+                      <span>Recovery difficulty</span>
+                      <strong>Needs stronger proof</strong>
                     </div>
                     <div className="rr-costRow">
-                      <span>Reputational impact</span>
-                      <strong>{fmtRange(impact.breakdown.reputational[0], impact.breakdown.reputational[1])}</strong>
+                      <span>Client / insurer pressure</span>
+                      <strong>Harder to answer confidently</strong>
                     </div>
                   </>
                 ) : (
                   <>
                     <div className="rr-costRow rr-costRowLocked">
                       <span>
-                        <Icon name="lock" size={14} /> Recovery costs
+                        <Icon name="lock" size={14} /> Recovery difficulty
                       </span>
                       <strong>Full report</strong>
                     </div>
                     <div className="rr-costRow rr-costRowLocked">
                       <span>
-                        <Icon name="lock" size={14} /> Reputational impact
+                        <Icon name="lock" size={14} /> Client / insurer pressure
                       </span>
                       <strong>Full report</strong>
                     </div>
@@ -1191,12 +1221,10 @@ export default function ResultsClient({ id }: { id: string }) {
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
                 <div className="rr-sectionTitle">
-                  {isPremium ? "3. What to fix first" : "3. Initial actions you can take"}
+                  {isPremium ? "3. What to fix first (next 90 days)" : "3. Initial actions you can take"}
                 </div>
                 <div className="rr-sectionSub">
-                  {isPremium
-                    ? "A practical action plan based on your current results."
-                    : "A small preview of the practical action plan included in the full report."}
+                  {isPremium ? "Focused actions to reduce your most likely points of failure." : "A small preview of the practical action plan included in the full report."}
                 </div>
               </div>
 
@@ -1225,8 +1253,8 @@ export default function ResultsClient({ id }: { id: string }) {
 
             {!isPremium ? (
               <LockedPanel
-                title="Get the full business risk report before spending thousands on an audit."
-                text="This report is designed to give you clarity first — so you can see where disruption is most likely to start, what it could cost, and whether you need a deeper audit or specialist support."
+                title="Get the full resilience report before spending more on audit or consultancy."
+                text="This report is designed to give you clarity first — so you can see where disruption is most likely to start, what is likely going wrong operationally, and what to improve before paying for deeper external support."
                 bullets={[
                   "Full downloadable PDF report",
                   "Complete 90-day action plan",
@@ -1266,21 +1294,13 @@ export default function ResultsClient({ id }: { id: string }) {
               <div className="rr-sectionHead">
                 <div className="rr-sectionTitle">5. Benchmark view</div>
                 <div className="rr-sectionSub">
-                  A simple comparison point to help interpret your current result.
+                  This is a practical reference point, not a formal ranking.
                 </div>
               </div>
 
               <div className="rr-benchmarkWrap">
                 <div className="rr-benchmarkValue">
-                  {isPremium ? (
-                    <>
-                      You are less secure than <strong>{benchmark.lessSecureThan}%</strong> of similar businesses
-                    </>
-                  ) : (
-                    <>
-                      Your current result suggests the business is <strong>below the typical SME baseline</strong> in some important resilience areas.
-                    </>
-                  )}
+                  Your current level is below what is typically expected for a stable SME
                 </div>
 
                 <div className="rr-benchmarkTrack">
@@ -1299,7 +1319,7 @@ export default function ResultsClient({ id }: { id: string }) {
               {!isPremium ? (
                 <div className="rr-miniLocked">
                   <Icon name="lock" size={14} />
-                  Full report includes fuller benchmark wording and interpretation.
+                  Full report includes fuller benchmark context and practical interpretation.
                 </div>
               ) : null}
             </div>
@@ -1361,7 +1381,7 @@ export default function ResultsClient({ id }: { id: string }) {
                   <div className="rs-deliverablesActions">
                     <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
                       <Icon name="bolt" />
-                      Unlock full report — £99
+                      Unlock full report — £79
                     </button>
                   </div>
                   <div className="rs-deliverablesFoot">
@@ -1838,6 +1858,12 @@ export default function ResultsClient({ id }: { id: string }) {
           font-size: 32px;
           line-height: 1.05;
           font-weight: 900;
+        }
+
+        .rr-moneyValueText {
+          font-size: 24px;
+          line-height: 1.2;
+          max-width: 14ch;
         }
 
         .rr-costRows {

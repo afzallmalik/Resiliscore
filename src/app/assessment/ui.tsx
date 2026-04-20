@@ -289,7 +289,7 @@ export default function AssessmentForm() {
                 </div>
 
                 <div className="af-tierCard af-tierCardAccent">
-                  <div className="af-tierTitle">Premium Business Risk Report (£99)</div>
+                  <div className="af-tierTitle">Premium Business Risk Report (£79)</div>
                   <div className="af-tierText">
                     <ul>
     <li>Understand your biggest business risks</li>
@@ -350,7 +350,7 @@ export default function AssessmentForm() {
               </div>
 
               <div className="af-smallNote">
-                Free dashboard included. Premium PDF report available after completion for £99.
+                Free dashboard included. Premium PDF report available after completion for £79.
               </div>
             </div>
           </div>
