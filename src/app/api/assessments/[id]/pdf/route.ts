@@ -1292,8 +1292,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   y -= 26;
 
   const intro = [
-    "This report provides a structured snapshot of your current cyber resilience position.",
-    "It is designed to help you quickly understand where disruption risk is most likely to occur and what to improve first.",
+    "This report highlights your resilience visibility gap: the difference between what the business believes is in place and what it can actually prove under pressure.",
+    "It is designed to show where disruption is most likely to begin, why that matters commercially, and what to improve first.",
   ];
 
   for (const paragraph of intro) {
@@ -1881,7 +1881,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
 /**
  * ------------------------------
- * Business Risk Summary & Estimated Impact
+ * Business Risk Summary & Practical Impact
  * ------------------------------
  */
 {

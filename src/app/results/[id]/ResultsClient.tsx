@@ -653,7 +653,7 @@ function LockedPanel({
       </div>
 
       <div className="rs-upsellFoot">
-        One-time payment. No subscription. Use it before committing to more expensive cyber support.
+        One-time payment. No subscription. Use it before committing to more expensive audits, consultants, or cyber support.
       </div>
     </div>
   );
@@ -983,13 +983,13 @@ export default function ResultsClient({ id }: { id: string }) {
           <div className="rs-heroCopy">
             <div className="rs-kicker">
               <Icon name="shield" />
-              Resiliscore Risk Report
+              Your Resilience Visibility Score
             </div>
 
-            <h1>See where cyber disruption is most likely to start in your business.</h1>
+            <h1>See where your business is most likely to break under pressure.</h1>
 
             <p className="rs-heroLead">
-              This shows where weaknesses are most likely to cause disruption, slow recovery, or create pressure from clients, suppliers, or insurers.
+              This reflects how well your business can demonstrate resilience under pressure — not just how resilient it believes it is.
             </p>
 
             <div className="rs-metaRow">
@@ -1084,15 +1084,15 @@ export default function ResultsClient({ id }: { id: string }) {
 
         <section className="rs-kpiGrid">
           <div className="rs-kpiCard">
-            <div className="rs-kpiLabel">Current risk level</div>
+            <div className="rs-kpiLabel">Visibility gap level</div>
             <div className="rs-kpiValue rs-kpiValueSmall">{riskLevel}</div>
             <div className="rs-kpiSub">Based on your answers today</div>
           </div>
 
           <div className="rs-kpiCard">
-            <div className="rs-kpiLabel">Indicative security position</div>
+            <div className="rs-kpiLabel">Resilience visibility score</div>
             <div className="rs-kpiValue">{overall.toFixed(1)}</div>
-            <div className="rs-kpiSub">Higher score = stronger protection</div>
+            <div className="rs-kpiSub">Higher score = stronger, more provable resilience</div>
           </div>
 
           <div className="rs-kpiCard rs-kpiWide">
@@ -1103,14 +1103,14 @@ export default function ResultsClient({ id }: { id: string }) {
 
         <section className="rs-panel rs-panelLight">
           <div className="rr-sectionHead">
-            <div className="rr-sectionTitle">What this likely looks like in practice</div>
+            <div className="rr-sectionTitle">The resilience visibility gap in practice</div>
             <div className="rr-sectionSub">This is where weaker resilience usually becomes visible in real business terms.</div>
           </div>
 
           <div className="rr-riskGrid">
             <RiskCard
               title="Weak points may already exist unnoticed"
-              detail="Most small businesses only discover gaps when something goes wrong. Your lowest scoring areas are where this is most likely to happen."
+              detail="Many businesses assume important controls are working until pressure exposes the gap. Your lowest scoring areas are where that is most likely to happen."
             />
 
             <RiskCard
@@ -1119,7 +1119,7 @@ export default function ResultsClient({ id }: { id: string }) {
             />
 
             <RiskCard
-              title="Harder to answer clients or insurers"
+              title="Harder to answer clients, insurers, or partners"
               detail="If you cannot clearly show controls, evidence, and ownership, it creates friction in due diligence, client assurance, and insurance conversations."
             />
           </div>
@@ -1376,7 +1376,7 @@ export default function ResultsClient({ id }: { id: string }) {
                 <>
                   <div className="rs-deliverablesTitle">Your free preview is ready</div>
                   <div className="rs-deliverablesText">
-                    Unlock the full report for a complete breakdown, fuller actions, benchmark context, and a downloadable PDF you can actually use.
+                    Unlock the full report for a sharper diagnosis, stronger actions, benchmark context, and a downloadable PDF you can actually use.
                   </div>
                   <div className="rs-deliverablesActions">
                     <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>

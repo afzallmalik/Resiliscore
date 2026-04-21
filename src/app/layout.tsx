@@ -4,13 +4,13 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Resiliscore – Cyber Resilience Maturity for SMEs",
+  title: "Resiliscore – Expose Your Resilience Visibility Gap",
   description:
-    "Cyber resilience maturity assessment for SMEs. Identify risk, prioritise improvements, and generate a clear resilience report in minutes.",
+    "Resiliscore helps SMEs expose the gap between perceived and provable resilience before incidents, insurer questions, or client pressure reveal it.",
   openGraph: {
-    title: "Resiliscore – Cyber Resilience Maturity for SMEs",
+    title: "Resiliscore – Expose Your Resilience Visibility Gap",
     description:
-      "Cyber resilience maturity assessment for SMEs. Identify risk, prioritise improvements, and generate a clear resilience report in minutes.",
+      "Resiliscore helps SMEs expose the gap between perceived and provable resilience before incidents, insurer questions, or client pressure reveal it.",
     images: ["/og-image.png"],
   },
 };
