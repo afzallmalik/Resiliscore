@@ -49,13 +49,13 @@ export default function RootLayout({
             </Link>
 
             <nav className="siteNav" aria-label="Primary">
-              <Link href="/methodology" className="siteNavLink">
+              <Link href="/methodology" className="siteNavLink siteNavLinkMethodology">
                 Methodology
               </Link>
-              <Link href="/privacy" className="siteNavLink">
+              <Link href="/privacy" className="siteNavLink siteNavLinkSecondary">
                 Privacy
               </Link>
-              <Link href="/terms" className="siteNavLink">
+              <Link href="/terms" className="siteNavLink siteNavLinkSecondary">
                 Terms
               </Link>
               <Link href="/assessment" className="siteHeaderCta">

@@ -669,3 +669,57 @@ textarea {
 .sectionCardLight h2 {
   color: var(--text) !important;
 }
+
+.siteNavLinkMethodology {
+  display: inline-flex;
+}
+
+.siteNavLinkSecondary {
+  display: inline-flex;
+}
+
+@media (max-width: 840px) {
+  .siteNav {
+    gap: 8px;
+  }
+
+  .siteNavLinkMethodology {
+    display: inline-flex;
+    padding: 10px 10px;
+    font-size: 13px;
+  }
+
+  .siteNavLinkSecondary {
+    display: none;
+  }
+
+  .siteHeaderCta {
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 640px) {
+  .siteHeaderInner {
+    gap: 10px;
+  }
+
+  .siteNav {
+    gap: 6px;
+  }
+
+  .siteNavLinkMethodology {
+    display: inline-flex;
+    padding: 8px 8px;
+    font-size: 12px;
+  }
+
+  .siteHeaderCta {
+    width: auto;
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: 12px;
+    box-shadow: none;
+  }
+}
