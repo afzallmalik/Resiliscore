@@ -723,3 +723,27 @@ textarea {
     box-shadow: none;
   }
 }
+
+/* Fix low contrast text inside light cards */
+
+.sectionCardLight h2,
+.sectionCardLight h3,
+.sectionCardLight .trustLabel,
+.sectionCardLight .featureText {
+  color: #0f172a; /* strong dark text */
+}
+
+.sectionCardLight p {
+  color: #334155; /* readable body text */
+}
+
+/* Fix "How it works" cards */
+
+.featureCard h3,
+.featureCard strong {
+  color: #0f172a;
+}
+
+.featureCard p {
+  color: #334155;
+}
