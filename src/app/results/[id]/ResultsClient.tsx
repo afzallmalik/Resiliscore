@@ -648,7 +648,7 @@ function LockedPanel({
       <div className="rs-upsellActions">
         <button className="rs-btn rs-btnPrimary" type="button" onClick={onUnlock}>
           <Icon name="bolt" />
-          Unlock full report — £79
+          Unlock full resilience report — £79
         </button>
       </div>
 
@@ -989,7 +989,7 @@ export default function ResultsClient({ id }: { id: string }) {
             <h1>See where your business is most likely to break under pressure.</h1>
 
             <p className="rs-heroLead">
-              This reflects how well your business can demonstrate resilience under pressure — not just how resilient it believes it is.
+              This shows where resilience is most likely to break under pressure, what appears inconsistent today, and what to fix first.
             </p>
 
             <div className="rs-metaRow">
@@ -1034,7 +1034,7 @@ export default function ResultsClient({ id }: { id: string }) {
               ) : (
                 <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
                   <Icon name="bolt" />
-                  Unlock full report — £79
+                  Unlock full resilience report — £79
                 </button>
               )}
 
@@ -1096,7 +1096,7 @@ export default function ResultsClient({ id }: { id: string }) {
           </div>
 
           <div className="rs-kpiCard rs-kpiWide">
-            <div className="rs-kpiLabel">Why this matters</div>
+            <div className="rs-kpiLabel">What this points to</div>
             <div className="rs-kpiText">{whyItMatters}</div>
           </div>
         </section>
@@ -1104,7 +1104,7 @@ export default function ResultsClient({ id }: { id: string }) {
         <section className="rs-panel rs-panelLight">
           <div className="rr-sectionHead">
             <div className="rr-sectionTitle">The resilience visibility gap in practice</div>
-            <div className="rr-sectionSub">This is where weaker resilience usually becomes visible in real business terms.</div>
+            <div className="rr-sectionSub">This is where inconsistency, weak ownership, or poor evidence usually becomes visible in real business terms.</div>
           </div>
 
           <div className="rr-riskGrid">
@@ -1270,7 +1270,7 @@ export default function ResultsClient({ id }: { id: string }) {
           <div className="rs-column">
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
-                <div className="rr-sectionTitle">4. Risk areas by topic</div>
+                <div className="rr-sectionTitle">4. Where resilience is weakest</div>
                 <div className="rr-sectionSub">
                   These are the weakest areas visible in your current answers.
                 </div>
@@ -1319,7 +1319,7 @@ export default function ResultsClient({ id }: { id: string }) {
               {!isPremium ? (
                 <div className="rr-miniLocked">
                   <Icon name="lock" size={14} />
-                  Full report includes fuller benchmark context and practical interpretation.
+                  Full report includes fuller benchmark context, practical interpretation, and recommended priorities.
                 </div>
               ) : null}
             </div>
@@ -1381,7 +1381,7 @@ export default function ResultsClient({ id }: { id: string }) {
                   <div className="rs-deliverablesActions">
                     <button className="rs-btn rs-btnPrimary" type="button" onClick={goCheckout}>
                       <Icon name="bolt" />
-                      Unlock full report — £79
+                      Unlock full resilience report — £79
                     </button>
                   </div>
                   <div className="rs-deliverablesFoot">

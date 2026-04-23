@@ -42,12 +42,9 @@ export default function MethodologyPage() {
         <section className="sectionCard sectionCardLight">
           <div className="sectionHeading">
             <div className="sectionEyebrow">Methodology</div>
-            <h2>How Resiliscore works</h2>
+            <h2>How Resiliscore works for SMEs</h2>
             <p>
-              Resiliscore is designed to give SMEs a practical view of cyber resilience,
-              not a technical audit and not a compliance certificate. Its purpose is to
-              show where resilience is most likely to fail under pressure, why that matters,
-              and what should be improved first.
+              Resiliscore is designed to give SMEs a practical view of cyber resilience. It is not a technical audit and not a compliance certificate. Its purpose is to show where resilience is most likely to fail under pressure, what is inconsistent, and what should be improved first.
             </p>
           </div>
         </section>
@@ -87,7 +84,7 @@ export default function MethodologyPage() {
         <section className="sectionCard sectionCardLight">
           <div className="sectionHeading">
             <div className="sectionEyebrow">Assessment scope</div>
-            <h2>The areas covered by Resiliscore</h2>
+            <h2>The resilience areas covered by Resiliscore</h2>
             <p>
               The assessment is structured across the operational areas that usually determine
               whether an SME can withstand disruption, respond clearly, and recover with confidence.
@@ -107,11 +104,9 @@ export default function MethodologyPage() {
         <section className="sectionCard sectionCardLight">
           <div className="sectionHeading">
             <div className="sectionEyebrow">What the report is designed to show</div>
-            <h2>More than a score</h2>
+            <h2>More than a score or checklist</h2>
             <p>
-              The output is intended to be commercially useful. It should help a business owner,
-              operator, or decision-maker understand what is likely to matter first, without
-              needing to interpret technical language.
+              The output is intended to be commercially useful. It should help a business owner, operator, or decision-maker understand what is likely to matter first, without needing to interpret technical language or buy a larger audit too early.
             </p>
           </div>
 
@@ -140,7 +135,7 @@ export default function MethodologyPage() {
         <section className="sectionCard sectionCardLight ctaSection">
           <div>
             <div className="sectionEyebrow">Start now</div>
-            <h2>Check your resilience before pressure exposes the gap.</h2>
+            <h2>Check your resilience before pressure exposes the gap</h2>
             <p>
               Take the free assessment, review your resilience position, and decide what to
               improve before a real incident, insurer question, or client request does it for you.

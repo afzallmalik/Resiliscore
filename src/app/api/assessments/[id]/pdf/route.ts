@@ -1292,8 +1292,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   y -= 26;
 
   const intro = [
-    "This report highlights your resilience visibility gap: the difference between what the business believes is in place and what it can actually prove under pressure.",
-    "It is designed to show where disruption is most likely to begin, why that matters commercially, and what to improve first.",
+    "This report highlights your resilience visibility gap: the difference between what the business believes is in place and what it can actually prove when pressure appears.",
+    "It is designed to show where resilience is weakest, what is most likely to break under pressure, and what to improve first.",
   ];
 
   for (const paragraph of intro) {
@@ -1324,8 +1324,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   const shows = [
     "Your overall resilience score and maturity level",
     "Stronger and weaker domains across your business",
-    "Priority risks and where disruption is most likely to originate",
-    "Clear actions to improve resilience over the next 30-90 days",
+    "Priority risks and where resilience is most likely to fail first",
+    "Clear actions and a prioritised 30-60-90 day plan",
   ];
 
   for (const item of shows) {
@@ -2496,7 +2496,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   y -= 22;
 
-  page.drawText("Relative benchmark view", {
+  page.drawText("Practical benchmark view", {
     x: 50,
     y,
     size: 11,
@@ -2542,7 +2542,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     126,
     "What this means",
     [
-      "This benchmark is a practical reference point, not a formal ranking.",
+      "This benchmark is a practical reference point, not a formal industry ranking.",
       "It is designed to make the result easier to interpret in business terms.",
     ],
     font,
@@ -2595,7 +2595,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   y -= 16;
 
   const explanation = [
-    "Use it as a practical reference point rather than a technical scorecard.",
+    "Use it as a practical reference point rather than a technical scorecard or league table.",
     "The aim is to understand whether your resilience looks stable enough for a typical SME, not to chase a percentage for its own sake.",
     "The goal is not to chase a number on its own. The goal is to reduce the likelihood and cost of disruption by improving the areas that matter most first.",
   ];
