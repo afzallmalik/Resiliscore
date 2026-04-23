@@ -262,9 +262,9 @@ export default function HomePage() {
         </section>
 
         <section className="sectionCard sectionCardDark ctaSection rsFinalCta">
-          <div>
-            <div className="sectionEyebrow">Final step</div>
-            <h2>
+          <div className="rsFinalCtaCopy">
+            <div className="rsFinalCtaEyebrow">Final step</div>
+            <h2 className="rsFinalCtaTitle">
               You do not need more cyber jargon.
               <br />
               You need to know whether what you already have would actually hold
@@ -521,6 +521,37 @@ export default function HomePage() {
 
         .rsFinalCta {
           align-items: center;
+          background:
+            radial-gradient(900px 320px at 0% 0%, rgba(79, 19, 140, 0.18), transparent 58%),
+            radial-gradient(700px 320px at 100% 0%, rgba(28, 115, 242, 0.16), transparent 60%),
+            linear-gradient(180deg, rgba(10, 16, 38, 0.98), rgba(4, 9, 28, 0.98));
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow: var(--shadow-md);
+        }
+
+        .rsFinalCtaCopy {
+          max-width: 820px;
+        }
+
+        .rsFinalCtaEyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: rgba(191, 219, 254, 0.95);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .rsFinalCtaTitle {
+          margin: 12px 0 0;
+          color: rgba(255, 255, 255, 0.98);
+          font-family: "Space Grotesk", Inter, sans-serif;
+          font-size: clamp(2rem, 3vw, 3rem);
+          line-height: 1.08;
+          letter-spacing: -0.035em;
+          max-width: 26ch;
         }
 
         @media (max-width: 1080px) {
@@ -585,6 +616,11 @@ export default function HomePage() {
           .rsImageFrameReport,
           .rsImageFrameTall {
             min-height: 240px;
+          }
+
+          .rsFinalCtaTitle {
+            font-size: 1.9rem;
+            max-width: none;
           }
         }
       `}</style>
