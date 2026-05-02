@@ -51,6 +51,40 @@ export default function MethodologyPage() {
 
         <section className="sectionCard sectionCardLight">
           <div className="sectionHeading">
+            <div className="sectionEyebrow">Three-layer model</div>
+            <h2>From assessment to action</h2>
+            <p>
+              Resiliscore works in three simple layers: first it identifies the gaps,
+              then it defines the control that should exist, and then it gives practical
+              implementation guidance so the business knows how to fix the weakness.
+            </p>
+          </div>
+
+          <div className="trustGrid">
+            {[
+              {
+                title: "1. Assessment",
+                text: "Identify weak areas across the business using a practical SME-focused question set.",
+              },
+              {
+                title: "2. Control definition",
+                text: "Explain what control should exist in plain English, without audit jargon.",
+              },
+              {
+                title: "3. Implementation guidance",
+                text: "Show how SMEs typically fix the issue, including effort, cost level, and expected maturity improvement.",
+              },
+            ].map((item) => (
+              <article key={item.title} className="trustCard">
+                <div className="trustLabel">{item.title}</div>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="sectionCard sectionCardLight">
+          <div className="sectionHeading">
             <div className="sectionEyebrow">Core idea</div>
             <h2>The resilience visibility gap</h2>
             <p>

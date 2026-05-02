@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 
 const problemPoints = [
@@ -34,6 +35,65 @@ const steps = [
   },
 ];
 
+
+const industryViews = [
+  {
+    label: "General SME",
+    headline: "Most SMEs are exposed through inconsistent routines, not one dramatic failure.",
+    text: "Resiliscore helps you see whether access, backups, suppliers, response, and ownership would hold up when the business is under pressure.",
+  },
+  {
+    label: "Professional services",
+    headline: "Client trust depends on confidentiality, continuity, and proof.",
+    text: "For accountants, consultants, legal practices, agencies, and advisers, weak access controls, poor evidence, or slow response can damage client confidence quickly.",
+  },
+  {
+    label: "Construction & property",
+    headline: "Projects rely on people, suppliers, documents, and payment flows staying available.",
+    text: "Resiliscore highlights weaknesses around supplier dependency, document access, finance systems, recovery, and operational continuity before they interrupt delivery.",
+  },
+  {
+    label: "Retail & eCommerce",
+    headline: "Downtime, payment disruption, account compromise, or supplier issues can hit revenue fast.",
+    text: "The assessment helps identify whether your store, customer data, admin access, fulfilment dependencies, and recovery plans are resilient enough.",
+  },
+  {
+    label: "Healthcare & clinics",
+    headline: "Availability, confidentiality, and evidence matter when patient-facing services depend on systems.",
+    text: "Resiliscore helps smaller healthcare providers understand whether access, sensitive data, supplier systems, and recovery routines are clearly controlled.",
+  },
+  {
+    label: "Manufacturing & engineering",
+    headline: "Operational disruption often starts with systems, suppliers, devices, or unmanaged change.",
+    text: "The assessment focuses on the routines that keep production, files, supplier access, backups, and response activity controlled under pressure.",
+  },
+  {
+    label: "Financial services",
+    headline: "Evidence, access control, and supplier assurance are central to trust.",
+    text: "Resiliscore gives a practical view of whether key controls are owned, repeatable, and provable when clients, insurers, or partners ask difficult questions.",
+  },
+  {
+    label: "Education & training",
+    headline: "Learning environments rely on access, data, platforms, and continuity working reliably.",
+    text: "The assessment helps identify weaknesses around user access, cloud platforms, learner data, supplier dependency, and recovery planning.",
+  },
+  {
+    label: "Hospitality & leisure",
+    headline: "Bookings, payments, staff access, and supplier systems need to work when demand is high.",
+    text: "Resiliscore highlights practical gaps that can create avoidable disruption in customer-facing operations.",
+  },
+  {
+    label: "IT, SaaS & MSP",
+    headline: "Your own resilience position affects customer confidence and delivery credibility.",
+    text: "The report helps smaller technology providers evidence control maturity, prioritise weak areas, and explain resilience improvements clearly.",
+  },
+  {
+    label: "Charity & non-profit",
+    headline: "Limited resources make prioritisation and evidence even more important.",
+    text: "Resiliscore helps charities focus on the controls most likely to protect operations, donor data, service continuity, and partner confidence.",
+  },
+];
+
 const whoItsFor = [
   {
     title: "SME owners",
@@ -50,6 +110,12 @@ const whoItsFor = [
 ];
 
 export default function HomePage() {
+  const [selectedIndustry, setSelectedIndustry] = useState(industryViews[0].label);
+  const selectedIndustryView = useMemo(
+    () => industryViews.find((item) => item.label === selectedIndustry) ?? industryViews[0],
+    [selectedIndustry]
+  );
+
   return (
     <main className="homePage">
       <section className="heroWrap rsHeroWrap">
@@ -57,7 +123,7 @@ export default function HomePage() {
         <div className="heroOverlay rsHeroOverlay" />
 
         <div className="homeShell heroShell">
-          <div className="rsHeroGrid">
+          <div className="rsHeroSingle">
             <div className="rsHeroCopy">
               <div className="heroEyebrow">Cyber resilience clarity for SMEs</div>
 
@@ -68,8 +134,8 @@ export default function HomePage() {
               </h1>
 
               <p className="rsHeroLead">
-                Resiliscore shows where you actually stand — and gives you a
-                clear, prioritised 90-day plan.
+                Resiliscore shows where your business is most likely to fail first,
+                what that means commercially, and what to fix next.
               </p>
 
               <div className="heroActions">
@@ -87,32 +153,11 @@ export default function HomePage() {
 
               <div className="rsHeroMeta">
                 <span>Built for SMEs</span>
-                <span>No subscription</span>
-                <span>One-time report</span>
+                <span>Assessment + action guidance</span>
+                <span>Executive-ready PDF</span>
               </div>
             </div>
-
-            <div className="rsHeroCard">
-              <div className="rsHeroCardLabel">Why businesses use it</div>
-              <h2>
-                Use Resiliscore before a client, insurer, supplier, or real
-                incident exposes the gap.
-              </h2>
-              <p>
-                It is a practical resilience report designed to help smaller
-                businesses understand what is inconsistent, what cannot yet be
-                proven, and what to fix first.
-              </p>
-
-              <div className="rsHeroMiniPoints">
-                <div className="rsHeroMiniPoint">Clear score</div>
-                <div className="rsHeroMiniPoint">Priority gaps</div>
-                <div className="rsHeroMiniPoint">90-day plan</div>
-                <div className="rsHeroMiniPoint">Executive-ready PDF</div>
-              </div>
-            </div>
-          </div>
-        </div>
+          </div>        </div>
       </section>
 
       <div className="homeShell siteSections rsLandingSections">
@@ -135,6 +180,43 @@ export default function HomePage() {
                   <span>{item}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="sectionCard sectionCardLight rsIndustrySection">
+          <div className="rsSectionGrid">
+            <div className="sectionHeading">
+              <div className="sectionEyebrow">Industry view</div>
+              <h2>Why this assessment matters for your business type</h2>
+              <p>
+                Select an industry to see the kind of pressure Resiliscore is designed to make visible.
+                The assessment stays simple, but the report helps translate resilience into practical business language.
+              </p>
+            </div>
+
+            <div className="rsIndustryPanel">
+              <label className="rsIndustryLabel" htmlFor="industry-view">
+                Choose your industry
+              </label>
+              <select
+                id="industry-view"
+                className="rsIndustrySelect"
+                value={selectedIndustry}
+                onChange={(event) => setSelectedIndustry(event.target.value)}
+              >
+                {industryViews.map((item) => (
+                  <option key={item.label} value={item.label}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+
+              <div className="rsIndustryResult">
+                <div className="rsIndustrySelected">{selectedIndustryView.label}</div>
+                <h3>{selectedIndustryView.headline}</h3>
+                <p>{selectedIndustryView.text}</p>
+              </div>
             </div>
           </div>
         </section>
@@ -299,16 +381,14 @@ export default function HomePage() {
         .rsHeroOverlay {
           background:
             linear-gradient(180deg, rgba(4, 10, 24, 0.52) 0%, rgba(4, 10, 24, 0.74) 100%),
-            radial-gradient(900px 420px at 15% 10%, rgba(26, 115, 232, 0.18), transparent 58%),
-            radial-gradient(700px 360px at 85% 20%, rgba(52, 211, 235, 0.12), transparent 60%);
+            radial-gradient(900px 420px at 15% 10%, rgba(34, 211, 238, 0.18), transparent 58%),
+            radial-gradient(700px 360px at 85% 20%, rgba(6, 182, 212, 0.12), transparent 60%);
         }
 
-        .rsHeroGrid {
-          display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
-          gap: 28px;
-          align-items: stretch;
-          min-height: calc(100vh - 190px);
+.rsHeroSingle {
+          min-height: calc(100vh - 220px);
+          display: flex;
+          align-items: center;
           padding: 44px 0 28px;
         }
 
@@ -351,7 +431,7 @@ export default function HomePage() {
           gap: 8px;
           padding: 8px 12px;
           background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(34, 211, 238, 0.16);
           border-radius: 999px;
         }
 
@@ -404,6 +484,78 @@ export default function HomePage() {
           color: rgba(255, 255, 255, 0.9);
           font-size: 14px;
           font-weight: 600;
+        }
+
+
+        .rsIndustrySection {
+          overflow: visible;
+        }
+
+        .rsIndustryPanel {
+          border-radius: var(--radius-lg);
+          border: 1px solid rgba(15, 20, 40, 0.08);
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.96));
+          padding: 22px;
+          box-shadow: var(--shadow-sm);
+        }
+
+        .rsIndustryLabel {
+          display: block;
+          margin-bottom: 8px;
+          color: var(--text-soft);
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .rsIndustrySelect {
+          width: 100%;
+          border-radius: 14px;
+          border: 1px solid rgba(15, 20, 40, 0.12);
+          background: #ffffff;
+          color: var(--text-main);
+          padding: 14px 14px;
+          font-size: 15px;
+          font-weight: 650;
+          outline: none;
+        }
+
+        .rsIndustrySelect:focus {
+          border-color: rgba(34, 211, 238, 0.62);
+          box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.14);
+        }
+
+        .rsIndustryResult {
+          margin-top: 18px;
+          border-radius: 16px;
+          background: rgba(6, 27, 34, 0.04);
+          border: 1px solid rgba(6, 27, 34, 0.08);
+          padding: 18px;
+        }
+
+        .rsIndustrySelected {
+          color: var(--cyan);
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .rsIndustryResult h3 {
+          margin: 10px 0 0;
+          color: var(--text-main);
+          font-family: "Space Grotesk", Inter, sans-serif;
+          font-size: clamp(1.35rem, 2vw, 2rem);
+          line-height: 1.15;
+          letter-spacing: -0.025em;
+        }
+
+        .rsIndustryResult p {
+          margin: 12px 0 0;
+          color: var(--text-soft);
+          line-height: 1.7;
+          font-size: 15px;
         }
 
         .rsLandingSections {
@@ -522,8 +674,8 @@ export default function HomePage() {
         .rsFinalCta {
           align-items: center;
           background:
-            radial-gradient(900px 320px at 0% 0%, rgba(79, 19, 140, 0.18), transparent 58%),
-            radial-gradient(700px 320px at 100% 0%, rgba(28, 115, 242, 0.16), transparent 60%),
+            radial-gradient(900px 320px at 0% 0%, rgba(34, 211, 238, 0.16), transparent 58%),
+            radial-gradient(700px 320px at 100% 0%, rgba(6, 182, 212, 0.12), transparent 60%),
             linear-gradient(180deg, rgba(10, 16, 38, 0.98), rgba(4, 9, 28, 0.98));
           border: 1px solid rgba(255, 255, 255, 0.08);
           box-shadow: var(--shadow-md);
@@ -537,7 +689,7 @@ export default function HomePage() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          color: rgba(191, 219, 254, 0.95);
+          color: rgba(34, 211, 238, 0.95);
           font-size: 12px;
           font-weight: 700;
           letter-spacing: 0.08em;
@@ -555,18 +707,13 @@ export default function HomePage() {
         }
 
         @media (max-width: 1080px) {
-          .rsHeroGrid,
           .rsSectionGrid,
           .rsSectionGridReverse {
             grid-template-columns: 1fr;
           }
 
-          .rsHeroGrid {
+          .rsHeroSingle {
             min-height: auto;
-          }
-
-          .rsHeroCard {
-            align-self: stretch;
           }
 
           .rsSectionGridReverse .sectionHeading,
@@ -580,12 +727,10 @@ export default function HomePage() {
             padding: 28px 0 34px;
           }
 
-          .rsHeroGrid {
+          .rsHeroSingle {
             padding: 28px 0 18px;
-            gap: 20px;
           }
 
-          .rsHeroCard,
           .rsBulletCard {
             padding: 18px;
           }

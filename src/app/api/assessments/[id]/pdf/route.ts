@@ -5,6 +5,7 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 import { createClient } from "@supabase/supabase-js";
+import { getImplementationGuidance, getDynamicImplementationGuidance, getDynamicTechnologySnapshotItem, type DynamicProviderContext } from "@/lib/implementationLayer";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -100,6 +101,7 @@ function sanitizeText(input: string) {
     .replace(/\u201C|\u201D/g, '"')
     .replace(/\u2026/g, "...")
     .replace(/\u00A0/g, " ")
+    .replace(/£/g, "GBP")
     .replace(/[^\x00-\x7F]/g, "");
 }
 
@@ -704,6 +706,70 @@ function loadActionsForDomains(domainCodes: string[]) {
   return Array.from(new Set(out)).map(sanitizeText);
 }
 
+
+function loadQuestionBankForProviderBrief() {
+  const candidates = [
+    path.join(process.cwd(), "data", "questions.v3_1.json"),
+    path.join(process.cwd(), "src", "data", "questions.v3_1.json"),
+    path.join(process.cwd(), "questions.v3_1.json"),
+  ];
+
+  for (const p of candidates) {
+    try {
+      if (fs.existsSync(p)) {
+        const parsed = JSON.parse(fs.readFileSync(p, "utf-8"));
+        return Array.isArray(parsed) ? parsed : [];
+      }
+    } catch {
+      // Keep PDF generation resilient if the question file is not available.
+    }
+  }
+
+  return [];
+}
+
+async function loadResponseRowsForProviderBrief(assessment: any, assessmentId: string) {
+  const embeddedCandidates = [
+    assessment?.responses,
+    assessment?.answers,
+    assessment?.responseData,
+    assessment?.response_data,
+    assessment?.questionResponses,
+    assessment?.question_responses,
+  ];
+
+  for (const candidate of embeddedCandidates) {
+    if (Array.isArray(candidate)) return candidate;
+    if (candidate && typeof candidate === "object") {
+      return Object.entries(candidate).map(([key, value]: [string, any]) => ({
+        questionId: key,
+        ...(typeof value === "object" && value !== null ? value : { score: value }),
+      }));
+    }
+  }
+
+  const client: any = prisma as any;
+  const attempts = [
+    () => client.response?.findMany?.({ where: { assessmentId } }),
+    () => client.response?.findMany?.({ where: { assessment_id: assessmentId } }),
+    () => client.assessmentResponse?.findMany?.({ where: { assessmentId } }),
+    () => client.assessmentResponse?.findMany?.({ where: { assessment_id: assessmentId } }),
+    () => client.responses?.findMany?.({ where: { assessmentId } }),
+    () => client.responses?.findMany?.({ where: { assessment_id: assessmentId } }),
+  ];
+
+  for (const attempt of attempts) {
+    try {
+      const rows = await attempt();
+      if (Array.isArray(rows) && rows.length) return rows;
+    } catch {
+      // Ignore and fall back to domain-level logic.
+    }
+  }
+
+  return [];
+}
+
 const DOMAIN_ANALYSIS: Record<
   string,
   { why: string; actions: Record<ReturnType<typeof scoreBand>, string[]> }
@@ -1103,6 +1169,10 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     const domainCodes = domainScores.map((d) => d.domain_code).filter(Boolean);
     const actions90 = loadActionsForDomains(domainCodes).slice(0, 12);
     const plan306090 = build306090Plan(ranked);
+    const providerBriefContext: DynamicProviderContext = {
+      questions: loadQuestionBankForProviderBrief(),
+      responses: await loadResponseRowsForProviderBrief(assessment, id),
+    };
 
     const keyFindingActions = topRisks
       .map((d) => {
@@ -2838,113 +2908,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
     /**
-     * ------------------------------
-     * Deep-dive narrative
-     * ------------------------------
-     */
-    {
-      let page = addPage(pdfDoc);
-      drawBrandHeader(page, shieldImg);
-      drawWatermark(page, watermarkImg, 0.12);
-
-      const { height } = page.getSize();
-      let y = height - 96;
-      drawSectionTitle(page, "Deep Dive (Consultant Narrative)", 50, y, fontBold);
-      y -= 26;
-
-      const intro =
-        "This section explains what your results mean in practical terms. It is not question-by-question; it focuses on outcomes, consistency, evidence, and what typically reduces disruption risk fastest for SMEs.";
-      for (const line of wrapText(intro, 100)) {
-        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-        y -= 14;
-      }
-      y -= 10;
-
-      for (const d of ranked) {
-        const name = d.domain_name || d.domain_code || "Domain";
-        const score = Number(d.score ?? 0);
-        const band = scoreBand(score);
-
-        const cfg =
-          DOMAIN_ANALYSIS[name] ||
-          DOMAIN_ANALYSIS[d.domain_code] || {
-            why: "This domain affects resilience outcomes. Improving consistency and evidence reduces disruption risk.",
-            actions: {
-              very_low: [
-                "Assign an owner and define the basics.",
-                "Create a simple routine/checklist.",
-                "Start collecting evidence.",
-              ],
-              low: [
-                "Make it repeatable with owners and dates.",
-                "Track actions to closure.",
-                "Reduce reliance on memory.",
-              ],
-              mid: [
-                "Add measurement and regular review.",
-                "Strengthen evidence quality.",
-                "Test that controls work.",
-              ],
-              high: [
-                "Improve assurance and trend reporting.",
-                "Reduce exceptions.",
-                "Embed into change.",
-              ],
-              very_high: ["Optimise and automate.", "Continuous improvement.", "Maintain at scale."],
-            },
-          };
-
-        if (y < 170) {
-          drawFooter(page, pageNum++, font, reportRef);
-          page = addPage(pdfDoc);
-          drawBrandHeader(page, shieldImg);
-          drawWatermark(page, watermarkImg, 0.12);
-          y = height - 96;
-        }
-
-        page.drawText(sanitizeText(name), { x: 50, y, size: 12, font: fontBold, color: BRAND.text });
-        page.drawText(sanitizeText(`${score.toFixed(2)} / 5`), {
-          x: 470,
-          y,
-          size: 12,
-          font: fontBold,
-          color: BRAND.text,
-        });
-        y -= 14;
-
-        drawBar(page, 50, y, 495, 8, score / 5);
-        y -= 18;
-
-        page.drawText("Why it matters", { x: 50, y, size: 10, font: fontBold, color: BRAND.muted });
-        y -= 12;
-        for (const line of wrapText(cfg.why, 105)) {
-          page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-          y -= 14;
-        }
-
-        y -= 4;
-
-        page.drawText("Recommended focus", { x: 50, y, size: 10, font: fontBold, color: BRAND.muted });
-        y -= 12;
-
-        const acts = (cfg.actions[band] ?? []).slice(0, 3).map(sanitizeText);
-        for (const a of acts) {
-          for (const line of wrapText(a, 105)) {
-            page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
-            y -= 14;
-          }
-          y -= 1;
-        }
-
-        y -= 10;
-        page.drawLine({ start: { x: 50, y }, end: { x: 545, y }, thickness: 1, color: rgb(0.92, 0.92, 0.92) });
-        y -= 14;
-      }
-
-      drawFooter(page, pageNum++, font, reportRef);
-    }
-
-    /**
  * ------------------------------
  * 30/60/90 day plan
  * ------------------------------
@@ -3043,6 +3006,210 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
 
+
+
+
+
+/**
+ * ------------------------------
+ * Technology snapshot helper
+ * Builds provider-ready briefing items from the weakest domains.
+ * Uses answer-aware guidance when response rows are available, and safely falls back to domain-level guidance.
+ * ------------------------------
+ */
+function getTechnologySnapshotForDomains(domains: any[], context?: DynamicProviderContext) {
+  const seen = new Set<string>();
+
+  return (domains || [])
+    .map((d: any) => {
+      const area = d?.domain_name || d?.domain_code || "Priority area";
+      const rawItem = getDynamicTechnologySnapshotItem(`${area} ${d?.domain_code || ""}`, context) as any;
+      const item = normalizeTechnologySnapshotItem(area, rawItem);
+
+      return {
+        area,
+        effort: item?.effort || "Medium",
+        cost: item?.cost || "GBP",
+        whyItMatters:
+          item?.whyItMatters ||
+          "This area needs clearer ownership, routine, evidence, and provider support so the control works consistently under pressure.",
+        whatToAskFor: Array.isArray(item?.whatToAskFor) ? item.whatToAskFor.filter(Boolean).slice(0, 7) : [],
+        evidenceToRequest: Array.isArray(item?.evidenceToRequest) ? item.evidenceToRequest.filter(Boolean).slice(0, 5) : [],
+      };
+    })
+    .filter((item: any) => {
+      const key = String(item.area || "").toLowerCase();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+function isAssetDataDomain(name: string) {
+  const value = String(name || "").toLowerCase();
+  return value.includes("asset") || value.includes("data");
+}
+
+function formatCostLabel(value?: string) {
+  const v = String(value || "").toUpperCase().replace(/\s+/g, "");
+  if (v === "GBP" || v === "£") return "Low cost";
+  if (v === "GBPGBP" || v === "££") return "Moderate cost";
+  if (v === "GBPGBPGBP" || v === "£££") return "Higher cost";
+  return value || "Moderate cost";
+}
+
+function getPolishedImplementationGuidance(name: string, domainCode: string | undefined, context?: DynamicProviderContext) {
+  const raw = getDynamicImplementationGuidance(`${name} ${domainCode || ""}`, context) as any;
+
+  if (!isAssetDataDomain(`${name} ${domainCode || ""}`)) {
+    return raw;
+  }
+
+  return {
+    ...raw,
+    plainEnglish:
+      "You cannot protect, recover, or prioritise what you cannot clearly identify. Weak visibility over critical systems and data slows response and creates confusion when pressure appears.",
+    controlRequired: "Critical asset and data visibility with clear ownership",
+    technologyCategories: [
+      "Asset inventory",
+      "Data classification",
+      "System ownership register",
+      "Secure disposal and retention tracking",
+    ],
+    technologyAsk:
+      "Ask for a clear list of critical systems and important data, who owns each item, where it is stored, how it is protected, and which assets matter most during disruption.",
+    typicalSmeApproach:
+      "Create a simple register of critical systems and key data, assign owners, classify data in plain terms, and review the list quarterly. Focus first on the systems and data needed to keep the business operating.",
+    effort: "Low",
+    cost: "GBP",
+    maturityImpact: "Level 1 -> Level 3",
+  };
+}
+
+function normalizeTechnologySnapshotItem(area: string, item: any) {
+  if (!isAssetDataDomain(area)) return item;
+
+  return {
+    ...item,
+    effort: "Low",
+    cost: "GBP",
+    whyItMatters:
+      "Asset and data visibility helps the business protect what matters, recover faster, and avoid confusion during incidents or supplier disruption.",
+    whatToAskFor: [
+      "Critical asset and data visibility",
+      "Asset inventory",
+      "Data classification",
+      "Owner list for key systems and data",
+      "Secure disposal and retention tracking",
+      "Which systems and data are most critical to keep the business running?",
+    ],
+    evidenceToRequest: [
+      "Critical systems and key data are listed with named owners.",
+      "Data is classified in simple business terms such as public, internal, and sensitive.",
+      "The asset/data register has been reviewed recently and exceptions are visible.",
+      "Evidence that the control has operated, not just been purchased",
+    ],
+  };
+}
+
+    /**
+ * ------------------------------
+ * Premium quick action page: Top 3 Actions to Take Now
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+
+  drawSectionTitle(page, "Top 3 Actions to Take Now", 50, y, fontBold);
+  y -= 28;
+
+  const intro =
+    "These are the first practical actions to focus on. They are based on the weakest areas in this assessment and are designed to reduce disruption risk quickly without creating unnecessary complexity.";
+
+  for (const line of wrapText(intro, 102)) {
+    page.drawText(line, { x: 50, y, size: 10.5, font, color: BRAND.text });
+    y -= 14;
+  }
+
+  y -= 18;
+
+  const actionDomains = ranked.slice(0, 3);
+
+  for (let i = 0; i < actionDomains.length; i++) {
+    const d = actionDomains[i];
+    const name = d.domain_name || d.domain_code || "Domain";
+    const score = Number(d.score ?? 0);
+    const guidance = getPolishedImplementationGuidance(name, d.domain_code, providerBriefContext) as any;
+
+    const cardHeight = 122;
+
+    drawRoundedCard(page, 50, y - cardHeight, 495, cardHeight, {
+      fill: BRAND.white,
+      border: BRAND.line,
+      radius: 18,
+    });
+
+    page.drawText(sanitizeText(`${i + 1}. ${name}`), {
+      x: 64,
+      y: y - 22,
+      size: 12,
+      font: fontBold,
+      color: BRAND.text,
+    });
+
+    page.drawText(sanitizeText(`${score.toFixed(2)} / 5`), {
+      x: 480,
+      y: y - 22,
+      size: 10,
+      font: fontBold,
+      color: BRAND.text,
+    });
+
+    let textY = y - 44;
+
+    const immediateAction = guidance?.typicalSmeApproach || guidance?.plainEnglish ||
+      "Assign an owner, agree a repeatable routine, and keep evidence that the action has been completed.";
+
+    page.drawText("Immediate action", {
+      x: 64,
+      y: textY,
+      size: 9.5,
+      font: fontBold,
+      color: BRAND.text,
+    });
+    textY -= 13;
+
+    for (const line of wrapText(immediateAction, 88).slice(0, 4)) {
+      page.drawText(line, { x: 76, y: textY, size: 9.4, font, color: BRAND.text });
+      textY -= 11.5;
+    }
+
+    textY -= 2;
+    page.drawText(
+      sanitizeText(`Effort / cost / impact: ${guidance?.effort || "Medium"} effort | ${formatCostLabel(guidance?.cost)} | ${guidance?.maturityImpact || "Level 1 -> Level 3"}`),
+      { x: 64, y: textY, size: 9.2, font: fontBold, color: BRAND.muted }
+    );
+
+    y -= cardHeight + 16;
+  }
+
+  y -= 4;
+  page.drawText("How to use this page", { x: 50, y, size: 11, font: fontBold, color: BRAND.text });
+  y -= 14;
+  const usage =
+    "Use these three actions as the opening agenda for an internal review or a conversation with your IT provider. The rest of the report explains the detail, evidence, and technology categories behind them.";
+  for (const line of wrapText(usage, 100)) {
+    page.drawText(line, { x: 50, y, size: 10.2, font, color: BRAND.text });
+    y -= 13;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
 
     /**
  * ------------------------------
@@ -3243,18 +3410,10 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     /**
  * ------------------------------
  * Premium page 2: Likely failure scenarios and exposure
+ * Final polish: one weak domain per page to prevent overflow
  * ------------------------------
  */
 {
-  const page = addPage(pdfDoc);
-  drawBrandHeader(page, shieldImg);
-  drawWatermark(page, watermarkImg, 0.12);
-
-  const { height } = page.getSize();
-  let y = height - 96;
-  drawSectionTitle(page, "Likely failure scenarios and exposure", 50, y, fontBold);
-  y -= 28;
-
   const scenarioForDomain = (name: string) => {
     const n = name.toLowerCase();
 
@@ -3367,34 +3526,54 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     };
   };
 
-  const intro =
-    "Lower-scoring domains do not guarantee failure, but they do indicate where real-world disruption is more likely to originate. This page translates weaker areas into practical business exposure so the report feels relevant beyond scoring alone.";
-
-  for (const line of wrapText(intro, 100)) {
-    page.drawText(line, {
-      x: 50,
-      y,
-      size: 10.5,
-      font,
-      color: BRAND.text,
-    });
-    y -= 14;
-  }
-
-  y -= 12;
-
   const focusDomains = ranked.slice(0, 3);
 
-  for (const d of focusDomains) {
+  for (let i = 0; i < focusDomains.length; i++) {
+    const d = focusDomains[i];
     const name = d.domain_name || d.domain_code || "Domain";
     const score = Number(d.score ?? 0);
     const detail = scenarioForDomain(name);
 
-    const cardHeight = 182;
+    const page = addPage(pdfDoc);
+    drawBrandHeader(page, shieldImg);
+    drawWatermark(page, watermarkImg, 0.12);
 
-    if (y - cardHeight < 105) break;
+    const { height } = page.getSize();
+    let y = height - 96;
 
-    drawRoundedCard(page, 50, y - cardHeight, 495, cardHeight, {
+    drawSectionTitle(
+      page,
+      i === 0
+        ? "Likely failure scenarios and exposure"
+        : "Likely failure scenarios and exposure - Continued",
+      50,
+      y,
+      fontBold
+    );
+    y -= 28;
+
+    const intro =
+      i === 0
+        ? "This section shows where disruption is most likely to begin. Each page focuses on one priority area so the exposure is easier to read and act on."
+        : "This page continues the practical exposure view for the next priority area.";
+
+    for (const line of wrapText(intro, 102)) {
+      page.drawText(line, {
+        x: 50,
+        y,
+        size: 10.2,
+        font,
+        color: BRAND.text,
+      });
+      y -= 13;
+    }
+
+    y -= 14;
+
+    const cardTop = y;
+    const cardHeight = 405;
+
+    drawRoundedCard(page, 50, cardTop - cardHeight, 495, cardHeight, {
       fill: BRAND.white,
       border: BRAND.line,
       radius: 18,
@@ -3402,8 +3581,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
     page.drawText(sanitizeText(name), {
       x: 64,
-      y: y - 20,
-      size: 11,
+      y: cardTop - 22,
+      size: 11.5,
       font: fontBold,
       color: BRAND.text,
     });
@@ -3411,7 +3590,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     drawMiniScorePill(
       page,
       448,
-      y - 30,
+      cardTop - 31,
       `${score.toFixed(2)} / 5`,
       fontBold,
       score < 2
@@ -3422,110 +3601,184 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       BRAND.text
     );
 
-    drawBar(page, 64, y - 44, 467, 8, score / 5);
+    drawBar(page, 64, cardTop - 48, 467, 8, score / 5);
 
-    page.drawText("Likely scenario", {
-      x: 64,
-      y: y - 64,
-      size: 9.5,
-      font: fontBold,
-      color: BRAND.muted,
-    });
+    let textY = cardTop - 78;
 
-    let textY = y - 78;
-    for (const line of wrapText(detail.scenario, 84)) {
-      page.drawText(line, {
+    const drawScenarioBlock = (heading: string, body: string, bodyFont = font) => {
+      page.drawText(heading, {
         x: 64,
         y: textY,
-        size: 10,
-        font,
-        color: BRAND.text,
+        size: 9.8,
+        font: fontBold,
+        color: BRAND.muted,
       });
+      textY -= 15;
+
+      for (const line of wrapText(body, 82).slice(0, 6)) {
+        page.drawText(line, {
+          x: 64,
+          y: textY,
+          size: 10.2,
+          font: bodyFont,
+          color: BRAND.text,
+        });
+        textY -= 13;
+      }
       textY -= 12;
-    }
+    };
 
-    textY -= 4;
-    page.drawText("Business exposure", {
-      x: 64,
-      y: textY,
-      size: 9.5,
-      font: fontBold,
-      color: BRAND.muted,
-    });
+    drawScenarioBlock("Likely scenario", detail.scenario);
+    drawScenarioBlock("Business exposure", detail.exposure);
+    drawScenarioBlock("Fastest way to reduce this risk", detail.fastestFix, fontBold);
 
-    textY -= 14;
-    for (const line of wrapText(detail.exposure, 84)) {
-      page.drawText(line, {
-        x: 64,
-        y: textY,
-        size: 10,
-        font,
-        color: BRAND.text,
-      });
-      textY -= 12;
-    }
+    y = cardTop - cardHeight - 26;
 
-    textY -= 4;
-    page.drawText("Fastest way to reduce this risk", {
-      x: 64,
-      y: textY,
-      size: 9.5,
-      font: fontBold,
-      color: BRAND.muted,
-    });
-
-    textY -= 14;
-    for (const line of wrapText(detail.fastestFix, 84)) {
-      page.drawText(line, {
-        x: 64,
-        y: textY,
-        size: 10,
+    if (i === focusDomains.length - 1) {
+      page.drawText("Overall interpretation", {
+        x: 50,
+        y,
+        size: 11,
         font: fontBold,
         color: BRAND.text,
       });
-      textY -= 12;
+      y -= 16;
+
+      const overallLines = [
+        "These scenarios are not predictions. They show where disruption is most likely to begin if current weaknesses remain unchanged.",
+        "For most SMEs, the fastest improvement comes from making the weakest areas owned, repeatable, and evidenced before adding complexity elsewhere.",
+      ];
+
+      for (const item of overallLines) {
+        for (const line of wrapText(item, 100)) {
+          page.drawText(line, {
+            x: 50,
+            y,
+            size: 10.3,
+            font,
+            color: BRAND.text,
+          });
+          y -= 13;
+        }
+        y -= 3;
+      }
     }
 
-    y -= cardHeight + 14;
+    drawFooter(page, pageNum++, font, reportRef);
   }
+}
 
-  if (y > 130) {
-    page.drawText("Overall interpretation", {
-      x: 50,
+
+
+/**
+ * ------------------------------
+ * Premium page 3: How to Fix This - Practical Options
+ * Final polish: one weak domain per page to prevent overflow
+ * ------------------------------
+ */
+{
+  const fixDomains = ranked.slice(0, 3);
+
+  for (let i = 0; i < fixDomains.length; i++) {
+    const d = fixDomains[i];
+    const name = d.domain_name || d.domain_code || "Domain";
+    const score = Number(d.score ?? 0);
+    const guidance = getPolishedImplementationGuidance(name, d.domain_code, providerBriefContext) as any;
+
+    const page = addPage(pdfDoc);
+    drawBrandHeader(page, shieldImg);
+    drawWatermark(page, watermarkImg, 0.12);
+
+    const { height } = page.getSize();
+    let y = height - 96;
+
+    drawSectionTitle(
+      page,
+      i === 0 ? "How to Fix This (Practical Options)" : "How to Fix This (Practical Options) - Continued",
+      50,
       y,
-      size: 11,
-      font: fontBold,
-      color: BRAND.text,
+      fontBold
+    );
+    y -= 28;
+
+    const intro =
+      i === 0
+        ? "Each page below focuses on one weak area only. This avoids overload and makes the recommendation easier to use with leadership, an internal IT owner, or an external IT provider."
+        : "This page continues the practical implementation guidance for the next priority area.";
+
+    for (const line of wrapText(intro, 102)) {
+      page.drawText(line, { x: 50, y, size: 10.2, font, color: BRAND.text });
+      y -= 13;
+    }
+
+    y -= 12;
+
+    const cardTop = y;
+    const cardHeight = 535;
+
+    drawRoundedCard(page, 50, cardTop - cardHeight, 495, cardHeight, {
+      fill: BRAND.white,
+      border: BRAND.line,
+      radius: 18,
     });
-    y -= 14;
 
-    const overallLines = [
-      "The purpose of this page is not to predict a single event. It is to show where disruption is most likely to begin if current weaknesses remain unchanged.",
-      "In most SMEs, better outcomes come from improving ownership, repeatability, and evidence in the weakest areas before investing in complexity elsewhere.",
-      "The business does not need every domain to be perfect. It needs the weakest domains to become reliable enough that they no longer create avoidable commercial exposure.",
-    ];
+    page.drawText(sanitizeText(name), { x: 64, y: cardTop - 23, size: 12, font: fontBold, color: BRAND.text });
+    page.drawText(sanitizeText(`${score.toFixed(2)} / 5`), { x: 475, y: cardTop - 23, size: 10, font: fontBold, color: BRAND.text });
 
-    for (const item of overallLines) {
-      for (const line of wrapText(item, 100)) {
-        page.drawText(line, {
-          x: 50,
-          y,
-          size: 10.5,
-          font,
+    let textY = cardTop - 48;
+
+    const drawMiniSection = (label: string, lines: string[], options?: { boldBody?: boolean; maxLines?: number }) => {
+      page.drawText(label, { x: 64, y: textY, size: 9.5, font: fontBold, color: BRAND.text });
+      textY -= 13;
+
+      for (const line of lines.slice(0, options?.maxLines ?? lines.length)) {
+        page.drawText(sanitizeText(line), {
+          x: 76,
+          y: textY,
+          size: 9.1,
+          font: options?.boldBody ? fontBold : font,
           color: BRAND.text,
         });
-        y -= 14;
+        textY -= 11.5;
       }
-      y -= 2;
-    }
-  }
 
-  drawFooter(page, pageNum++, font, reportRef);
+      textY -= 11;
+    };
+
+    const plainEnglishLines = wrapText(guidance?.plainEnglish || "This area needs clearer ownership, routine, and evidence so the control works consistently under pressure.", 86).slice(0, 4);
+    for (const line of plainEnglishLines) {
+      page.drawText(line, { x: 64, y: textY, size: 9.4, font, color: BRAND.muted });
+      textY -= 11.5;
+    }
+    textY -= 14;
+
+    drawMiniSection("Control required", wrapText(guidance?.controlRequired || "Defined control ownership and evidence", 84), { maxLines: 2 });
+
+    const technologyLines = (guidance?.technologyCategories || [])
+      .slice(0, 4)
+      .map((tech: string) => `- ${tech}`);
+    drawMiniSection("Technology options", technologyLines.length ? technologyLines : ["- Process or technology support", "- Evidence tracking"], { maxLines: 4 });
+
+    const askText = guidance?.technologyAsk || "Ask what capability will be implemented, who owns it, what evidence will be produced, and how often it will be reviewed.";
+    drawMiniSection("What to ask for", wrapText(askText, 84), { maxLines: 4 });
+
+    const approach = guidance?.typicalSmeApproach || "Start with a simple routine, assign an owner, review it regularly, and keep evidence that the control has operated.";
+    drawMiniSection("Typical SME approach", wrapText(approach, 84), { maxLines: 5 });
+
+    page.drawText("Effort / cost / impact", { x: 64, y: textY, size: 9.5, font: fontBold, color: BRAND.text });
+    textY -= 14;
+    page.drawText(
+      sanitizeText(`${guidance?.effort || "Medium"} effort | ${formatCostLabel(guidance?.cost)} | ${guidance?.maturityImpact || "Level 1 -> Level 3"}`),
+      { x: 76, y: textY, size: 9.4, font: fontBold, color: BRAND.text }
+    );
+
+    drawFooter(page, pageNum++, font, reportRef);
+  }
 }
 
     /**
  * ------------------------------
- * Premium page 3: Next-level target state and evidence to prioritise
+ * Premium page 5: Next-level target state and evidence to prioritise
  * ------------------------------
  */
 {
@@ -4254,7 +4507,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
     /**
  * ------------------------------
- * MSP / IT Partner Support + Reassessment Recommendation
+ * MSP / IT Partner Support
+ * Upgraded bridge-to-action page. Provider Brief follows this page.
  * ------------------------------
  */
 {
@@ -4265,12 +4519,112 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   const { height } = page.getSize();
   let y = height - 96;
 
-  drawSectionTitle(page, "MSP / IT Partner Support", 50, y, fontBold);
+  drawSectionTitle(page, "Working With an IT Provider or MSP", 50, y, fontBold);
   y -= 28;
 
   const mspIntro =
-    "Many organisations implement resilience improvements with the support of their internal IT team or external IT provider. This report can be used as a practical roadmap for remediation and operational follow-through.";
+    "Most SMEs implement resilience improvements with the support of an internal IT owner, IT provider, or MSP. Use this report as a practical briefing document: it shows what needs attention first, what capability is required, and what evidence should come back.";
   for (const line of wrapText(mspIntro, 100)) {
+    page.drawText(line, {
+      x: 50,
+      y,
+      size: 10.5,
+      font,
+      color: BRAND.text,
+    });
+    y -= 14;
+  }
+
+  y -= 12;
+
+  drawRoundedCard(page, 50, y - 112, 495, 112, {
+    fill: BRAND.white,
+    border: BRAND.line,
+    radius: 18,
+  });
+
+  let cardY = y - 22;
+  page.drawText("What to do next", {
+    x: 64,
+    y: cardY,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  cardY -= 17;
+
+  const nextSteps = [
+    "Share this report with your IT provider, MSP, or internal IT owner.",
+    "Focus first on the weakest 2-3 domains, not every issue at once.",
+    "Use the How to Fix This pages to agree practical remediation actions.",
+    "Use the Provider Brief on the next page before buying tools or services.",
+  ];
+
+  for (const item of nextSteps) {
+    for (const line of wrapText(`- ${item}`, 90)) {
+      page.drawText(sanitizeText(line), {
+        x: 64,
+        y: cardY,
+        size: 9.5,
+        font,
+        color: BRAND.text,
+      });
+      cardY -= 12;
+    }
+  }
+
+  y -= 132;
+
+  drawRoundedCard(page, 50, y - 118, 495, 118, {
+    fill: BRAND.white,
+    border: BRAND.line,
+    radius: 18,
+  });
+
+  cardY = y - 22;
+  page.drawText("What good provider support should include", {
+    x: 64,
+    y: cardY,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  cardY -= 17;
+
+  const goodProviderSupport = [
+    "Named ownership for each improvement area, not vague general support.",
+    "A short action plan with owners, dates, blockers, and progress updates.",
+    "Regular reporting showing coverage, exceptions, and actions closed.",
+    "Evidence that controls are operating, not just confirmation that tools exist.",
+  ];
+
+  for (const item of goodProviderSupport) {
+    for (const line of wrapText(`- ${item}`, 90)) {
+      page.drawText(sanitizeText(line), {
+        x: 64,
+        y: cardY,
+        size: 9.5,
+        font,
+        color: BRAND.text,
+      });
+      cardY -= 12;
+    }
+  }
+
+  y -= 140;
+
+  page.drawText("Important buying note", {
+    x: 50,
+    y,
+    size: 11,
+    font: fontBold,
+    color: BRAND.text,
+  });
+  y -= 17;
+
+  const buyingNote =
+    "The key question is not which vendor is best. It is whether the provider can deliver the capability, coverage, ownership, reporting, and evidence your business needs based on its weakest areas.";
+  for (const line of wrapText(buyingNote, 100)) {
     page.drawText(line, {
       x: 50,
       y,
@@ -4283,50 +4637,255 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   y -= 10;
 
-  page.drawText("Typical implementation areas", {
-    x: 50,
-    y,
-    size: 11,
-    font: fontBold,
-    color: BRAND.text,
-  });
-  y -= 16;
-
-  const mspAreas = [
-    "Identity and access management improvements",
-    "Backup testing and recovery validation",
-    "Vulnerability remediation",
-    "System hardening and patch routines",
-    "Supplier access review",
-  ];
-
-  for (const item of mspAreas) {
-    page.drawText(`• ${sanitizeText(item)}`, {
-      x: 50,
-      y,
-      size: 10.5,
-      font,
-      color: BRAND.text,
-    });
-    y -= 16;
-  }
-
-  y -= 6;
-
-  const mspClose =
-    "If you work with an IT provider or MSP, this report can be used to structure improvements, agree ownership, and track delivery against the priority actions identified in the assessment.";
-  for (const line of wrapText(mspClose, 100)) {
+  const providerBridge =
+    "The next page turns this into a provider brief. Use it to frame the conversation before agreeing scope, support, or new technology.";
+  for (const line of wrapText(providerBridge, 100)) {
     page.drawText(line, {
       x: 50,
       y,
       size: 10.5,
-      font,
+      font: fontBold,
       color: BRAND.text,
     });
     y -= 14;
   }
 
-  y -= 18;
+  drawFooter(page, pageNum++, font, reportRef);
+}
+
+/**
+ * ------------------------------
+ * Provider Brief - What to Ask For
+ * Positioned after the MSP / IT Partner Support page so it acts as a practical briefing pack
+ * ------------------------------
+ */
+{
+  let page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.12);
+
+  const { height } = page.getSize();
+  let y = height - 96;
+
+  const newProviderPage = () => {
+    drawFooter(page, pageNum++, font, reportRef);
+    page = addPage(pdfDoc);
+    drawBrandHeader(page, shieldImg);
+    drawWatermark(page, watermarkImg, 0.12);
+    y = height - 96;
+    drawSectionTitle(page, "Provider Brief - What to Ask For (Continued)", 50, y, fontBold);
+    y -= 30;
+  };
+
+  drawSectionTitle(page, "Provider Brief - What to Ask For", 50, y, fontBold);
+  y -= 28;
+
+  const intro =
+    "Use this page after the MSP / IT Partner Support guidance. It does not recommend suppliers. It translates your weakest areas into the capabilities, provider questions, and evidence expectations to discuss before buying tools or services.";
+
+  for (const line of wrapText(intro, 102)) {
+    page.drawText(line, { x: 50, y, size: 10.2, font, color: BRAND.text });
+    y -= 13;
+  }
+
+  y -= 10;
+
+  const techItems = getTechnologySnapshotForDomains(ranked.slice(0, 3), providerBriefContext);
+
+  for (const item of techItems) {
+    const capabilityLines = item.whatToAskFor.flatMap((v) => wrapText(v, 72)).slice(0, 6);
+    const evidenceLines = item.evidenceToRequest.flatMap((v) => wrapText(v, 72)).slice(0, 4);
+    const whyLines = wrapText(item.whyItMatters, 82).slice(0, 3);
+    const cardHeight = 178;
+
+    if (y - cardHeight < 105) newProviderPage();
+
+    const cardTop = y;
+    drawRoundedCard(page, 50, cardTop - cardHeight, 495, cardHeight, {
+      fill: BRAND.white,
+      border: BRAND.line,
+      radius: 18,
+    });
+
+    page.drawText(sanitizeText(item.area), { x: 64, y: cardTop - 20, size: 11.2, font: fontBold, color: BRAND.text });
+    page.drawText(sanitizeText(`${item.effort} effort | ${formatCostLabel(item.cost)}`), { x: 420, y: cardTop - 20, size: 9, font: fontBold, color: BRAND.muted });
+
+    let textY = cardTop - 40;
+    for (const line of whyLines) {
+      page.drawText(line, { x: 64, y: textY, size: 9.1, font, color: BRAND.muted });
+      textY -= 10.5;
+    }
+
+    textY -= 2;
+    page.drawText("Ask the provider for", { x: 64, y: textY, size: 9, font: fontBold, color: BRAND.text });
+    textY -= 11;
+    for (const line of capabilityLines) {
+      page.drawText(sanitizeText(`- ${line}`), { x: 74, y: textY, size: 8.7, font, color: BRAND.text });
+      textY -= 10;
+    }
+
+    textY -= 2;
+    page.drawText("Evidence you should expect", { x: 64, y: textY, size: 9, font: fontBold, color: BRAND.text });
+    textY -= 11;
+    for (const line of evidenceLines) {
+      page.drawText(sanitizeText(`- ${line}`), { x: 74, y: textY, size: 8.7, font, color: BRAND.text });
+      textY -= 10;
+    }
+
+    y = cardTop - cardHeight - 13;
+  }
+
+  if (y < 138) newProviderPage();
+
+  page.drawText("Buying note", { x: 50, y, size: 11, font: fontBold, color: BRAND.text });
+  y -= 15;
+  const note =
+    "The right question is not 'which vendor is best?' It is: which capability, coverage, owner, reporting, and evidence do we need based on our weakest areas? Use this page as a short provider brief before agreeing scope, support, or new tools.";
+  for (const line of wrapText(note, 100)) {
+    page.drawText(line, { x: 50, y, size: 10.2, font, color: BRAND.text });
+    y -= 13;
+  }
+
+  drawFooter(page, pageNum++, font, reportRef);
+}
+
+
+        /**
+     * ------------------------------
+     * Detailed domain commentary - optional appendix
+     * ------------------------------
+     */
+    {
+      let page = addPage(pdfDoc);
+      drawBrandHeader(page, shieldImg);
+      drawWatermark(page, watermarkImg, 0.12);
+
+      const { height } = page.getSize();
+      let y = height - 96;
+      drawSectionTitle(page, "Detailed Domain Commentary (Optional)", 50, y, fontBold);
+      y -= 26;
+
+      const intro =
+        "This appendix provides additional context for each domain. It is useful for internal discussion, but the main action guidance appears earlier in the report. Use it to understand why each area matters and how improvement usually works in practice.";
+      for (const line of wrapText(intro, 100)) {
+        page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
+        y -= 14;
+      }
+      y -= 10;
+
+      for (const d of ranked) {
+        const name = d.domain_name || d.domain_code || "Domain";
+        const score = Number(d.score ?? 0);
+        const band = scoreBand(score);
+
+        const cfg =
+          DOMAIN_ANALYSIS[name] ||
+          DOMAIN_ANALYSIS[d.domain_code] || {
+            why: "This domain affects resilience outcomes. Improving consistency and evidence reduces disruption risk.",
+            actions: {
+              very_low: [
+                "Assign an owner and define the basics.",
+                "Create a simple routine/checklist.",
+                "Start collecting evidence.",
+              ],
+              low: [
+                "Make it repeatable with owners and dates.",
+                "Track actions to closure.",
+                "Reduce reliance on memory.",
+              ],
+              mid: [
+                "Add measurement and regular review.",
+                "Strengthen evidence quality.",
+                "Test that controls work.",
+              ],
+              high: [
+                "Improve assurance and trend reporting.",
+                "Reduce exceptions.",
+                "Embed into change.",
+              ],
+              very_high: ["Optimise and automate.", "Continuous improvement.", "Maintain at scale."],
+            },
+          };
+
+        if (y < 170) {
+          drawFooter(page, pageNum++, font, reportRef);
+          page = addPage(pdfDoc);
+          drawBrandHeader(page, shieldImg);
+          drawWatermark(page, watermarkImg, 0.12);
+          y = height - 96;
+        }
+
+        page.drawText(sanitizeText(name), { x: 50, y, size: 12, font: fontBold, color: BRAND.text });
+        page.drawText(sanitizeText(`${score.toFixed(2)} / 5`), {
+          x: 470,
+          y,
+          size: 12,
+          font: fontBold,
+          color: BRAND.text,
+        });
+        y -= 14;
+
+        drawBar(page, 50, y, 495, 8, score / 5);
+        y -= 18;
+
+        page.drawText("Why it matters", { x: 50, y, size: 10, font: fontBold, color: BRAND.muted });
+        y -= 12;
+        for (const line of wrapText(cfg.why, 105)) {
+          page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
+          y -= 14;
+        }
+
+        y -= 4;
+
+        page.drawText("Recommended focus", { x: 50, y, size: 10, font: fontBold, color: BRAND.muted });
+        y -= 12;
+
+        const acts = (cfg.actions[band] ?? []).slice(0, 3).map(sanitizeText);
+        for (const a of acts) {
+          for (const line of wrapText(a, 105)) {
+            page.drawText(line, { x: 50, y, size: 10.5, font, color: rgb(0.15, 0.15, 0.15) });
+            y -= 14;
+          }
+          y -= 1;
+        }
+
+        y -= 4;
+
+        const contrastLine = name.includes("Asset")
+          ? "This is rarely a tool problem first. It is usually a visibility and ownership gap."
+          : name.includes("Identity")
+          ? "This is not about adding complexity. It is about controlling who can access what."
+          : name.includes("Governance")
+          ? "This is not a technical issue first. It is an ownership and decision-rhythm issue."
+          : "This is not about perfection. It is about making the control repeatable and provable.";
+        for (const line of wrapText(contrastLine, 105)) {
+          page.drawText(line, { x: 50, y, size: 10.2, font: fontBold, color: BRAND.muted });
+          y -= 13;
+        }
+
+        y -= 8;
+        page.drawLine({ start: { x: 50, y }, end: { x: 545, y }, thickness: 1, color: BRAND.line });
+        y -= 14;
+      }
+
+      drawFooter(page, pageNum++, font, reportRef);
+    }
+
+
+
+/**
+ * ------------------------------
+ * Reassessment Recommendation
+ * Kept as the final report page
+ * ------------------------------
+ */
+{
+  const page = addPage(pdfDoc);
+  drawBrandHeader(page, shieldImg);
+  drawWatermark(page, watermarkImg, 0.10);
+
+  const { height } = page.getSize();
+  let y = height - 96;
 
   drawSectionTitle(page, "Reassessment Recommendation", 50, y, fontBold);
   y -= 28;

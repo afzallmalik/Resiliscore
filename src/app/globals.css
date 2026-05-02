@@ -1,6 +1,6 @@
 :root {
-  --bg: #070b12;
-  --bg-2: #0f1130;
+  --bg: #061B22;
+  --bg-2: #092A35;
   --panel: rgba(255, 255, 255, 0.06);
   --panel-strong: rgba(255, 255, 255, 0.1);
   --panel-light: #f7f8fc;
@@ -13,13 +13,13 @@
   --text-on-dark: rgba(255, 255, 255, 0.96);
   --muted-on-dark: rgba(255, 255, 255, 0.7);
 
-  --purple: #4f138c;
-  --indigo: #4325d0;
-  --blue: #1c73f2;
-  --cyan: #4db7eb;
-  --pink: #d95ac8;
-  --teal: #32c6af;
-  --amber: #f0ab34;
+  --purple: #0F4C5C; /* legacy: avoid for primary UI */
+  --indigo: #0E7490;
+  --blue: #06B6D4;
+  --cyan: #22D3EE;
+  --pink: #22D3EE; /* legacy: mapped to cyan to avoid colour noise */
+  --teal: #0EA5A4;
+  --amber: #F59E0B;
 
   --shadow-sm: 0 12px 30px rgba(6, 11, 24, 0.08);
   --shadow-md: 0 24px 60px rgba(6, 11, 24, 0.16);
@@ -43,9 +43,9 @@ body {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(900px 500px at 10% 0%, rgba(79, 19, 140, 0.24), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, rgba(28, 115, 242, 0.18), transparent 58%),
-    linear-gradient(180deg, #060913 0%, #0b1020 100%);
+    radial-gradient(900px 500px at 10% 0%, rgba(34, 211, 238, 0.16), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(6, 182, 212, 0.12), transparent 58%),
+    linear-gradient(180deg, #061B22 0%, #08111F 100%);
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.55;
@@ -123,17 +123,17 @@ textarea {
   min-height: 44px;
   padding: 0 18px;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--indigo), var(--blue));
-  color: white;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  color: #061B22;
   font-size: 14px;
-  font-weight: 700;
-  box-shadow: 0 12px 26px rgba(28, 115, 242, 0.28);
+  font-weight: 800;
+  box-shadow: 0 14px 32px rgba(34, 211, 238, 0.26);
   transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
 .siteHeaderCta:hover {
   transform: translateY(-1px);
-  box-shadow: 0 16px 36px rgba(28, 115, 242, 0.32);
+  box-shadow: 0 18px 42px rgba(34, 211, 238, 0.34);
 }
 
 .homePage {
@@ -161,15 +161,40 @@ textarea {
   background-image: url('/hero-landing.png');
   background-size: cover;
   background-position: center;
-  opacity: 0.42;
-  transform: scale(1.03);
+  background-attachment: fixed;
+  opacity: 0.46;
+  transform: scale(1.035);
+  will-change: opacity, transform;
+  animation: heroBackdropBreath 18s ease-in-out infinite alternate;
 }
 
 .heroOverlay {
   background:
-    linear-gradient(180deg, rgba(6, 9, 19, 0.42) 0%, rgba(6, 9, 19, 0.62) 100%),
-    radial-gradient(900px 420px at 15% 15%, rgba(79, 19, 140, 0.34), transparent 60%),
-    radial-gradient(700px 420px at 80% 20%, rgba(28, 115, 242, 0.26), transparent 58%);
+    linear-gradient(180deg, rgba(6, 27, 34, 0.50) 0%, rgba(6, 27, 34, 0.74) 100%),
+    radial-gradient(900px 420px at 15% 15%, rgba(34, 211, 238, 0.22), transparent 60%),
+    radial-gradient(700px 420px at 80% 20%, rgba(6, 182, 212, 0.16), transparent 58%);
+  will-change: opacity;
+  animation: heroSignalGlow 14s ease-in-out infinite alternate;
+}
+
+@keyframes heroBackdropBreath {
+  from {
+    opacity: 0.42;
+    transform: scale(1.03);
+  }
+  to {
+    opacity: 0.50;
+    transform: scale(1.055);
+  }
+}
+
+@keyframes heroSignalGlow {
+  from {
+    opacity: 0.94;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .heroShell {
@@ -437,7 +462,7 @@ textarea {
   height: 10px;
   margin-top: 8px;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--cyan), var(--pink));
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
   flex: 0 0 auto;
 }
 
@@ -495,9 +520,9 @@ textarea {
   display: grid;
   place-items: center;
   font-weight: 800;
-  color: white;
-  background: linear-gradient(135deg, var(--indigo), var(--blue));
-  box-shadow: 0 10px 24px rgba(28, 115, 242, 0.18);
+  color: #061B22;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  box-shadow: 0 10px 24px rgba(34, 211, 238, 0.18);
 }
 
 .ctaSection {
@@ -530,10 +555,14 @@ textarea {
   transform: translateY(-1px);
 }
 
+.btnPrimary:hover {
+  box-shadow: 0 18px 42px rgba(34, 211, 238, 0.34);
+}
+
 .btnPrimary {
-  background: linear-gradient(135deg, var(--indigo), var(--blue));
-  color: white;
-  box-shadow: 0 14px 32px rgba(28, 115, 242, 0.28);
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  color: #061B22;
+  box-shadow: 0 14px 32px rgba(34, 211, 238, 0.26);
 }
 
 .btnSecondary {
@@ -558,6 +587,22 @@ textarea {
   color: var(--text-on-dark);
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .heroBackdrop,
+  .heroOverlay {
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroBackdrop {
+    background-attachment: scroll;
+    animation: none;
+    transform: scale(1.03);
+  }
 }
 
 @media (max-width: 1080px) {

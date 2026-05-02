@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { DOMAINS_V13 } from "@/lib/domains";
+import { getImplementationAction, getImplementationGuidance } from "@/lib/implementationLayer";
 
 type DomainScoreRaw = {
   code?: string;
@@ -262,88 +263,13 @@ function getBenchmarkPercent(overall: number) {
 }
 
 function getPriorityActions(ranked: NormalizedDomainScore[]) {
-  const actions: { title: string; why: string }[] = [];
-
-  for (const d of ranked.slice(0, 5)) {
-    const key = `${d.fullName} ${d.name}`.toLowerCase();
-
-    if (key.includes("identity") || key.includes("access")) {
-      actions.push({
-        title: "Enable multi-factor authentication on all email and key business accounts",
-        why: "This blocks one of the most common ways small businesses are breached.",
-      });
-      continue;
-    }
-
-    if (key.includes("recovery") || key.includes("backup") || key.includes("resilience")) {
-      actions.push({
-        title: "Back up your data daily to a separate system and test recovery",
-        why: "This reduces downtime and damage if files are lost or encrypted.",
-      });
-      continue;
-    }
-
-    if (key.includes("threat") || key.includes("vulnerability")) {
-      actions.push({
-        title: "Make sure all business devices and systems update automatically",
-        why: "Attackers often exploit known weaknesses that already have fixes available.",
-      });
-      continue;
-    }
-
-    if (key.includes("incident") || key.includes("response")) {
-      actions.push({
-        title: "Create a simple plan for what to do if something goes wrong",
-        why: "Fast, clear action reduces downtime, confusion, and cost.",
-      });
-      continue;
-    }
-
-    if (key.includes("operations")) {
-      actions.push({
-        title: "Put basic day-to-day security routines in place for devices, users, and data",
-        why: "Simple routines prevent small gaps from becoming expensive incidents.",
-      });
-      continue;
-    }
-
-    if (key.includes("supplier") || key.includes("third")) {
-      actions.push({
-        title: "Review which suppliers can access your systems or data",
-        why: "A weak supplier can still create major disruption for your business.",
-      });
-      continue;
-    }
-
-    if (key.includes("asset") || key.includes("data")) {
-      actions.push({
-        title: "List your key systems and sensitive data so you know what must be protected first",
-        why: "You cannot protect or recover what you cannot quickly identify.",
-      });
-      continue;
-    }
-
-    if (key.includes("risk") || key.includes("compliance")) {
-      actions.push({
-        title: "Track your main security risks and assign an owner to each one",
-        why: "Known problems often stay open too long when nobody owns them clearly.",
-      });
-      continue;
-    }
-
-    if (key.includes("governance")) {
-      actions.push({
-        title: "Assign one person to own cyber risk and review progress monthly",
-        why: "Clear ownership is one of the fastest ways to reduce avoidable gaps.",
-      });
-      continue;
-    }
-
-    actions.push({
-      title: "Fix the biggest security gap in this area first and assign clear ownership",
-      why: "The fastest improvements come from fixing the weakest points before attackers find them.",
-    });
-  }
+  const actions = ranked.slice(0, 5).map((d) => {
+    const implementation = getImplementationAction(`${d.fullName} ${d.name} ${d.code}`);
+    return {
+      title: implementation.title,
+      why: implementation.why,
+    };
+  });
 
   const deduped: { title: string; why: string }[] = [];
   const seen = new Set<string>();
@@ -355,25 +281,25 @@ function getPriorityActions(ranked: NormalizedDomainScore[]) {
   }
 
   while (deduped.length < 5) {
-    const filler = [
+    const fallback = [
       {
-        title: "Use strong, unique passwords and stop sharing logins",
-        why: "Shared and reused passwords make account takeover much easier.",
+        title: "Enable MFA and remove shared logins",
+        why: "This is usually the quickest way to reduce account takeover risk.",
       },
       {
-        title: "Train staff to spot suspicious emails and fake login pages",
-        why: "Staff are often the first route attackers use to get in.",
+        title: "Test that critical data can be restored",
+        why: "Backups only reduce risk if recovery has been proven.",
       },
       {
-        title: "Remove access quickly when staff leave or change roles",
-        why: "Old accounts are an easy weakness if left active too long.",
+        title: "Create a one-page incident plan",
+        why: "Clear response steps reduce confusion, delay, and avoidable cost.",
       },
     ];
 
-    for (const f of filler) {
-      if (!seen.has(f.title)) {
-        seen.add(f.title);
-        deduped.push(f);
+    for (const item of fallback) {
+      if (!seen.has(item.title)) {
+        seen.add(item.title);
+        deduped.push(item);
       }
       if (deduped.length >= 5) break;
     }
@@ -388,34 +314,29 @@ function getAssuranceChecklist(domainScores: NormalizedDomainScore[]) {
       `${d.fullName} ${d.name}`.toLowerCase().includes(needle.toLowerCase())
     );
 
-  const access = byName("identity") || byName("access");
-  const recovery = byName("recovery") || byName("backup") || byName("resilience");
-  const response = byName("incident") || byName("response");
-  const operations = byName("operations");
-  const suppliers = byName("supplier") || byName("third");
+  const rows = [
+    byName("identity") || byName("access"),
+    byName("recovery") || byName("backup") || byName("resilience"),
+    byName("incident") || byName("response"),
+    byName("operations"),
+    byName("supplier") || byName("third"),
+  ].filter(Boolean) as NormalizedDomainScore[];
 
-  return [
-    {
-      label: "Protected access to email and key systems",
-      status: (access?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
-    },
-    {
-      label: "Backups and recovery arrangements",
-      status: (recovery?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
-    },
-    {
-      label: "Basic response plan for incidents",
-      status: (response?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
-    },
-    {
-      label: "Day-to-day security routines",
-      status: (operations?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
-    },
-    {
-      label: "Third-party and supplier controls",
-      status: (suppliers?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
-    },
-  ];
+  const fallbackRows = domainScores.slice().sort((a, b) => a.score - b.score).slice(0, 5);
+  const sourceRows = rows.length ? rows : fallbackRows;
+
+  return sourceRows.map((domain) => {
+    const guidance = getImplementationGuidance(`${domain.fullName} ${domain.name} ${domain.code}`);
+    return {
+      label: guidance.controlRequired,
+      status: domain.score >= 3 ? "Ready to show" : "Needs work",
+      controlCategory: guidance.checklist.controlCategory,
+      implementationType: guidance.checklist.implementationType,
+      effort: guidance.effort,
+      priority: guidance.checklist.priority,
+      outcome: guidance.checklist.outcome,
+    };
+  });
 }
 
 function Icon({
@@ -568,10 +489,20 @@ function ActionCard({
 function AssuranceItem({
   label,
   status,
+  controlCategory,
+  implementationType,
+  effort,
+  priority,
+  outcome,
   locked = false,
 }: {
   label: string;
   status: string;
+  controlCategory?: string;
+  implementationType?: string;
+  effort?: string;
+  priority?: string;
+  outcome?: string;
   locked?: boolean;
 }) {
   const ready = status === "Ready to show";
@@ -588,6 +519,66 @@ function AssuranceItem({
         )}
       </div>
       <div className="rr-assuranceStatus">{locked ? "Full report" : status}</div>
+      {!locked ? (
+        <div className="rr-assuranceDetail">
+          {controlCategory ? <span>{controlCategory}</span> : null}
+          {implementationType ? <span>{implementationType}</span> : null}
+          {effort ? <span>{effort} effort</span> : null}
+          {priority ? <span>{priority} priority</span> : null}
+          {outcome ? <p>Done when: {outcome}</p> : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function ImplementationFixCard({
+  domain,
+  index,
+}: {
+  domain: NormalizedDomainScore;
+  index: number;
+}) {
+  const guidance = getImplementationGuidance(`${domain.fullName} ${domain.name} ${domain.code}`);
+
+  return (
+    <div className="rr-implementationCard">
+      <div className="rr-implementationTop">
+        <div>
+          <div className="rr-implementationEyebrow">Weak domain {index}</div>
+          <div className="rr-implementationTitle">{domain.name}</div>
+        </div>
+        <div className="rr-implementationScore">{domain.score.toFixed(2)} / 5</div>
+      </div>
+
+      <div className="rr-implementationBody">
+        <div className="rr-implementationRow">
+          <strong>Control required</strong>
+          <span>{guidance.controlRequired}</span>
+        </div>
+        <div className="rr-implementationRow">
+          <strong>Why it matters</strong>
+          <span>{guidance.plainEnglish}</span>
+        </div>
+        <div className="rr-implementationRow">
+          <strong>Technology categories</strong>
+          <span>{guidance.technologyCategories.slice(0, 4).join(", ")}</span>
+        </div>
+        <div className="rr-implementationRow">
+          <strong>What to ask an IT provider for</strong>
+          <span>{(guidance as any).technologyAsk || "Ask what capability, coverage, reporting, ownership, and evidence will be put in place."}</span>
+        </div>
+        <div className="rr-implementationRow">
+          <strong>Typical SME approach</strong>
+          <span>{guidance.typicalSmeApproach}</span>
+        </div>
+      </div>
+
+      <div className="rr-implementationMeta">
+        <span>Effort: {guidance.effort}</span>
+        <span>Cost: {guidance.cost}</span>
+        <span>Impact: {guidance.maturityImpact}</span>
+      </div>
     </div>
   );
 }
@@ -1103,6 +1094,21 @@ export default function ResultsClient({ id }: { id: string }) {
 
         <section className="rs-panel rs-panelLight">
           <div className="rr-sectionHead">
+            <div className="rr-sectionTitle">Top 3 actions to take now</div>
+            <div className="rr-sectionSub">
+              These are the fastest practical moves based on your weakest areas. Start here before spending money on wider cyber work.
+            </div>
+          </div>
+
+          <div className="rr-topActionGrid">
+            {actions.slice(0, 3).map((action, i) => (
+              <ActionCard key={action.title} index={i + 1} title={action.title} why={action.why} />
+            ))}
+          </div>
+        </section>
+
+        <section className="rs-panel rs-panelLight">
+          <div className="rr-sectionHead">
             <div className="rr-sectionTitle">The resilience visibility gap in practice</div>
             <div className="rr-sectionSub">This is where inconsistency, weak ownership, or poor evidence usually becomes visible in real business terms.</div>
           </div>
@@ -1292,6 +1298,28 @@ export default function ResultsClient({ id }: { id: string }) {
 
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
+                <div className="rr-sectionTitle">How to fix this</div>
+                <div className="rr-sectionSub">
+                  Practical implementation guidance for the weakest domains. No vendors, no affiliate recommendations — only control types, technology categories, and what to ask an IT provider for.
+                </div>
+              </div>
+
+              <div className="rr-implementationStack">
+                {(isPremium ? weakestDomains : weakestDomains.slice(0, 2)).map((d, i) => (
+                  <ImplementationFixCard key={`fix-${d.code}`} domain={d} index={i + 1} />
+                ))}
+              </div>
+
+              {!isPremium ? (
+                <div className="rr-miniLocked">
+                  <Icon name="lock" size={14} />
+                  Full report includes the complete practical implementation view and PDF-ready action guidance.
+                </div>
+              ) : null}
+            </div>
+
+            <div className="rs-panel rs-panelLight">
+              <div className="rr-sectionHead">
                 <div className="rr-sectionTitle">5. Benchmark view</div>
                 <div className="rr-sectionSub">
                   This is a practical reference point, not a formal ranking.
@@ -1338,6 +1366,11 @@ export default function ResultsClient({ id }: { id: string }) {
                     key={item.label}
                     label={item.label}
                     status={item.status}
+                    controlCategory={item.controlCategory}
+                    implementationType={item.implementationType}
+                    effort={item.effort}
+                    priority={item.priority}
+                    outcome={item.outcome}
                   />
                 ))}
 
@@ -1347,6 +1380,11 @@ export default function ResultsClient({ id }: { id: string }) {
                       key={item.label}
                       label={item.label}
                       status={item.status}
+                      controlCategory={item.controlCategory}
+                      implementationType={item.implementationType}
+                      effort={item.effort}
+                      priority={item.priority}
+                      outcome={item.outcome}
                       locked
                     />
                   ))}

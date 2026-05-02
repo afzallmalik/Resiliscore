@@ -96,3 +96,29 @@ export function computeScores(params: {
 
   return { domainScores, overallScore, grade };
 }
+
+/**
+ * Helper used by results/PDF layers to consistently identify the weakest domains.
+ * This does not change the core score; it only sorts and limits existing domain scores.
+ */
+export function getWeakestDomains(domainScores: DomainScore[], limit = 3): DomainScore[] {
+  return domainScores
+    .slice()
+    .sort((a, b) => a.score - b.score)
+    .slice(0, limit);
+}
+
+/**
+ * Helper used where the product needs a practical action priority rather than a new score.
+ * Lower maturity plus higher real-world exposure receives higher priority.
+ */
+export function getWeightedPriorityDomains(domainScores: DomainScore[], limit = 3): DomainScore[] {
+  return domainScores
+    .slice()
+    .sort((a, b) => {
+      const aPriority = (5 - a.score) * getDomainWeight(a.domain_name || a.domain_code);
+      const bPriority = (5 - b.score) * getDomainWeight(b.domain_name || b.domain_code);
+      return bPriority - aPriority;
+    })
+    .slice(0, limit);
+}

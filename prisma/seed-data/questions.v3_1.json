@@ -628,5 +628,89 @@
     "order": 10,
     "prompt": "Do you reduce concentration risk where possible?",
     "helpText": "Avoid over-dependence on a single provider."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Identity & Access Management",
+    "order": 11,
+    "prompt": "Is multi-factor authentication enforced for email, cloud systems, finance tools, and administrator accounts?",
+    "helpText": "This checks whether MFA covers the accounts most likely to cause disruption if compromised."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Identity & Access Management",
+    "order": 12,
+    "prompt": "Are administrator accounts separated from normal day-to-day user accounts?",
+    "helpText": "Admin access should be limited and not used for everyday browsing, email, or routine work."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Identity & Access Management",
+    "order": 13,
+    "prompt": "Do you review user access regularly and remove leavers quickly?",
+    "helpText": "Access reviews should include cloud apps, finance tools, shared folders, admin access, and supplier access."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Threat & Vulnerability Management",
+    "order": 11,
+    "prompt": "Is endpoint protection active on all business laptops, desktops, and servers?",
+    "helpText": "This includes anti-malware, ransomware protection, device health visibility, and alerting."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Threat & Vulnerability Management",
+    "order": 12,
+    "prompt": "Do you have visibility of missing patches or known vulnerabilities across important systems?",
+    "helpText": "The aim is to know what is exposed, what matters most, and what is overdue."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Threat & Vulnerability Management",
+    "order": 13,
+    "prompt": "Are high-risk vulnerabilities tracked to closure with owners and target dates?",
+    "helpText": "Critical fixes should not sit informally in email threads or depend on memory."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Resilience & Recovery",
+    "order": 11,
+    "prompt": "Are critical systems and data backed up automatically with failures monitored?",
+    "helpText": "Backups should run without manual effort and failures should be visible quickly."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Resilience & Recovery",
+    "order": 12,
+    "prompt": "Do you keep at least one backup copy protected from normal user access or ransomware deletion?",
+    "helpText": "Protected, immutable, or separated backup copies reduce the chance that attackers can delete recovery options."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Resilience & Recovery",
+    "order": 13,
+    "prompt": "Have you tested restoring a critical file, system, or service in the last 6 months?",
+    "helpText": "Backups only reduce business risk if recovery has been proven."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Secure Operations",
+    "order": 11,
+    "prompt": "Do you receive a regular report showing patch status, backup status, endpoint alerts, and overdue actions?",
+    "helpText": "This turns technology into management visibility rather than hidden technical activity."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Incident Detection & Response",
+    "order": 11,
+    "prompt": "Do you know which security alerts are monitored, who responds, and how quickly escalation happens?",
+    "helpText": "This is especially important if you rely on an MSP, IT provider, or outsourced support."
+  },
+  {
+    "modelVersion": "v3.1",
+    "domain": "Third-Party & Supply Chain",
+    "order": 11,
+    "prompt": "Do you ask critical suppliers or IT providers what security capabilities, reporting, and evidence they provide?",
+    "helpText": "This helps the business buy outcomes and proof, not just tools or vague support."
   }
 ]
