@@ -4693,8 +4693,9 @@ function normalizeTechnologySnapshotItem(area: string, item: any) {
   const techItems = getTechnologySnapshotForDomains(ranked.slice(0, 3), providerBriefContext);
 
   for (const item of techItems) {
-    const capabilityLines = item.whatToAskFor.flatMap((v) => wrapText(v, 72)).slice(0, 6);
-    const evidenceLines = item.evidenceToRequest.flatMap((v) => wrapText(v, 72)).slice(0, 4);
+const capabilityLines = item.whatToAskFor.flatMap((v: string) => wrapText(v, 72)).slice(0, 6);
+
+const evidenceLines = item.evidenceToRequest.flatMap((v: string) => wrapText(v, 72)).slice(0, 4);
     const whyLines = wrapText(item.whyItMatters, 82).slice(0, 3);
     const cardHeight = 178;
 
