@@ -561,7 +561,7 @@ function ImplementationFixCard({
           <span>{guidance.plainEnglish}</span>
         </div>
         <div className="rr-implementationRow">
-          <strong>Technology categories</strong>
+          <strong>Technology options</strong>
           <span>{guidance.technologyCategories.slice(0, 4).join(", ")}</span>
         </div>
         <div className="rr-implementationRow">
@@ -1067,7 +1067,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
             {!isPremium ? (
               <div className="rr-heroLockNote">
-                The full report includes the complete breach route view, fuller cost breakdown, and a practical action plan.
+                The full report includes the complete disruption-route view, the provider brief, and a practical action plan.
               </div>
             ) : null}
           </div>
@@ -1134,7 +1134,7 @@ export default function ResultsClient({ id }: { id: string }) {
         <section className="rr-sectionGrid">
           <div className="rs-panel rs-panelLight">
             <div className="rr-sectionHead">
-              <div className="rr-sectionTitle">1. Your most likely breach routes</div>
+              <div className="rr-sectionTitle">1. Your most likely disruption routes</div>
               <div className="rr-sectionSub">
                 These are the areas most likely to create disruption if left unchanged.
               </div>
@@ -1148,7 +1148,7 @@ export default function ResultsClient({ id }: { id: string }) {
                   detail={
                     i === 0
                       ? "This appears to be the highest-priority exposure visible in your current answers."
-                      : "This is another common route small businesses are breached when weaknesses remain unresolved."
+                      : "This is another common route where small businesses can be disrupted when weaknesses remain unresolved."
                   }
                 />
               ))}
@@ -1157,7 +1157,7 @@ export default function ResultsClient({ id }: { id: string }) {
             {!isPremium ? (
               <div className="rr-miniLocked">
                 <Icon name="lock" size={14} />
-                Full report unlocks the complete route analysis and wider context.
+                Full report unlocks the complete disruption-route analysis and wider context.
               </div>
             ) : null}
           </div>
@@ -1264,9 +1264,10 @@ export default function ResultsClient({ id }: { id: string }) {
                 bullets={[
                   "Full downloadable PDF report",
                   "Complete 90-day action plan",
+                  "Provider Brief - what to ask your IT provider or MSP for",
                   "Full assurance and evidence checklist",
                   "Complete benchmark context",
-                  "Useful before insurers, clients, or consultants ask questions",
+                  "Useful before insurers, clients, IT providers, or consultants ask questions",
                 ]}
                 onUnlock={goCheckout}
               />
@@ -1313,10 +1314,21 @@ export default function ResultsClient({ id }: { id: string }) {
               {!isPremium ? (
                 <div className="rr-miniLocked">
                   <Icon name="lock" size={14} />
-                  Full report includes the complete practical implementation view and PDF-ready action guidance.
+                  Full report includes the complete practical implementation view, provider brief, and PDF-ready action guidance.
                 </div>
               ) : null}
             </div>
+
+            {!isPremium ? (
+              <div className="rs-panel rs-panelLight rr-providerPreview">
+                <div className="rr-sectionHead">
+                  <div className="rr-sectionTitle">Provider Brief included in the full report</div>
+                  <div className="rr-sectionSub">
+                    The PDF includes a practical brief you can use with an IT provider or MSP, showing what capability to ask for, what evidence to expect, and how to avoid generic quotes.
+                  </div>
+                </div>
+              </div>
+            ) : null}
 
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
@@ -1347,7 +1359,7 @@ export default function ResultsClient({ id }: { id: string }) {
               {!isPremium ? (
                 <div className="rr-miniLocked">
                   <Icon name="lock" size={14} />
-                  Full report includes fuller benchmark context, practical interpretation, and recommended priorities.
+                  Full report includes benchmark context, practical interpretation, and recommended priorities.
                 </div>
               ) : null}
             </div>
@@ -1737,13 +1749,13 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rr-sectionGrid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr;
           gap: 18px;
         }
 
         .rs-mainGrid {
           display: grid;
-          grid-template-columns: 0.98fr 1.02fr;
+          grid-template-columns: 1fr;
           gap: 18px;
           align-items: start;
         }
@@ -1838,6 +1850,7 @@ export default function ResultsClient({ id }: { id: string }) {
         .rr-riskGrid {
           margin-top: 14px;
           display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           gap: 12px;
         }
 
@@ -2208,6 +2221,11 @@ export default function ResultsClient({ id }: { id: string }) {
           color: rgba(255,255,255,0.62);
           font-size: 13px;
           line-height: 1.6;
+        }
+
+        .rr-providerPreview {
+          border-color: rgba(13,177,123,0.18);
+          background: linear-gradient(180deg, #ffffff, #f7fffc);
         }
 
         .rs-deliverablesTitle {

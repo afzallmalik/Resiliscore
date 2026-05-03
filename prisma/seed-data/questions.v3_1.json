@@ -3,714 +3,714 @@
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 1,
-    "prompt": "Is there a named senior owner accountable for cyber security and resilience?",
-    "helpText": "A specific leader owns decisions, funding and priority-setting."
+    "prompt": "Is one senior person clearly responsible for cyber resilience in the business?",
+    "helpText": "There should be a named person who owns decisions, funding, priorities, and follow-up."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 2,
-    "prompt": "Do leaders review cyber and resilience risks on a set schedule?",
-    "helpText": "Monthly or quarterly reviews with tracked actions are sufficient."
+    "prompt": "Do leaders review cyber and resilience risks regularly?",
+    "helpText": "A simple monthly or quarterly review with actions and owners is enough."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 3,
-    "prompt": "Is your risk appetite written down and agreed by leadership?",
-    "helpText": "A short statement defining acceptable risk levels is enough."
+    "prompt": "Has leadership agreed how much cyber or disruption risk the business is willing to accept?",
+    "helpText": "This can be a short statement explaining what level of risk is acceptable and what is not."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 4,
-    "prompt": "Are key security and resilience policies approved and communicated?",
-    "helpText": "Staff should know the rules and where to find them."
+    "prompt": "Do staff know the basic rules for security, backups, access, and incident reporting?",
+    "helpText": "Policies do not need to be complex, but staff should know where to find them and what is expected."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 5,
-    "prompt": "Are major business decisions checked for cyber or resilience impact?",
-    "helpText": "Include new systems, suppliers, sites and major operational changes."
+    "prompt": "When the business makes major changes, do you check whether cyber or resilience risk changes too?",
+    "helpText": "Include new systems, suppliers, offices, cloud tools, acquisitions, or major process changes."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 6,
-    "prompt": "Do you track and close actions from audits, incidents and reviews?",
-    "helpText": "Actions need owners, due dates and evidence of completion."
+    "prompt": "Do you track important security or resilience actions until they are completed?",
+    "helpText": "Actions from reviews, incidents, audits, or supplier issues should have owners, dates, and evidence."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 7,
-    "prompt": "Is there clear escalation for urgent risks or incidents?",
-    "helpText": "Everyone should know who to call and who can make decisions."
+    "prompt": "If an urgent cyber or disruption issue happened, would staff know who to contact and who can make decisions?",
+    "helpText": "Escalation should be clear before pressure appears."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 8,
-    "prompt": "Do you assign budget and resources for critical control improvements?",
-    "helpText": "Fund the essentials: access control, backups, patching and response."
+    "prompt": "Do you set aside time, money, or people to fix the most important resilience gaps?",
+    "helpText": "Focus first on essentials such as access control, backups, patching, and response."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 9,
-    "prompt": "Are roles and responsibilities clearly defined across teams?",
-    "helpText": "Avoid gaps and overlaps\u2014people should know what they own."
+    "prompt": "Are people clear about who owns key cyber and resilience tasks?",
+    "helpText": "Avoid gaps where everyone assumes someone else is responsible."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Governance & Leadership",
     "order": 10,
-    "prompt": "Do you update governance arrangements when the business changes?",
-    "helpText": "Review oversight after growth, new technology or major incidents."
+    "prompt": "Do you update your oversight when the business grows, changes systems, or has an incident?",
+    "helpText": "Governance should change when the business changes."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 1,
-    "prompt": "Do you maintain a simple risk register covering cyber and disruption risks?",
-    "helpText": "List top risks, owners, impacts and current controls."
+    "prompt": "Do you keep a simple list of your main cyber, supplier, and disruption risks?",
+    "helpText": "List the top risks, who owns them, business impact, and what is being done."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 2,
-    "prompt": "Are risks assessed using business impact criteria?",
-    "helpText": "Consider financial, operational, legal and reputational effects."
+    "prompt": "Do you judge risks by how they would affect the business?",
+    "helpText": "Think about money, downtime, customers, legal duties, and reputation."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 3,
-    "prompt": "Do you review and update risk priorities regularly?",
-    "helpText": "Use a set cadence and record changes."
+    "prompt": "Do you review your risk priorities regularly?",
+    "helpText": "Risks should not sit unchanged for months without review."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 4,
-    "prompt": "Are risk treatment actions tracked to completion?",
-    "helpText": "Every action should have an owner and deadline."
+    "prompt": "Do risk actions have clear owners and deadlines?",
+    "helpText": "Every important action should have someone responsible and a target date."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 5,
-    "prompt": "Do you formally document accepted risks?",
-    "helpText": "Include rationale and review date."
+    "prompt": "If the business accepts a risk, is that decision written down?",
+    "helpText": "Record why the risk is accepted, who approved it, and when it will be reviewed."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 6,
-    "prompt": "Do you understand key legal or contractual obligations?",
-    "helpText": "Map requirements to practical controls."
+    "prompt": "Do you understand the main legal, client, insurer, or contract requirements that apply to your business?",
+    "helpText": "Focus on the obligations that affect security, data, continuity, and supplier assurance."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 7,
-    "prompt": "Are procedures reflected in day-to-day practice?",
-    "helpText": "Verify that staff follow documented processes."
+    "prompt": "Do staff actually follow the procedures you have written down?",
+    "helpText": "The aim is to confirm that documented processes happen in real life."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 8,
-    "prompt": "Do you retain evidence that controls operate effectively?",
-    "helpText": "Keep proof such as reports, logs or review records."
+    "prompt": "Can you quickly prove that important controls are working?",
+    "helpText": "Evidence can include reports, logs, screenshots, review notes, or completed checklists."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 9,
-    "prompt": "Are risks reassessed after significant change?",
-    "helpText": "Assess impact before major migrations or integrations."
+    "prompt": "Do you reassess risks before or after major changes?",
+    "helpText": "Include cloud migrations, new suppliers, major integrations, or new ways of working."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Risk & Compliance",
     "order": 10,
-    "prompt": "Do you capture lessons learned from incidents into your risk process?",
-    "helpText": "Update risk entries and controls to prevent recurrence."
+    "prompt": "After an incident or near miss, do you update your risk list and controls?",
+    "helpText": "Lessons learned should feed back into risk management."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 1,
-    "prompt": "Do you maintain an up-to-date inventory of systems and services?",
-    "helpText": "Keep a current list of hardware, software and cloud services."
+    "prompt": "Do you keep a current list of the systems, devices, software, and cloud services your business uses?",
+    "helpText": "You cannot protect or recover what you do not know exists."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 2,
-    "prompt": "Have you identified critical systems and sensitive data?",
-    "helpText": "Agree what would cause most harm if unavailable or exposed."
+    "prompt": "Do you know which systems and data would hurt the business most if they were unavailable or exposed?",
+    "helpText": "Identify the systems and data that matter most to trading, customers, finance, or compliance."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 3,
-    "prompt": "Is ownership assigned for key systems and datasets?",
-    "helpText": "Owners are accountable for protection and recovery."
+    "prompt": "Does each important system or dataset have a clear owner?",
+    "helpText": "Owners are responsible for keeping information accurate, protected, and recoverable."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 4,
-    "prompt": "Do you classify data according to sensitivity?",
-    "helpText": "Labels such as public, internal or confidential guide handling."
+    "prompt": "Do you label or separate data by how sensitive it is?",
+    "helpText": "Simple labels such as public, internal, confidential, or sensitive are enough."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 5,
-    "prompt": "Are data sharing methods controlled and monitored?",
-    "helpText": "Reduce accidental leakage via email or external links."
+    "prompt": "Do you control how sensitive files and data are shared outside the business?",
+    "helpText": "Reduce accidental leakage through email, shared links, or uncontrolled folders."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 6,
-    "prompt": "Do you define retention and secure disposal rules?",
-    "helpText": "Specify how long to keep data and how to delete it safely."
+    "prompt": "Do you know how long key data should be kept and how it should be safely deleted?",
+    "helpText": "Retention and disposal rules reduce clutter, risk, and confusion."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 7,
-    "prompt": "Are system dependencies documented to support recovery?",
-    "helpText": "Record configurations and critical integration points."
+    "prompt": "Do you understand which systems depend on each other?",
+    "helpText": "This helps recovery planning and avoids surprises during outages."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 8,
-    "prompt": "Do you manage and reduce shadow IT?",
-    "helpText": "Identify unofficial tools and bring them under control."
+    "prompt": "Do you look for unofficial tools, apps, or spreadsheets being used outside normal IT oversight?",
+    "helpText": "Bring important unofficial tools under control before they become hidden risk."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 9,
-    "prompt": "Are backup requirements defined for critical information?",
-    "helpText": "Match frequency and scope to business importance."
+    "prompt": "Have you decided what information must be backed up and how often?",
+    "helpText": "Backup coverage should match business importance."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Asset & Data Management",
     "order": 10,
-    "prompt": "Do asset and data records get updated after new deployments?",
-    "helpText": "Inventory should evolve with the organisation."
+    "prompt": "When new systems or tools are introduced, do you update your records?",
+    "helpText": "Your system and data list should stay current as the business changes."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 1,
-    "prompt": "Is multi-factor authentication enabled for key accounts?",
-    "helpText": "Protect email, cloud and admin access with MFA."
+    "prompt": "Do staff need more than just a password to access key accounts?",
+    "helpText": "Use extra verification, such as an app code or phone prompt, for email, cloud, and admin access."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 2,
-    "prompt": "Is access removed promptly when staff leave or change roles?",
-    "helpText": "Use a joiners/movers/leavers checklist."
+    "prompt": "When someone leaves or changes role, is their access removed or changed quickly?",
+    "helpText": "Use a joiners, movers, and leavers checklist."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 3,
-    "prompt": "Is access granted based on least privilege?",
-    "helpText": "Users receive only what is necessary for their role."
+    "prompt": "Do people only get access to what they genuinely need for their role?",
+    "helpText": "Avoid broad access that is convenient but unnecessary."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 4,
-    "prompt": "Are access rights reviewed periodically?",
-    "helpText": "Quarterly reviews reduce unnecessary access."
+    "prompt": "Do you regularly check whether people still need the access they have?",
+    "helpText": "Quarterly reviews help remove old or unnecessary access."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 5,
-    "prompt": "Are privileged accounts minimised and controlled?",
-    "helpText": "Separate admin from daily-use accounts."
+    "prompt": "Are admin-level accounts limited and controlled separately from everyday user accounts?",
+    "helpText": "Admin access should not be used for normal email, browsing, or routine work."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 6,
-    "prompt": "Are shared accounts tightly managed or avoided?",
-    "helpText": "Define ownership and rotate credentials if unavoidable."
+    "prompt": "Are shared logins avoided or tightly controlled?",
+    "helpText": "If shared accounts are unavoidable, ownership and password changes should be clear."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 7,
-    "prompt": "Are password standards enforced across systems?",
-    "helpText": "Prevent weak or reused passwords."
+    "prompt": "Do you prevent weak or reused passwords across business systems?",
+    "helpText": "Use password rules, password managers, or other controls to reduce credential risk."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 8,
-    "prompt": "Is remote access secured and monitored?",
-    "helpText": "Harden VPNs and admin portals."
+    "prompt": "Is remote access to business systems protected and monitored?",
+    "helpText": "Remote access, VPNs, and admin portals should be secured and reviewed."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 9,
-    "prompt": "Is third-party access time-limited and controlled?",
-    "helpText": "Grant access only for the required period."
+    "prompt": "Is supplier or third-party access limited to what they need and removed when no longer required?",
+    "helpText": "Supplier access should not remain open indefinitely."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Identity & Access Management",
     "order": 10,
-    "prompt": "Are access events logged for investigation?",
-    "helpText": "Maintain logs of logins and privilege changes."
+    "prompt": "Can you see who logged in and who changed important access rights?",
+    "helpText": "Login and access-change records help investigate problems."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 1,
-    "prompt": "Do you follow a defined patching routine?",
-    "helpText": "Apply critical updates within agreed timeframes."
+    "prompt": "Do you have a regular routine for applying important updates?",
+    "helpText": "Critical patches should be applied within agreed timeframes."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 2,
-    "prompt": "Are backups monitored for failures?",
-    "helpText": "Detect issues before data is lost."
+    "prompt": "Would you know quickly if backups stopped working?",
+    "helpText": "Backup failures should be monitored, not discovered after an incident."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 3,
-    "prompt": "Do you test restoration of backups?",
-    "helpText": "Restore tests confirm recovery capability."
+    "prompt": "Have you tested that backups can actually be restored?",
+    "helpText": "A backup only helps if you can recover from it."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 4,
-    "prompt": "Are key security logs centrally collected?",
-    "helpText": "Central logging supports detection and investigation."
+    "prompt": "Are important security logs collected somewhere they can be reviewed?",
+    "helpText": "Logs help spot issues and investigate incidents."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 5,
-    "prompt": "Do you use secure configuration baselines?",
-    "helpText": "Standard builds reduce misconfiguration risk."
+    "prompt": "Do you use standard secure settings for devices, systems, and cloud tools?",
+    "helpText": "Standard builds reduce mistakes and misconfiguration."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 6,
-    "prompt": "Are system changes reviewed before release?",
-    "helpText": "Assess operational and security impact."
+    "prompt": "Are system changes checked before they go live?",
+    "helpText": "Review the security and operational impact of important changes."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 7,
-    "prompt": "Are endpoints protected with current security tools?",
-    "helpText": "Use antivirus or EDR and encryption."
+    "prompt": "Are business devices protected with up-to-date security tools?",
+    "helpText": "This includes laptops, desktops, servers, encryption, anti-malware, or endpoint protection."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 8,
-    "prompt": "Are critical services monitored for uptime?",
-    "helpText": "Early detection reduces disruption."
+    "prompt": "Would you know quickly if a critical service stopped working?",
+    "helpText": "Monitoring reduces downtime and surprise outages."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 9,
-    "prompt": "Are high-risk actions subject to approval?",
-    "helpText": "Prevent accidental or unauthorised change."
+    "prompt": "Do high-risk actions need approval before they happen?",
+    "helpText": "This reduces accidental or unauthorised changes."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Secure Operations",
     "order": 10,
-    "prompt": "Do you improve operations after outages or incidents?",
-    "helpText": "Strengthen controls using lessons learned."
+    "prompt": "After outages or incidents, do you improve the way operations are run?",
+    "helpText": "Use lessons learned to strengthen routines."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 1,
-    "prompt": "Do you conduct regular vulnerability scans?",
-    "helpText": "Scan internal and internet-facing systems."
+    "prompt": "Do you regularly check systems for known weaknesses?",
+    "helpText": "This can include vulnerability scanning of important internal and internet-facing systems."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 2,
-    "prompt": "Are vulnerabilities prioritised by business impact?",
-    "helpText": "Focus on critical systems first."
+    "prompt": "Do you fix the weaknesses that could affect critical systems first?",
+    "helpText": "Prioritise based on business impact, not just technical severity."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 3,
-    "prompt": "Are high-risk vulnerabilities remediated quickly?",
-    "helpText": "Define and monitor remediation targets."
+    "prompt": "Are serious weaknesses fixed within clear target times?",
+    "helpText": "High-risk issues should not stay open without ownership."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 4,
-    "prompt": "Do you track vulnerability findings to closure?",
-    "helpText": "Keep evidence of remediation."
+    "prompt": "Do you track known weaknesses until they are fixed?",
+    "helpText": "Keep evidence that important issues were remediated."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 5,
-    "prompt": "Do you monitor emerging threats affecting your environment?",
-    "helpText": "Stay informed through vendor or industry alerts."
+    "prompt": "Do you stay aware of new threats that could affect your systems or suppliers?",
+    "helpText": "Use vendor alerts, MSP updates, or trusted industry sources."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 6,
-    "prompt": "Are exposed services hardened against common attacks?",
-    "helpText": "Disable defaults and unnecessary services."
+    "prompt": "Are internet-facing systems hardened against common attacks?",
+    "helpText": "Remove default settings, unused services, and obvious exposure."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 7,
-    "prompt": "Is security considered during system changes?",
-    "helpText": "Prevent new vulnerabilities from being introduced."
+    "prompt": "When systems change, do you check that new weaknesses have not been introduced?",
+    "helpText": "Security should be considered during changes, not after problems appear."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 8,
-    "prompt": "Are remediation exceptions formally documented?",
-    "helpText": "Record justification and review dates."
+    "prompt": "If a weakness cannot be fixed quickly, is the exception written down and reviewed?",
+    "helpText": "Record the reason, owner, and review date."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 9,
-    "prompt": "Are anti-phishing measures implemented?",
-    "helpText": "Combine email filtering, MFA and awareness."
+    "prompt": "Do you have protections against phishing emails and fake login attempts?",
+    "helpText": "Use a mix of email filtering, MFA, awareness, and reporting."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Threat & Vulnerability Management",
     "order": 10,
-    "prompt": "Do you reduce repeat vulnerabilities over time?",
-    "helpText": "Improve controls to prevent recurring findings."
+    "prompt": "Do you reduce repeat weaknesses over time?",
+    "helpText": "Recurring issues suggest the root cause has not been fixed."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 1,
-    "prompt": "Do you have a documented incident response plan?",
-    "helpText": "Define roles, contacts and decision paths."
+    "prompt": "If a cyber incident happened, would your team know what to do first?",
+    "helpText": "A simple plan should define roles, contacts, decision paths, and first actions."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 2,
-    "prompt": "Can staff report suspected incidents easily?",
-    "helpText": "Encourage quick reporting of suspicious activity."
+    "prompt": "Can staff easily report suspicious emails, messages, or system behaviour?",
+    "helpText": "Make reporting simple and encourage people to raise concerns quickly."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 3,
-    "prompt": "Are key systems monitored for suspicious behaviour?",
-    "helpText": "Detect anomalies in email, cloud and admin access."
+    "prompt": "Are important systems watched for unusual or suspicious activity?",
+    "helpText": "Focus on email, cloud systems, admin accounts, and critical services."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 4,
-    "prompt": "Is an incident log maintained?",
-    "helpText": "Record timeline, actions and outcomes."
+    "prompt": "Do you record incidents, near misses, and what was done about them?",
+    "helpText": "Keep a simple log of timeline, actions, decisions, and outcome."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 5,
-    "prompt": "Have you tested your incident response process recently?",
-    "helpText": "Tabletop exercises reveal gaps."
+    "prompt": "Have you practised your incident response process recently?",
+    "helpText": "A tabletop exercise can reveal confusion before a real incident."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 6,
-    "prompt": "Can incidents be contained quickly?",
-    "helpText": "Disable accounts or isolate systems rapidly."
+    "prompt": "Can you quickly contain an incident, such as disabling an account or isolating a device?",
+    "helpText": "Fast containment reduces damage and downtime."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 7,
-    "prompt": "Do you understand notification obligations?",
-    "helpText": "Know when customers or regulators must be informed."
+    "prompt": "Do you know when customers, regulators, insurers, or suppliers must be informed after an incident?",
+    "helpText": "Understand notification requirements before pressure appears."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 8,
-    "prompt": "Is evidence preserved after incidents?",
-    "helpText": "Retain logs and relevant records."
+    "prompt": "Would you keep the evidence needed to understand what happened?",
+    "helpText": "Preserve logs, screenshots, records, and decisions."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 9,
-    "prompt": "Are post-incident improvements tracked to completion?",
-    "helpText": "Prevent recurrence of similar events."
+    "prompt": "Do you track improvements after incidents until they are completed?",
+    "helpText": "Lessons learned should become actions, not just discussion."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Incident Detection & Response",
     "order": 10,
-    "prompt": "Do you have access to external expertise for major incidents?",
-    "helpText": "Identify legal, technical and communications support."
+    "prompt": "Do you know who to call for specialist help during a serious incident?",
+    "helpText": "Identify technical, legal, communications, or insurer support in advance."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 1,
-    "prompt": "Have you identified critical services required to operate?",
-    "helpText": "Agree which services must be restored first."
+    "prompt": "Do you know which services must be restored first for the business to keep operating?",
+    "helpText": "Agree what is most critical before disruption happens."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 2,
-    "prompt": "Are recovery time objectives defined?",
-    "helpText": "Set realistic recovery targets."
+    "prompt": "Have you agreed how quickly key systems or services need to be restored?",
+    "helpText": "Set realistic recovery targets based on business need."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 3,
-    "prompt": "Are backup arrangements aligned to recovery targets?",
-    "helpText": "Backup frequency should support business needs."
+    "prompt": "Do your backup arrangements match how quickly the business needs to recover?",
+    "helpText": "Backup frequency and coverage should support recovery targets."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 4,
-    "prompt": "Are recovery procedures documented?",
-    "helpText": "Provide step-by-step restoration guidance."
+    "prompt": "Are recovery steps written down clearly enough for someone to follow under pressure?",
+    "helpText": "Use simple step-by-step recovery guidance."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 5,
-    "prompt": "Are continuity arrangements defined for manual operation?",
-    "helpText": "Plan temporary workarounds if systems fail."
+    "prompt": "If key systems were unavailable, do you have temporary ways to keep working?",
+    "helpText": "Plan manual workarounds for the most important activities."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 6,
-    "prompt": "Is a communication plan in place for disruption?",
-    "helpText": "Define internal and external messaging."
+    "prompt": "Do you know what you would tell staff, customers, or suppliers during a major disruption?",
+    "helpText": "Prepare internal and external communication routes."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 7,
-    "prompt": "Have recovery plans been tested?",
-    "helpText": "Run tabletop or live restoration tests."
+    "prompt": "Have you tested whether your recovery plans actually work?",
+    "helpText": "Use tabletop exercises or live restore tests."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 8,
-    "prompt": "Are dependencies mapped for recovery planning?",
-    "helpText": "Understand system and supplier interdependencies."
+    "prompt": "Do you know which systems, people, and suppliers your recovery depends on?",
+    "helpText": "Dependencies often decide whether recovery succeeds or stalls."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 9,
-    "prompt": "Are improvements made after testing or disruption?",
-    "helpText": "Update plans based on findings."
+    "prompt": "After tests or real disruption, do you update your recovery plans?",
+    "helpText": "Plans should improve based on what you learn."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Resilience & Recovery",
     "order": 10,
-    "prompt": "Do you consider non-cyber disruptions in planning?",
-    "helpText": "Include power, connectivity and staffing issues."
+    "prompt": "Do your plans cover non-cyber disruption such as power, internet, premises, or staffing problems?",
+    "helpText": "Operational disruption can be just as damaging as cyber incidents."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 1,
-    "prompt": "Do you maintain a list of critical suppliers?",
-    "helpText": "Identify vendors supporting essential services."
+    "prompt": "Do you keep a list of suppliers that are important to business operations?",
+    "helpText": "Identify vendors that support essential systems, data, or services."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 2,
-    "prompt": "Are supplier security controls assessed before onboarding?",
-    "helpText": "Use proportionate due diligence."
+    "prompt": "Before using an important supplier, do you check whether they manage security properly?",
+    "helpText": "Use proportionate due diligence for critical suppliers."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 3,
-    "prompt": "Do contracts include security and incident clauses?",
-    "helpText": "Specify notification timelines and minimum controls."
+    "prompt": "Do supplier contracts explain security, data handling, and incident expectations?",
+    "helpText": "Include notification timelines, minimum controls, and responsibilities where relevant."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 4,
-    "prompt": "Are key suppliers reviewed periodically?",
-    "helpText": "Reassess risk annually or after major change."
+    "prompt": "Do you review important suppliers after onboarding?",
+    "helpText": "Reassess critical suppliers annually or after major change."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 5,
-    "prompt": "Is supplier system access controlled?",
-    "helpText": "Apply least privilege and logging."
+    "prompt": "Is supplier access to your systems limited and monitored?",
+    "helpText": "Apply least privilege and keep access records."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 6,
-    "prompt": "Are supplier dependencies understood?",
-    "helpText": "Know which services rely on each vendor."
+    "prompt": "Do you understand which business services rely on each supplier?",
+    "helpText": "Supplier dependency matters during outages or incidents."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 7,
-    "prompt": "Do you plan for supplier outages or breaches?",
-    "helpText": "Define contingency measures."
+    "prompt": "Do you have a plan if a key supplier suffers an outage or breach?",
+    "helpText": "Define backup options, workarounds, or escalation routes."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 8,
-    "prompt": "Are supplier data handling practices defined?",
-    "helpText": "Ensure proper retention and deletion."
+    "prompt": "Do you know how suppliers handle, keep, and delete your data?",
+    "helpText": "Clarify retention, deletion, and data handling expectations."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 9,
-    "prompt": "Are supplier risk issues tracked to resolution?",
-    "helpText": "Record findings and remediation actions."
+    "prompt": "If supplier risks are identified, are they tracked until resolved?",
+    "helpText": "Record findings, owners, actions, and completion evidence."
   },
   {
     "modelVersion": "v3.0",
     "domain": "Third-Party & Supply Chain",
     "order": 10,
-    "prompt": "Do you reduce concentration risk where possible?",
-    "helpText": "Avoid over-dependence on a single provider."
+    "prompt": "Do you reduce over-dependence on one supplier where possible?",
+    "helpText": "Avoid single points of failure where the business impact would be high."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Identity & Access Management",
     "order": 11,
-    "prompt": "Is multi-factor authentication enforced for email, cloud systems, finance tools, and administrator accounts?",
-    "helpText": "This checks whether MFA covers the accounts most likely to cause disruption if compromised."
+    "prompt": "Do staff need extra verification for email, cloud systems, finance tools, and admin accounts?",
+    "helpText": "This checks whether the most important accounts are protected beyond passwords."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Identity & Access Management",
     "order": 12,
-    "prompt": "Are administrator accounts separated from normal day-to-day user accounts?",
-    "helpText": "Admin access should be limited and not used for everyday browsing, email, or routine work."
+    "prompt": "Are administrator accounts kept separate from normal day-to-day accounts?",
+    "helpText": "Admin access should be limited and not used for routine email, browsing, or daily work."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Identity & Access Management",
     "order": 13,
-    "prompt": "Do you review user access regularly and remove leavers quickly?",
-    "helpText": "Access reviews should include cloud apps, finance tools, shared folders, admin access, and supplier access."
+    "prompt": "Do you regularly check access and remove people quickly when they leave?",
+    "helpText": "Include cloud apps, finance tools, shared folders, admin access, and supplier access."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Threat & Vulnerability Management",
     "order": 11,
-    "prompt": "Is endpoint protection active on all business laptops, desktops, and servers?",
-    "helpText": "This includes anti-malware, ransomware protection, device health visibility, and alerting."
+    "prompt": "Are all business laptops, desktops, and servers protected with active security software?",
+    "helpText": "This includes anti-malware, ransomware protection, device visibility, and alerting."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Threat & Vulnerability Management",
     "order": 12,
-    "prompt": "Do you have visibility of missing patches or known vulnerabilities across important systems?",
+    "prompt": "Can you see which important systems are missing updates or have known weaknesses?",
     "helpText": "The aim is to know what is exposed, what matters most, and what is overdue."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Threat & Vulnerability Management",
     "order": 13,
-    "prompt": "Are high-risk vulnerabilities tracked to closure with owners and target dates?",
-    "helpText": "Critical fixes should not sit informally in email threads or depend on memory."
+    "prompt": "Do serious weaknesses have owners, target dates, and evidence that they were fixed?",
+    "helpText": "Critical fixes should not sit informally in emails or rely on memory."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Resilience & Recovery",
     "order": 11,
-    "prompt": "Are critical systems and data backed up automatically with failures monitored?",
-    "helpText": "Backups should run without manual effort and failures should be visible quickly."
+    "prompt": "Are critical systems and data backed up automatically, with failures visible quickly?",
+    "helpText": "Backups should run without manual effort and failed jobs should be noticed."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Resilience & Recovery",
     "order": 12,
-    "prompt": "Do you keep at least one backup copy protected from normal user access or ransomware deletion?",
-    "helpText": "Protected, immutable, or separated backup copies reduce the chance that attackers can delete recovery options."
+    "prompt": "Do you keep at least one backup copy protected from normal users or attackers?",
+    "helpText": "Protected or separated backup copies reduce the chance that recovery options are deleted."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Resilience & Recovery",
     "order": 13,
-    "prompt": "Have you tested restoring a critical file, system, or service in the last 6 months?",
-    "helpText": "Backups only reduce business risk if recovery has been proven."
+    "prompt": "Have you restored a critical file, system, or service in the last 6 months to prove recovery works?",
+    "helpText": "Backups only reduce business risk if recovery has been tested."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Secure Operations",
     "order": 11,
-    "prompt": "Do you receive a regular report showing patch status, backup status, endpoint alerts, and overdue actions?",
-    "helpText": "This turns technology into management visibility rather than hidden technical activity."
+    "prompt": "Do you receive a regular report showing patching, backups, device alerts, and overdue actions?",
+    "helpText": "This turns technical activity into management visibility."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Incident Detection & Response",
     "order": 11,
-    "prompt": "Do you know which security alerts are monitored, who responds, and how quickly escalation happens?",
+    "prompt": "Do you know which security alerts are monitored, who responds, and how quickly issues are escalated?",
     "helpText": "This is especially important if you rely on an MSP, IT provider, or outsourced support."
   },
   {
     "modelVersion": "v3.1",
     "domain": "Third-Party & Supply Chain",
     "order": 11,
-    "prompt": "Do you ask critical suppliers or IT providers what security capabilities, reporting, and evidence they provide?",
-    "helpText": "This helps the business buy outcomes and proof, not just tools or vague support."
+    "prompt": "Do you ask critical suppliers or IT providers what security capabilities, reports, and evidence they provide?",
+    "helpText": "This helps you buy outcomes and proof, not just tools or vague support."
   }
 ]

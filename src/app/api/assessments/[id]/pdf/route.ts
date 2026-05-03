@@ -303,18 +303,20 @@ function drawBar(page: any, x: number, y: number, w: number, h: number, pct: num
   const safePct = clamp(pct, 0, 1);
   const r = h / 2;
 
-  const trackColor = rgb(0.95, 0.96, 0.985);
-  const trackBorder = BRAND.line;
+  // Cleaner, softer progress bar:
+  // - no outlined end-cap ring
+  // - muted track
+  // - solid rounded fill
+  const trackColor = rgb(0.925, 0.94, 0.965);
   const fillColor = BRAND.accent;
 
+  // Track
   page.drawRectangle({
     x: x + r,
     y,
     width: Math.max(0, w - h),
     height: h,
     color: trackColor,
-    borderColor: trackBorder,
-    borderWidth: 1,
   });
 
   page.drawCircle({
@@ -322,8 +324,6 @@ function drawBar(page: any, x: number, y: number, w: number, h: number, pct: num
     y: y + r,
     size: r,
     color: trackColor,
-    borderColor: trackBorder,
-    borderWidth: 1,
   });
 
   page.drawCircle({
@@ -331,23 +331,23 @@ function drawBar(page: any, x: number, y: number, w: number, h: number, pct: num
     y: y + r,
     size: r,
     color: trackColor,
-    borderColor: trackBorder,
-    borderWidth: 1,
   });
 
   const fillW = w * safePct;
   if (fillW <= 0) return;
 
+  // Very small values render as a clean dot rather than a broken pill.
   if (fillW <= h) {
     page.drawCircle({
-      x: x + r,
+      x: x + Math.max(fillW / 2, 1),
       y: y + r,
-      size: Math.max(fillW / 2, r * 0.55),
+      size: Math.max(fillW / 2, 1),
       color: fillColor,
     });
     return;
   }
 
+  // Fill
   page.drawCircle({
     x: x + r,
     y: y + r,
@@ -358,7 +358,7 @@ function drawBar(page: any, x: number, y: number, w: number, h: number, pct: num
   page.drawRectangle({
     x: x + r,
     y,
-    width: Math.max(0, fillW - r),
+    width: Math.max(0, fillW - h),
     height: h,
     color: fillColor,
   });

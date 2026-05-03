@@ -4,17 +4,21 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 
 const problemPoints = [
-  "Security is inconsistent across the business",
-  "No clear view of where resilience is weakest",
-  "No prioritised plan for what to fix first",
-  "Little evidence if something goes wrong",
+  "Access, backups, suppliers, response, or ownership may fail under pressure",
+  "Weaknesses are often concentrated in one or two avoidable areas",
+  "Leaders need a clear plan before spending more on tools or consultancy",
+  "Evidence is often missing when clients, insurers, or partners ask questions",
 ];
 
 const whatYouGet = [
-  "A clear resilience score",
-  "A prioritised 90-day action plan",
-  "Evidence checklist for each control",
-  "Executive-ready summary and PDF report",
+  "Executive-ready resilience summary",
+  "Top 3 immediate actions to take now",
+  "Prioritised 30 / 60 / 90 day improvement plan",
+  "Practical implementation guidance",
+  "Technology direction without vendor bias",
+  "Provider Brief: what to ask your IT provider or MSP",
+  "Evidence checklist for key controls",
+  "Downloadable PDF report",
 ];
 
 const steps = [
@@ -31,7 +35,7 @@ const steps = [
   {
     number: "03",
     title: "Act on a clear plan",
-    text: "Use the report, checklist, and prioritised 90-day plan to improve resilience without guesswork.",
+    text: "Use the report, checklist, provider brief, and prioritised 90-day plan to improve resilience without guesswork.",
   },
 ];
 
@@ -39,7 +43,7 @@ const steps = [
 const industryViews = [
   {
     label: "General SME",
-    headline: "Most SMEs are exposed through inconsistent routines, not one dramatic failure.",
+    headline: "Most SMEs do not fail everywhere. They fail in one or two weak areas.",
     text: "Resiliscore helps you see whether access, backups, suppliers, response, and ownership would hold up when the business is under pressure.",
   },
   {
@@ -135,7 +139,7 @@ export default function HomePage() {
 
               <p className="rsHeroLead">
                 Resiliscore shows where your business is most likely to fail first,
-                what that means commercially, and what to fix next.
+                what that means commercially, and gives you a clear plan to fix it.
               </p>
 
               <div className="heroActions">
@@ -153,11 +157,12 @@ export default function HomePage() {
 
               <div className="rsHeroMeta">
                 <span>Built for SMEs</span>
-                <span>Assessment + action guidance</span>
-                <span>Executive-ready PDF</span>
+                <span>Assessment + action plan</span>
+                <span>Provider-ready PDF</span>
               </div>
             </div>
-          </div>        </div>
+          </div>
+        </div>
       </section>
 
       <div className="homeShell siteSections rsLandingSections">
@@ -165,11 +170,11 @@ export default function HomePage() {
           <div className="rsSectionGrid">
             <div className="sectionHeading">
               <div className="sectionEyebrow">The problem</div>
-              <h2>The gap isn’t what you know. It’s what’s missing.</h2>
+              <h2>Most businesses don’t fail everywhere.</h2>
               <p>
-                Most SMEs do not lack tools. They lack visibility over what is
-                inconsistent, weak, or unproven when the business is under
-                pressure.
+                They fail in the weak areas nobody has tested, owned, evidenced,
+                or discussed properly. Resiliscore turns those gaps into clear
+                priorities.
               </p>
             </div>
 
@@ -190,8 +195,8 @@ export default function HomePage() {
               <div className="sectionEyebrow">Industry view</div>
               <h2>Why this assessment matters for your business type</h2>
               <p>
-                Select an industry to see the kind of pressure Resiliscore is designed to make visible.
-                The assessment stays simple, but the report helps translate resilience into practical business language.
+                Select an industry to see where disruption typically starts and why this assessment matters.
+                The assessment stays simple, but the report turns resilience gaps into practical business language.
               </p>
             </div>
 
@@ -225,10 +230,11 @@ export default function HomePage() {
           <div className="rsSectionGrid rsSectionGridReverse">
             <div className="sectionHeading">
               <div className="sectionEyebrow">What you get</div>
-              <h2>A report built to be clear, practical, and usable.</h2>
+              <h2>Not just a score — a practical action plan.</h2>
               <p>
-                Resiliscore is designed to help you understand what matters
-                first, without enterprise software or over-explaining.
+                The results page gives immediate clarity. The full PDF adds the
+                implementation guidance, evidence checklist, and provider brief
+                needed to turn risk into action.
               </p>
 
               <div className="rsBulletCard rsBulletCardInline">
@@ -260,18 +266,18 @@ export default function HomePage() {
               <div className="sectionEyebrow">Sample report</div>
               <h2>See the structure before you commit.</h2>
               <p>
-                Review the sample report to see the tone, layout, priorities,
-                and level of clarity before taking the assessment.
+                Review the sample report to see the structure, priorities,
+                implementation guidance, and provider-ready format before taking the assessment.
               </p>
             </div>
 
             <div className="samplePanel rsSamplePanel">
               <div>
                 <div className="samplePanelLabel">Preview</div>
-                <h3>Executive-ready. Plain English. No technical fluff.</h3>
+                <h3>Executive-ready. Plain English. Action-focused.</h3>
                 <p>
                   Built to be useful for leadership, internal planning,
-                  insurers, clients, and external conversations.
+                  IT provider conversations, insurers, clients, and follow-up work.
                 </p>
               </div>
 
@@ -326,8 +332,8 @@ export default function HomePage() {
               <div className="sectionEyebrow">Who it’s for</div>
               <h2>Built for smaller businesses that need clarity, not jargon.</h2>
               <p>
-                Resiliscore is designed for SMEs that want a practical view of
-                resilience before spending more heavily on audits, consultants,
+                Resiliscore is designed for owner-led SMEs that want a practical view of
+                resilience before spending more heavily on tools, audits, consultants,
                 or larger cyber programmes.
               </p>
             </div>
@@ -349,8 +355,7 @@ export default function HomePage() {
             <h2 className="rsFinalCtaTitle">
               You do not need more cyber jargon.
               <br />
-              You need to know whether what you already have would actually hold
-              up under pressure.
+              You need to know what would break first — and what to fix next.
             </h2>
           </div>
 
