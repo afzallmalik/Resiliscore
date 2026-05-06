@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { DOMAINS_V13 } from "@/lib/domains";
-import { getImplementationAction, getImplementationGuidance } from "@/lib/implementationLayer";
 
 type DomainScoreRaw = {
   code?: string;
@@ -263,13 +262,88 @@ function getBenchmarkPercent(overall: number) {
 }
 
 function getPriorityActions(ranked: NormalizedDomainScore[]) {
-  const actions = ranked.slice(0, 5).map((d) => {
-    const implementation = getImplementationAction(`${d.fullName} ${d.name} ${d.code}`);
-    return {
-      title: implementation.title,
-      why: implementation.why,
-    };
-  });
+  const actions: { title: string; why: string }[] = [];
+
+  for (const d of ranked.slice(0, 5)) {
+    const key = `${d.fullName} ${d.name}`.toLowerCase();
+
+    if (key.includes("identity") || key.includes("access")) {
+      actions.push({
+        title: "Enable multi-factor authentication on all email and key business accounts",
+        why: "This blocks one of the most common ways small businesses are breached.",
+      });
+      continue;
+    }
+
+    if (key.includes("recovery") || key.includes("backup") || key.includes("resilience")) {
+      actions.push({
+        title: "Back up your data daily to a separate system and test recovery",
+        why: "This reduces downtime and damage if files are lost or encrypted.",
+      });
+      continue;
+    }
+
+    if (key.includes("threat") || key.includes("vulnerability")) {
+      actions.push({
+        title: "Make sure all business devices and systems update automatically",
+        why: "Attackers often exploit known weaknesses that already have fixes available.",
+      });
+      continue;
+    }
+
+    if (key.includes("incident") || key.includes("response")) {
+      actions.push({
+        title: "Create a simple plan for what to do if something goes wrong",
+        why: "Fast, clear action reduces downtime, confusion, and cost.",
+      });
+      continue;
+    }
+
+    if (key.includes("operations")) {
+      actions.push({
+        title: "Put basic day-to-day security routines in place for devices, users, and data",
+        why: "Simple routines prevent small gaps from becoming expensive incidents.",
+      });
+      continue;
+    }
+
+    if (key.includes("supplier") || key.includes("third")) {
+      actions.push({
+        title: "Review which suppliers can access your systems or data",
+        why: "A weak supplier can still create major disruption for your business.",
+      });
+      continue;
+    }
+
+    if (key.includes("asset") || key.includes("data")) {
+      actions.push({
+        title: "List your key systems and sensitive data so you know what must be protected first",
+        why: "You cannot protect or recover what you cannot quickly identify.",
+      });
+      continue;
+    }
+
+    if (key.includes("risk") || key.includes("compliance")) {
+      actions.push({
+        title: "Track your main security risks and assign an owner to each one",
+        why: "Known problems often stay open too long when nobody owns them clearly.",
+      });
+      continue;
+    }
+
+    if (key.includes("governance")) {
+      actions.push({
+        title: "Assign one person to own cyber risk and review progress monthly",
+        why: "Clear ownership is one of the fastest ways to reduce avoidable gaps.",
+      });
+      continue;
+    }
+
+    actions.push({
+      title: "Fix the biggest security gap in this area first and assign clear ownership",
+      why: "The fastest improvements come from fixing the weakest points before attackers find them.",
+    });
+  }
 
   const deduped: { title: string; why: string }[] = [];
   const seen = new Set<string>();
@@ -281,25 +355,25 @@ function getPriorityActions(ranked: NormalizedDomainScore[]) {
   }
 
   while (deduped.length < 5) {
-    const fallback = [
+    const filler = [
       {
-        title: "Enable MFA and remove shared logins",
-        why: "This is usually the quickest way to reduce account takeover risk.",
+        title: "Use strong, unique passwords and stop sharing logins",
+        why: "Shared and reused passwords make account takeover much easier.",
       },
       {
-        title: "Test that critical data can be restored",
-        why: "Backups only reduce risk if recovery has been proven.",
+        title: "Train staff to spot suspicious emails and fake login pages",
+        why: "Staff are often the first route attackers use to get in.",
       },
       {
-        title: "Create a one-page incident plan",
-        why: "Clear response steps reduce confusion, delay, and avoidable cost.",
+        title: "Remove access quickly when staff leave or change roles",
+        why: "Old accounts are an easy weakness if left active too long.",
       },
     ];
 
-    for (const item of fallback) {
-      if (!seen.has(item.title)) {
-        seen.add(item.title);
-        deduped.push(item);
+    for (const f of filler) {
+      if (!seen.has(f.title)) {
+        seen.add(f.title);
+        deduped.push(f);
       }
       if (deduped.length >= 5) break;
     }
@@ -314,29 +388,34 @@ function getAssuranceChecklist(domainScores: NormalizedDomainScore[]) {
       `${d.fullName} ${d.name}`.toLowerCase().includes(needle.toLowerCase())
     );
 
-  const rows = [
-    byName("identity") || byName("access"),
-    byName("recovery") || byName("backup") || byName("resilience"),
-    byName("incident") || byName("response"),
-    byName("operations"),
-    byName("supplier") || byName("third"),
-  ].filter(Boolean) as NormalizedDomainScore[];
+  const access = byName("identity") || byName("access");
+  const recovery = byName("recovery") || byName("backup") || byName("resilience");
+  const response = byName("incident") || byName("response");
+  const operations = byName("operations");
+  const suppliers = byName("supplier") || byName("third");
 
-  const fallbackRows = domainScores.slice().sort((a, b) => a.score - b.score).slice(0, 5);
-  const sourceRows = rows.length ? rows : fallbackRows;
-
-  return sourceRows.map((domain) => {
-    const guidance = getImplementationGuidance(`${domain.fullName} ${domain.name} ${domain.code}`);
-    return {
-      label: guidance.controlRequired,
-      status: domain.score >= 3 ? "Ready to show" : "Needs work",
-      controlCategory: guidance.checklist.controlCategory,
-      implementationType: guidance.checklist.implementationType,
-      effort: guidance.effort,
-      priority: guidance.checklist.priority,
-      outcome: guidance.checklist.outcome,
-    };
-  });
+  return [
+    {
+      label: "Protected access to email and key systems",
+      status: (access?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+    {
+      label: "Backups and recovery arrangements",
+      status: (recovery?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+    {
+      label: "Basic response plan for incidents",
+      status: (response?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+    {
+      label: "Day-to-day security routines",
+      status: (operations?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+    {
+      label: "Third-party and supplier controls",
+      status: (suppliers?.score ?? 0) >= 3 ? "Ready to show" : "Needs work",
+    },
+  ];
 }
 
 function Icon({
@@ -489,20 +568,10 @@ function ActionCard({
 function AssuranceItem({
   label,
   status,
-  controlCategory,
-  implementationType,
-  effort,
-  priority,
-  outcome,
   locked = false,
 }: {
   label: string;
   status: string;
-  controlCategory?: string;
-  implementationType?: string;
-  effort?: string;
-  priority?: string;
-  outcome?: string;
   locked?: boolean;
 }) {
   const ready = status === "Ready to show";
@@ -519,66 +588,6 @@ function AssuranceItem({
         )}
       </div>
       <div className="rr-assuranceStatus">{locked ? "Full report" : status}</div>
-      {!locked ? (
-        <div className="rr-assuranceDetail">
-          {controlCategory ? <span>{controlCategory}</span> : null}
-          {implementationType ? <span>{implementationType}</span> : null}
-          {effort ? <span>{effort} effort</span> : null}
-          {priority ? <span>{priority} priority</span> : null}
-          {outcome ? <p>Done when: {outcome}</p> : null}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function ImplementationFixCard({
-  domain,
-  index,
-}: {
-  domain: NormalizedDomainScore;
-  index: number;
-}) {
-  const guidance = getImplementationGuidance(`${domain.fullName} ${domain.name} ${domain.code}`);
-
-  return (
-    <div className="rr-implementationCard">
-      <div className="rr-implementationTop">
-        <div>
-          <div className="rr-implementationEyebrow">Weak domain {index}</div>
-          <div className="rr-implementationTitle">{domain.name}</div>
-        </div>
-        <div className="rr-implementationScore">{domain.score.toFixed(2)} / 5</div>
-      </div>
-
-      <div className="rr-implementationBody">
-        <div className="rr-implementationRow">
-          <strong>Control required</strong>
-          <span>{guidance.controlRequired}</span>
-        </div>
-        <div className="rr-implementationRow">
-          <strong>Why it matters</strong>
-          <span>{guidance.plainEnglish}</span>
-        </div>
-        <div className="rr-implementationRow">
-          <strong>Technology options</strong>
-          <span>{guidance.technologyCategories.slice(0, 4).join(", ")}</span>
-        </div>
-        <div className="rr-implementationRow">
-          <strong>What to ask an IT provider for</strong>
-          <span>{(guidance as any).technologyAsk || "Ask what capability, coverage, reporting, ownership, and evidence will be put in place."}</span>
-        </div>
-        <div className="rr-implementationRow">
-          <strong>Typical SME approach</strong>
-          <span>{guidance.typicalSmeApproach}</span>
-        </div>
-      </div>
-
-      <div className="rr-implementationMeta">
-        <span>Effort: {guidance.effort}</span>
-        <span>Cost: {guidance.cost}</span>
-        <span>Impact: {guidance.maturityImpact}</span>
-      </div>
     </div>
   );
 }
@@ -1067,7 +1076,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
             {!isPremium ? (
               <div className="rr-heroLockNote">
-                The full report includes the complete disruption-route view, the provider brief, and a practical action plan.
+                The full report includes the complete breach route view, fuller cost breakdown, and a practical action plan.
               </div>
             ) : null}
           </div>
@@ -1089,21 +1098,6 @@ export default function ResultsClient({ id }: { id: string }) {
           <div className="rs-kpiCard rs-kpiWide">
             <div className="rs-kpiLabel">What this points to</div>
             <div className="rs-kpiText">{whyItMatters}</div>
-          </div>
-        </section>
-
-        <section className="rs-panel rs-panelLight">
-          <div className="rr-sectionHead">
-            <div className="rr-sectionTitle">Top 3 actions to take now</div>
-            <div className="rr-sectionSub">
-              These are the fastest practical moves based on your weakest areas. Start here before spending money on wider cyber work.
-            </div>
-          </div>
-
-          <div className="rr-topActionGrid">
-            {actions.slice(0, 3).map((action, i) => (
-              <ActionCard key={action.title} index={i + 1} title={action.title} why={action.why} />
-            ))}
           </div>
         </section>
 
@@ -1134,7 +1128,7 @@ export default function ResultsClient({ id }: { id: string }) {
         <section className="rr-sectionGrid">
           <div className="rs-panel rs-panelLight">
             <div className="rr-sectionHead">
-              <div className="rr-sectionTitle">1. Your most likely disruption routes</div>
+              <div className="rr-sectionTitle">1. Your most likely breach routes</div>
               <div className="rr-sectionSub">
                 These are the areas most likely to create disruption if left unchanged.
               </div>
@@ -1148,7 +1142,7 @@ export default function ResultsClient({ id }: { id: string }) {
                   detail={
                     i === 0
                       ? "This appears to be the highest-priority exposure visible in your current answers."
-                      : "This is another common route where small businesses can be disrupted when weaknesses remain unresolved."
+                      : "This is another common route small businesses are breached when weaknesses remain unresolved."
                   }
                 />
               ))}
@@ -1157,7 +1151,7 @@ export default function ResultsClient({ id }: { id: string }) {
             {!isPremium ? (
               <div className="rr-miniLocked">
                 <Icon name="lock" size={14} />
-                Full report unlocks the complete disruption-route analysis and wider context.
+                Full report unlocks the complete route analysis and wider context.
               </div>
             ) : null}
           </div>
@@ -1264,10 +1258,9 @@ export default function ResultsClient({ id }: { id: string }) {
                 bullets={[
                   "Full downloadable PDF report",
                   "Complete 90-day action plan",
-                  "Provider Brief - what to ask your IT provider or MSP for",
                   "Full assurance and evidence checklist",
                   "Complete benchmark context",
-                  "Useful before insurers, clients, IT providers, or consultants ask questions",
+                  "Useful before insurers, clients, or consultants ask questions",
                 ]}
                 onUnlock={goCheckout}
               />
@@ -1299,39 +1292,6 @@ export default function ResultsClient({ id }: { id: string }) {
 
             <div className="rs-panel rs-panelLight">
               <div className="rr-sectionHead">
-                <div className="rr-sectionTitle">How to fix this</div>
-                <div className="rr-sectionSub">
-                  Practical implementation guidance for the weakest domains. No vendors, no affiliate recommendations — only control types, technology categories, and what to ask an IT provider for.
-                </div>
-              </div>
-
-              <div className="rr-implementationStack">
-                {(isPremium ? weakestDomains : weakestDomains.slice(0, 2)).map((d, i) => (
-                  <ImplementationFixCard key={`fix-${d.code}`} domain={d} index={i + 1} />
-                ))}
-              </div>
-
-              {!isPremium ? (
-                <div className="rr-miniLocked">
-                  <Icon name="lock" size={14} />
-                  Full report includes the complete practical implementation view, provider brief, and PDF-ready action guidance.
-                </div>
-              ) : null}
-            </div>
-
-            {!isPremium ? (
-              <div className="rs-panel rs-panelLight rr-providerPreview">
-                <div className="rr-sectionHead">
-                  <div className="rr-sectionTitle">Provider Brief included in the full report</div>
-                  <div className="rr-sectionSub">
-                    The PDF includes a practical brief you can use with an IT provider or MSP, showing what capability to ask for, what evidence to expect, and how to avoid generic quotes.
-                  </div>
-                </div>
-              </div>
-            ) : null}
-
-            <div className="rs-panel rs-panelLight">
-              <div className="rr-sectionHead">
                 <div className="rr-sectionTitle">5. Benchmark view</div>
                 <div className="rr-sectionSub">
                   This is a practical reference point, not a formal ranking.
@@ -1359,7 +1319,7 @@ export default function ResultsClient({ id }: { id: string }) {
               {!isPremium ? (
                 <div className="rr-miniLocked">
                   <Icon name="lock" size={14} />
-                  Full report includes benchmark context, practical interpretation, and recommended priorities.
+                  Full report includes fuller benchmark context, practical interpretation, and recommended priorities.
                 </div>
               ) : null}
             </div>
@@ -1378,11 +1338,6 @@ export default function ResultsClient({ id }: { id: string }) {
                     key={item.label}
                     label={item.label}
                     status={item.status}
-                    controlCategory={item.controlCategory}
-                    implementationType={item.implementationType}
-                    effort={item.effort}
-                    priority={item.priority}
-                    outcome={item.outcome}
                   />
                 ))}
 
@@ -1392,11 +1347,6 @@ export default function ResultsClient({ id }: { id: string }) {
                       key={item.label}
                       label={item.label}
                       status={item.status}
-                      controlCategory={item.controlCategory}
-                      implementationType={item.implementationType}
-                      effort={item.effort}
-                      priority={item.priority}
-                      outcome={item.outcome}
                       locked
                     />
                   ))}
@@ -1503,14 +1453,15 @@ export default function ResultsClient({ id }: { id: string }) {
         }
 
         .rs-btnPrimary {
-          background: #0db17b;
-          color: #fff;
-          border-color: rgba(13, 177, 123, 0.15);
-          box-shadow: 0 8px 20px rgba(13, 177, 123, 0.22);
+          background: linear-gradient(135deg, #22d3ee, #06b6d4);
+          color: #061b22;
+          border-color: rgba(34, 211, 238, 0.24);
+          box-shadow: 0 14px 34px rgba(34, 211, 238, 0.26);
         }
 
         .rs-btnPrimary:hover {
-          background: #0a8d62;
+          background: linear-gradient(135deg, #67e8f9, #22d3ee);
+          box-shadow: 0 18px 44px rgba(34, 211, 238, 0.34);
         }
 
         .rs-btnSecondary {
@@ -1536,16 +1487,17 @@ export default function ResultsClient({ id }: { id: string }) {
         .rs-hero {
           position: relative;
           overflow: hidden;
-          border-radius: 28px;
-          padding: 24px;
-          border: 1px solid rgba(255,255,255,0.10);
+          border-radius: 30px;
+          padding: 28px;
+          border: 1px solid rgba(255,255,255,0.11);
           background:
-            radial-gradient(600px 320px at 0% 0%, rgba(13,177,123,0.18), transparent 60%),
-            radial-gradient(700px 340px at 100% 0%, rgba(255,255,255,0.07), transparent 55%),
-            linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+            radial-gradient(760px 360px at 0% 0%, rgba(34,211,238,0.16), transparent 62%),
+            radial-gradient(640px 340px at 100% 0%, rgba(14,165,164,0.10), transparent 58%),
+            linear-gradient(180deg, rgba(6,27,34,0.94), rgba(5,13,22,0.98));
+          box-shadow: 0 28px 80px rgba(0,0,0,0.28);
           display: grid;
           grid-template-columns: 1.05fr 0.95fr;
-          gap: 18px;
+          gap: 20px;
           align-items: stretch;
         }
 
@@ -1749,13 +1701,13 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rr-sectionGrid {
           display: grid;
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr 1fr;
           gap: 18px;
         }
 
         .rs-mainGrid {
           display: grid;
-          grid-template-columns: 1fr;
+          grid-template-columns: 0.98fr 1.02fr;
           gap: 18px;
           align-items: start;
         }
@@ -1850,7 +1802,6 @@ export default function ResultsClient({ id }: { id: string }) {
         .rr-riskGrid {
           margin-top: 14px;
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           gap: 12px;
         }
 
@@ -2168,9 +2119,11 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rs-upsell {
           background:
-            radial-gradient(420px 220px at 0% 0%, rgba(13,177,123,0.16), transparent 70%),
-            linear-gradient(180deg, #0a2530, #0c2b36);
-          border: 1px solid rgba(13,177,123,0.20);
+            radial-gradient(520px 260px at 0% 0%, rgba(34,211,238,0.16), transparent 68%),
+            radial-gradient(460px 240px at 100% 0%, rgba(14,165,164,0.10), transparent 62%),
+            linear-gradient(180deg, #061b22, #07131c);
+          border: 1px solid rgba(34,211,238,0.18);
+          box-shadow: 0 20px 58px rgba(0,0,0,0.24);
         }
 
         .rs-upsellKicker {
@@ -2223,11 +2176,6 @@ export default function ResultsClient({ id }: { id: string }) {
           line-height: 1.6;
         }
 
-        .rr-providerPreview {
-          border-color: rgba(13,177,123,0.18);
-          background: linear-gradient(180deg, #ffffff, #f7fffc);
-        }
-
         .rs-deliverablesTitle {
           color: #061b22;
           font-weight: 850;
@@ -2258,6 +2206,107 @@ export default function ResultsClient({ id }: { id: string }) {
           color: rgba(255,255,255,0.72);
           font-size: 13px;
           padding: 0 4px;
+        }
+
+
+        /* Executive visual polish — aligned with Resiliscore assurance tone */
+        .rs-shell {
+          max-width: 1200px;
+          padding-top: 26px;
+          gap: 22px;
+        }
+
+        .rs-hero h1 {
+          font-family: "Space Grotesk", Inter, sans-serif;
+          font-size: clamp(38px, 4.4vw, 58px);
+          line-height: 0.98;
+          letter-spacing: -0.045em;
+          max-width: 13ch;
+        }
+
+        .rs-kicker {
+          background: rgba(34,211,238,0.10);
+          border-color: rgba(34,211,238,0.20);
+        }
+
+        .rr-heroCard {
+          border-radius: 24px;
+          background:
+            radial-gradient(420px 220px at 100% 0%, rgba(34,211,238,0.12), transparent 64%),
+            linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.045));
+          border: 1px solid rgba(255,255,255,0.12);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 18px 44px rgba(0,0,0,0.18);
+          backdrop-filter: blur(14px);
+        }
+
+        .rr-impactLabel {
+          color: rgba(255,255,255,0.62);
+          text-transform: uppercase;
+          letter-spacing: 0.055em;
+        }
+
+        .rr-impactValue {
+          color: rgba(255,255,255,0.96);
+          font-family: "Space Grotesk", Inter, sans-serif;
+          letter-spacing: -0.035em;
+        }
+
+        .rr-impactNote,
+        .rr-heroLockNote {
+          color: rgba(255,255,255,0.68);
+        }
+
+        .rr-breachItem {
+          border-color: rgba(255,255,255,0.11);
+          background: rgba(255,255,255,0.055);
+          color: rgba(255,255,255,0.88);
+        }
+
+        .rs-kpiCard,
+        .rs-panelLight {
+          border-radius: 24px;
+          background: linear-gradient(180deg, #ffffff, #f8fbfc);
+          border: 1px solid rgba(6,27,34,0.075);
+          box-shadow: 0 18px 44px rgba(2, 12, 18, 0.10);
+        }
+
+        .rs-kpiValue,
+        .rr-sectionTitle,
+        .rs-panelTitle,
+        .rs-deliverablesTitle,
+        .rr-riskCardTitle,
+        .rr-actionTitle {
+          font-family: "Space Grotesk", Inter, sans-serif;
+          letter-spacing: -0.02em;
+        }
+
+        .rr-riskCard,
+        .rr-moneyCard,
+        .rr-actionCard,
+        .rr-assuranceItem,
+        .rs-domainCard,
+        .rr-providerPreview {
+          border-radius: 18px;
+          background: #ffffff;
+          border: 1px solid rgba(6,27,34,0.075);
+          box-shadow: 0 10px 24px rgba(2,12,18,0.055);
+        }
+
+        .rr-moneyIcon,
+        .rr-actionNo {
+          background: rgba(34,211,238,0.12);
+          color: #0e7490;
+        }
+
+        .rr-providerPreview {
+          background:
+            radial-gradient(360px 180px at 0% 0%, rgba(34,211,238,0.10), transparent 62%),
+            linear-gradient(180deg, #ffffff, #f7fbfc);
+          border-color: rgba(34,211,238,0.16);
+        }
+
+        .rr-benchmarkFill {
+          background: linear-gradient(90deg, #14b8a6, #22d3ee, #f59e0b, #ef4444);
         }
 
         @media (max-width: 1080px) {

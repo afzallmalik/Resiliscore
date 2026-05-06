@@ -127,15 +127,13 @@ export default function HomePage() {
         <div className="heroOverlay rsHeroOverlay" />
 
         <div className="homeShell heroShell">
-          <div className="rsHeroSingle">
+          <div className="rsHeroSplit">
             <div className="rsHeroCopy">
               <div className="heroEyebrow">Cyber resilience clarity for SMEs</div>
 
               <h1 className="rsHeroTitle">
-                Most SMEs think they’re covered.
-                <br />
-                The real risk is what breaks under pressure.
-              </h1>
+ 		 Know where your business would fail first — and what to fix next.
+		    </h1>
 
               <p className="rsHeroLead">
                 Resiliscore shows where your business is most likely to fail first,
@@ -159,6 +157,21 @@ export default function HomePage() {
                 <span>Built for SMEs</span>
                 <span>Assessment + action plan</span>
                 <span>Provider-ready PDF</span>
+              </div>
+            </div>
+
+            <div className="rsHeroVisual" aria-hidden="true">
+              <div className="rsHeroLogoAura" />
+              <img
+                src="/resiliscore-logo.png"
+                alt=""
+                className="rsHeroLogoMark"
+              />
+              <div className="rsHeroVisualLine" />
+              <div className="rsHeroVisualMeta">
+                <span>0–5 maturity score</span>
+                <span>Top 3 actions</span>
+                <span>Provider brief</span>
               </div>
             </div>
           </div>
@@ -372,60 +385,63 @@ export default function HomePage() {
 
       <style jsx>{`
         .rsHeroWrap {
-          padding: 56px 0 48px;
+          padding: 44px 0 38px;
         }
 
         .rsHeroBackdrop {
           background-image: url("/hero-landing.png");
           background-size: cover;
           background-position: center;
-          opacity: 0.34;
-          transform: scale(1.03);
+          opacity: 0.30;
+          transform: scale(1.035);
         }
 
         .rsHeroOverlay {
           background:
-            linear-gradient(180deg, rgba(4, 10, 24, 0.52) 0%, rgba(4, 10, 24, 0.74) 100%),
-            radial-gradient(900px 420px at 15% 10%, rgba(34, 211, 238, 0.18), transparent 58%),
-            radial-gradient(700px 360px at 85% 20%, rgba(6, 182, 212, 0.12), transparent 60%);
+            linear-gradient(180deg, rgba(3, 12, 18, 0.64) 0%, rgba(3, 12, 18, 0.84) 100%),
+            radial-gradient(760px 420px at 16% 10%, rgba(34, 211, 238, 0.16), transparent 62%),
+            radial-gradient(640px 360px at 86% 20%, rgba(14, 165, 164, 0.10), transparent 60%);
         }
 
-.rsHeroSingle {
-          min-height: calc(100vh - 220px);
-          display: flex;
+        .rsHeroSplit {
+          min-height: calc(100vh - 210px);
+          display: grid;
+          grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+          gap: clamp(32px, 5vw, 72px);
           align-items: center;
-          padding: 44px 0 28px;
+          padding: 48px 0 32px;
         }
 
         .rsHeroCopy {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          max-width: 700px;
+          max-width: 720px;
         }
 
-        .rsHeroTitle {
-          margin: 18px 0 0;
-          color: var(--text-on-dark);
-          font-family: "Space Grotesk", Inter, sans-serif;
-          font-size: clamp(3rem, 5.6vw, 5.2rem);
-          line-height: 0.98;
-          letter-spacing: -0.045em;
-        }
+	.rsHeroTitle {
+  	margin: 18px 0 0;
+  	color: var(--text-on-dark);
+  	font-family: "Space Grotesk", Inter, sans-serif;
+  	font-size: clamp(2.8rem, 4.8vw, 4.45rem);
+  	line-height: 1.02;
+  	letter-spacing: -0.045em;
+  	max-width: 13ch;
+	}
 
         .rsHeroLead {
-          margin: 20px 0 0;
-          max-width: 34rem;
-          color: var(--muted-on-dark);
+          margin: 22px 0 0;
+          max-width: 37rem;
+          color: rgba(255, 255, 255, 0.74);
           font-size: 18px;
-          line-height: 1.7;
+          line-height: 1.72;
         }
 
         .rsHeroMeta {
-          margin-top: 18px;
+          margin-top: 20px;
           display: flex;
           flex-wrap: wrap;
-          gap: 12px;
+          gap: 10px;
           color: rgba(255, 255, 255, 0.78);
           font-size: 13px;
         }
@@ -435,62 +451,70 @@ export default function HomePage() {
           align-items: center;
           gap: 8px;
           padding: 8px 12px;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(34, 211, 238, 0.16);
+          background: rgba(255, 255, 255, 0.055);
+          border: 1px solid rgba(34, 211, 238, 0.14);
           border-radius: 999px;
         }
 
-        .rsHeroCard {
-          align-self: end;
-          border-radius: 18px;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          background: linear-gradient(180deg, rgba(8, 14, 30, 0.8), rgba(11, 18, 36, 0.84));
-          padding: 24px;
-          box-shadow: var(--shadow-md);
-          backdrop-filter: blur(14px);
+        .rsHeroVisual {
+          position: relative;
+          min-height: 420px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          isolation: isolate;
         }
 
-        .rsHeroCardLabel {
-          color: rgba(255, 255, 255, 0.76);
+        .rsHeroLogoAura {
+          position: absolute;
+          width: min(86%, 520px);
+          aspect-ratio: 1;
+          border-radius: 999px;
+          background:
+            radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.16), transparent 58%),
+            radial-gradient(circle at 50% 50%, rgba(14, 165, 164, 0.10), transparent 72%);
+          filter: blur(2px);
+          opacity: 0.96;
+          z-index: -1;
+        }
+
+        .rsHeroLogoMark {
+          width: min(78%, 460px);
+          height: auto;
+          object-fit: contain;
+          filter:
+            drop-shadow(0 28px 60px rgba(0, 0, 0, 0.34))
+            drop-shadow(0 0 34px rgba(34, 211, 238, 0.10));
+          opacity: 0.98;
+        }
+
+        .rsHeroVisualLine {
+          margin-top: 28px;
+          width: min(64%, 360px);
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.42), transparent);
+        }
+
+        .rsHeroVisualMeta {
+          margin-top: 18px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 10px;
+          color: rgba(255, 255, 255, 0.70);
           font-size: 12px;
           font-weight: 700;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.04em;
           text-transform: uppercase;
         }
 
-        .rsHeroCard h2 {
-          margin: 12px 0 0;
-          color: var(--text-on-dark);
-          font-family: "Space Grotesk", Inter, sans-serif;
-          font-size: clamp(1.6rem, 2.4vw, 2.4rem);
-          line-height: 1.08;
-          letter-spacing: -0.03em;
+        .rsHeroVisualMeta span {
+          padding: 7px 10px;
+          border-radius: 999px;
+          border: 1px solid rgba(255, 255, 255, 0.10);
+          background: rgba(255, 255, 255, 0.045);
         }
-
-        .rsHeroCard p {
-          margin: 14px 0 0;
-          color: var(--muted-on-dark);
-          line-height: 1.7;
-          font-size: 15px;
-        }
-
-        .rsHeroMiniPoints {
-          margin-top: 18px;
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 10px;
-        }
-
-        .rsHeroMiniPoint {
-          border-radius: 12px;
-          padding: 12px 14px;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: rgba(255, 255, 255, 0.9);
-          font-size: 14px;
-          font-weight: 600;
-        }
-
 
         .rsIndustrySection {
           overflow: visible;
@@ -717,8 +741,18 @@ export default function HomePage() {
             grid-template-columns: 1fr;
           }
 
-          .rsHeroSingle {
+          .rsHeroSplit {
             min-height: auto;
+            grid-template-columns: 1fr;
+          }
+
+          .rsHeroVisual {
+            min-height: 260px;
+            order: -1;
+          }
+
+          .rsHeroLogoMark {
+            width: min(72%, 360px);
           }
 
           .rsSectionGridReverse .sectionHeading,
@@ -732,8 +766,13 @@ export default function HomePage() {
             padding: 28px 0 34px;
           }
 
-          .rsHeroSingle {
-            padding: 28px 0 18px;
+          .rsHeroSplit {
+            padding: 30px 0 18px;
+            gap: 24px;
+          }
+
+          .rsHeroVisual {
+            min-height: 220px;
           }
 
           .rsBulletCard {
@@ -745,9 +784,23 @@ export default function HomePage() {
           }
         }
 
-        @media (max-width: 640px) {
-          .rsHeroTitle {
-            font-size: 2.7rem;
+	@media (max-width: 640px) {
+  	.rsHeroTitle {
+    	font-size: 2.25rem;
+    	line-height: 1.05;
+    	max-width: none;
+  	}
+
+          .rsHeroVisual {
+            min-height: 180px;
+          }
+
+          .rsHeroLogoMark {
+            width: min(82%, 300px);
+          }
+
+          .rsHeroVisualMeta {
+            display: none;
           }
 
           .rsHeroLead {

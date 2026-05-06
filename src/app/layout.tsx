@@ -4,13 +4,13 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Resiliscore – Know What Breaks Under Pressure",
+  title: "Resiliscore – Expose Your Resilience Visibility Gap",
   description:
-    "Resiliscore helps SMEs identify weak resilience areas, understand business impact, and turn cyber risk into practical action.",
+    "Resiliscore helps SMEs expose the gap between perceived and provable resilience before incidents, insurer questions, or client pressure reveal it.",
   openGraph: {
-    title: "Resiliscore – Know What Breaks Under Pressure",
+    title: "Resiliscore – Expose Your Resilience Visibility Gap",
     description:
-      "Resiliscore helps SMEs identify weak resilience areas, understand business impact, and turn cyber risk into practical action.",
+      "Resiliscore helps SMEs expose the gap between perceived and provable resilience before incidents, insurer questions, or client pressure reveal it.",
     images: ["/og-image.png"],
   },
 };
