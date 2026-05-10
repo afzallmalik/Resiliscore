@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: "Resiliscore – Know What Breaks Under Pressure",
     description:
       "Resiliscore helps SMEs identify weak resilience areas, understand business impact, and turn cyber risk into practical action.",
-    images: ["/og-image.png"],
+    images: ["/og-image-v2.png"],
   },
 };
 
