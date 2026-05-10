@@ -1430,7 +1430,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rs-loadingText {
           color: #061b22;
-          font-weight: 700;
+          font-weight: 500;
         }
 
         .rs-btn {
@@ -1442,7 +1442,7 @@ export default function ResultsClient({ id }: { id: string }) {
           padding: 0 15px;
           border-radius: 999px;
           text-decoration: none;
-          font-weight: 800;
+          font-weight: 500;
           border: 1px solid transparent;
           cursor: pointer;
           transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
@@ -1511,7 +1511,7 @@ export default function ResultsClient({ id }: { id: string }) {
           border: 1px solid rgba(255,255,255,0.12);
           color: rgba(255,255,255,0.92);
           font-size: 13px;
-          font-weight: 800;
+          font-weight: 500;
         }
 
         .rs-hero h1 {
@@ -1548,7 +1548,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rs-pill span {
           color: rgba(255,255,255,0.95);
-          font-weight: 700;
+          font-weight: 500;
           margin-left: 6px;
         }
 
@@ -1559,7 +1559,7 @@ export default function ResultsClient({ id }: { id: string }) {
           background: rgba(13,177,123,0.12);
           border: 1px solid rgba(13,177,123,0.22);
           color: rgba(255,255,255,0.92);
-          font-weight: 700;
+          font-weight: 500;
         }
 
         .rs-actions {
@@ -1587,7 +1587,7 @@ export default function ResultsClient({ id }: { id: string }) {
           border-radius: 999px;
           display: inline-flex;
           align-items: center;
-          font-weight: 900;
+          font-weight: 500;
           font-size: 14px;
         }
 
@@ -1612,14 +1612,14 @@ export default function ResultsClient({ id }: { id: string }) {
         .rr-impactLabel {
           color: rgba(6,27,34,0.60);
           font-size: 13px;
-          font-weight: 700;
+          font-weight: 500;
         }
 
         .rr-impactValue {
           color: #061b22;
           font-size: 34px;
           line-height: 1.05;
-          font-weight: 900;
+          font-weight: 500;
         }
 
         .rr-impactNote {
@@ -1672,7 +1672,7 @@ export default function ResultsClient({ id }: { id: string }) {
         .rs-kpiLabel {
           color: rgba(6,27,34,0.60);
           font-size: 13px;
-          font-weight: 700;
+          font-weight: 500;
         }
 
         .rs-kpiValue {
@@ -1680,7 +1680,7 @@ export default function ResultsClient({ id }: { id: string }) {
           color: #061b22;
           font-size: 38px;
           line-height: 1;
-          font-weight: 900;
+          font-weight: 500;
         }
 
         .rs-kpiValueSmall {
@@ -1745,7 +1745,7 @@ export default function ResultsClient({ id }: { id: string }) {
         .rs-panelTitle {
           color: #061b22;
           font-size: 18px;
-          font-weight: 850;
+          font-weight: 500;
         }
 
         .rs-panelTitleLight {
@@ -1791,7 +1791,7 @@ export default function ResultsClient({ id }: { id: string }) {
         .rr-sectionTitle {
           color: #061b22;
           font-size: 18px;
-          font-weight: 850;
+          font-weight: 500;
         }
 
         .rr-sectionSub {
@@ -1814,7 +1814,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rr-riskCardTitle {
           color: #061b22;
-          font-weight: 850;
+          font-weight: 500;
           font-size: 17px;
         }
 
@@ -1851,7 +1851,7 @@ export default function ResultsClient({ id }: { id: string }) {
         .rr-moneyLabel {
           color: rgba(6,27,34,0.60);
           font-size: 13px;
-          font-weight: 700;
+          font-weight: 500;
         }
 
         .rr-moneyValue {
@@ -1859,7 +1859,7 @@ export default function ResultsClient({ id }: { id: string }) {
           color: #061b22;
           font-size: 32px;
           line-height: 1.05;
-          font-weight: 900;
+          font-weight: 500;
         }
 
         .rr-moneyValueText {
@@ -1928,12 +1928,12 @@ export default function ResultsClient({ id }: { id: string }) {
           place-items: center;
           background: rgba(13,177,123,0.12);
           color: #0a8d62;
-          font-weight: 900;
+          font-weight: 500;
         }
 
         .rr-actionTitle {
           color: #061b22;
-          font-weight: 850;
+          font-weight: 500;
           line-height: 1.4;
         }
 
@@ -1965,7 +1965,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rs-domainName {
           color: rgba(255,255,255,0.95);
-          font-weight: 800;
+          font-weight: 500;
         }
 
         .rs-domainLabel {
@@ -1981,7 +1981,7 @@ export default function ResultsClient({ id }: { id: string }) {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          font-weight: 900;
+          font-weight: 500;
           font-size: 14px;
           padding: 0 12px;
         }
@@ -2043,7 +2043,7 @@ export default function ResultsClient({ id }: { id: string }) {
         }
 
         .rr-benchmarkValue strong {
-          font-weight: 900;
+          font-weight: 500;
         }
 
         .rr-benchmarkTrack {
@@ -2066,7 +2066,7 @@ export default function ResultsClient({ id }: { id: string }) {
           gap: 12px;
           color: rgba(6,27,34,0.60);
           font-size: 13px;
-          font-weight: 700;
+          font-weight: 500;
         }
 
         .rr-assuranceStack {
@@ -2103,7 +2103,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rr-assuranceLabel {
           color: #061b22;
-          font-weight: 700;
+          font-weight: 500;
           line-height: 1.5;
           display: inline-flex;
           align-items: center;
@@ -2112,7 +2112,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rr-assuranceStatus {
           font-size: 13px;
-          font-weight: 900;
+          font-weight: 500;
           white-space: nowrap;
           color: #061b22;
         }
@@ -2131,7 +2131,7 @@ export default function ResultsClient({ id }: { id: string }) {
           text-transform: uppercase;
           letter-spacing: 0.06em;
           color: rgba(255,255,255,0.62);
-          font-weight: 800;
+          font-weight: 500;
         }
 
         .rs-upsellTitle {
@@ -2139,7 +2139,7 @@ export default function ResultsClient({ id }: { id: string }) {
           color: rgba(255,255,255,0.96);
           font-size: 24px;
           line-height: 1.15;
-          font-weight: 900;
+          font-weight: 500;
         }
 
         .rs-upsellText {
@@ -2178,7 +2178,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rs-deliverablesTitle {
           color: #061b22;
-          font-weight: 850;
+          font-weight: 500;
           font-size: 18px;
         }
 
@@ -2217,9 +2217,9 @@ export default function ResultsClient({ id }: { id: string }) {
         }
 
         .rs-hero h1 {
-          font-family: "Space Grotesk", Inter, sans-serif;
-          font-size: clamp(38px, 4.4vw, 58px);
-          line-height: 0.98;
+          font-family: Inter, sans-serif;
+          font-size: clamp(3rem, 5vw, 5rem);
+          line-height: 1.02;
           letter-spacing: -0.045em;
           max-width: 13ch;
         }
@@ -2247,7 +2247,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         .rr-impactValue {
           color: rgba(255,255,255,0.96);
-          font-family: "Space Grotesk", Inter, sans-serif;
+          font-family: Inter, sans-serif;
           letter-spacing: -0.035em;
         }
 
@@ -2276,8 +2276,8 @@ export default function ResultsClient({ id }: { id: string }) {
         .rs-deliverablesTitle,
         .rr-riskCardTitle,
         .rr-actionTitle {
-          font-family: "Space Grotesk", Inter, sans-serif;
-          letter-spacing: -0.02em;
+          font-family: Inter, sans-serif;
+          letter-spacing: -0.035em;
         }
 
         .rr-riskCard,

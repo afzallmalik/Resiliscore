@@ -4,13 +4,13 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Resiliscore – Expose Your Resilience Visibility Gap",
+  title: "Resiliscore – Know What Breaks Under Pressure",
   description:
-    "Resiliscore helps SMEs expose the gap between perceived and provable resilience before incidents, insurer questions, or client pressure reveal it.",
+    "Resiliscore helps SMEs identify weak resilience areas, understand business impact, and turn cyber risk into practical action.",
   openGraph: {
-    title: "Resiliscore – Expose Your Resilience Visibility Gap",
+    title: "Resiliscore – Know What Breaks Under Pressure",
     description:
-      "Resiliscore helps SMEs expose the gap between perceived and provable resilience before incidents, insurer questions, or client pressure reveal it.",
+      "Resiliscore helps SMEs identify weak resilience areas, understand business impact, and turn cyber risk into practical action.",
     images: ["/og-image.png"],
   },
 };
@@ -41,10 +41,10 @@ export default function RootLayout({
               <Image
                 src="/resiliscore-logo.png"
                 alt="Resiliscore"
-                width={220}
-                height={44}
+                width={300}
+                height={60}
                 priority
-                style={{ height: 34, width: "auto" }}
+                style={{ height: 46, width: "auto" }}
               />
             </Link>
 
