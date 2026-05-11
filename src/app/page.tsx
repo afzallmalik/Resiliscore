@@ -4,21 +4,17 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 
 const problemPoints = [
-  "Access, backups, suppliers, response, or ownership may fail under pressure",
-  "Weaknesses are often concentrated in one or two avoidable areas",
-  "Leaders need a clear plan before spending more on tools or consultancy",
-  "Evidence is often missing when clients, insurers, or partners ask questions",
+  "Security is inconsistent across the business",
+  "No clear view of where resilience is weakest",
+  "No prioritised plan for what to fix first",
+  "Little evidence if something goes wrong",
 ];
 
 const whatYouGet = [
-  "Executive-ready resilience summary",
-  "Top 3 immediate actions to take now",
-  "Prioritised 30 / 60 / 90 day improvement plan",
-  "Practical implementation guidance",
-  "Technology direction without vendor bias",
-  "Provider Brief: what to ask your IT provider or MSP",
-  "Evidence checklist for key controls",
-  "Downloadable PDF report",
+  "A clear resilience score",
+  "A prioritised 90-day action plan",
+  "Evidence checklist for each control",
+  "Executive-ready summary and PDF report",
 ];
 
 const steps = [
@@ -35,7 +31,7 @@ const steps = [
   {
     number: "03",
     title: "Act on a clear plan",
-    text: "Use the report, checklist, provider brief, and prioritised 90-day plan to improve resilience without guesswork.",
+    text: "Use the report, checklist, and prioritised 90-day plan to improve resilience without guesswork.",
   },
 ];
 
@@ -43,7 +39,7 @@ const steps = [
 const industryViews = [
   {
     label: "General SME",
-    headline: "Most SMEs do not fail everywhere. They fail in one or two weak areas.",
+    headline: "Most SMEs are exposed through inconsistent routines, not one dramatic failure.",
     text: "Resiliscore helps you see whether access, backups, suppliers, response, and ownership would hold up when the business is under pressure.",
   },
   {
@@ -113,6 +109,21 @@ const whoItsFor = [
   },
 ];
 
+const whyNowPoints = [
+  {
+    title: "Harder questions are reaching smaller businesses",
+    text: "Clients, insurers, suppliers, and procurement teams increasingly expect businesses to explain how they manage access, recovery, suppliers, evidence, and continuity.",
+  },
+  {
+    title: "Most SMEs need a starting point, not more jargon",
+    text: "Many businesses know resilience matters, but do not know where to begin, what is already working, or which weaknesses should be prioritised first.",
+  },
+  {
+    title: "Resilience is becoming a leadership issue",
+    text: "The risk is not just a technical incident. It is downtime, confusion, slow decisions, weak evidence, supplier disruption, and loss of confidence when pressure appears.",
+  },
+];
+
 export default function HomePage() {
   const [selectedIndustry, setSelectedIndustry] = useState(industryViews[0].label);
   const selectedIndustryView = useMemo(
@@ -132,12 +143,14 @@ export default function HomePage() {
               <div className="heroEyebrow">Cyber resilience clarity for SMEs</div>
 
               <h1 className="rsHeroTitle">
-                Know where your business would fail first — and what to fix next.
+                Most SMEs think they’re covered.
+                <br />
+                The real risk is what breaks under pressure.
               </h1>
 
               <p className="rsHeroLead">
                 Resiliscore shows where your business is most likely to fail first,
-                what that means commercially, and gives you a clear plan to fix it.
+                what that means commercially, and what to fix next.
               </p>
 
               <div className="heroActions">
@@ -155,24 +168,55 @@ export default function HomePage() {
 
               <div className="rsHeroMeta">
                 <span>Built for SMEs</span>
-                <span>Assessment + action plan</span>
-                <span>Provider-ready PDF</span>
+                <span>Assessment + action guidance</span>
+                <span>Executive-ready PDF</span>
               </div>
             </div>
-          </div>
-        </div>
+          </div>        </div>
       </section>
 
       <div className="homeShell siteSections rsLandingSections">
+        <section className="sectionCard sectionCardDark rsWhyNowSection">
+          <div className="rsWhyNowHeader">
+            <div className="sectionEyebrow">Why this matters now</div>
+            <h2>SMEs are being asked to prove resilience before pressure exposes the gaps.</h2>
+            <p>
+              Resiliscore gives smaller businesses a practical starting point: insight,
+              education, and prioritised direction before they spend more heavily on
+              tools, audits, consultants, or larger cyber programmes.
+            </p>
+          </div>
+
+          <div className="rsWhyNowGrid">
+            {whyNowPoints.map((item) => (
+              <article key={item.title} className="rsWhyNowCard">
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="rsWhyNowNote">
+            <span>UK resilience direction</span>
+            <p>
+              UK cyber guidance increasingly encourages practical steps, readiness, and
+              confidence-building for smaller organisations. Resiliscore supports that
+              direction by helping SMEs understand where they stand, what is weakest,
+              and what to improve first — without claiming to be a certification,
+              audit, or government-backed scheme.
+            </p>
+          </div>
+        </section>
+
         <section className="sectionCard sectionCardLight">
           <div className="rsSectionGrid">
             <div className="sectionHeading">
               <div className="sectionEyebrow">The problem</div>
-              <h2>Most businesses don’t fail everywhere.</h2>
+              <h2>The gap isn’t what you know. It’s what’s missing.</h2>
               <p>
-                They fail in the weak areas nobody has tested, owned, evidenced,
-                or discussed properly. Resiliscore turns those gaps into clear
-                priorities.
+                Most SMEs do not lack tools. They lack visibility over what is
+                inconsistent, weak, or unproven when the business is under
+                pressure.
               </p>
             </div>
 
@@ -193,8 +237,8 @@ export default function HomePage() {
               <div className="sectionEyebrow">Industry view</div>
               <h2>Why this assessment matters for your business type</h2>
               <p>
-                Select an industry to see where disruption typically starts and why this assessment matters.
-                The assessment stays simple, but the report turns resilience gaps into practical business language.
+                Select an industry to see the kind of pressure Resiliscore is designed to make visible.
+                The assessment stays simple, but the report helps translate resilience into practical business language.
               </p>
             </div>
 
@@ -228,11 +272,10 @@ export default function HomePage() {
           <div className="rsSectionGrid rsSectionGridReverse">
             <div className="sectionHeading">
               <div className="sectionEyebrow">What you get</div>
-              <h2>Not just a score — a practical action plan.</h2>
+              <h2>A report built to be clear, practical, and usable.</h2>
               <p>
-                The results page gives immediate clarity. The full PDF adds the
-                implementation guidance, evidence checklist, and provider brief
-                needed to turn risk into action.
+                Resiliscore is designed to help you understand what matters
+                first, without enterprise software or over-explaining.
               </p>
 
               <div className="rsBulletCard rsBulletCardInline">
@@ -264,18 +307,18 @@ export default function HomePage() {
               <div className="sectionEyebrow">Sample report</div>
               <h2>See the structure before you commit.</h2>
               <p>
-                Review the sample report to see the structure, priorities,
-                implementation guidance, and provider-ready format before taking the assessment.
+                Review the sample report to see the tone, layout, priorities,
+                and level of clarity before taking the assessment.
               </p>
             </div>
 
             <div className="samplePanel rsSamplePanel">
               <div>
                 <div className="samplePanelLabel">Preview</div>
-                <h3>Executive-ready. Plain English. Action-focused.</h3>
+                <h3>Executive-ready. Plain English. No technical fluff.</h3>
                 <p>
                   Built to be useful for leadership, internal planning,
-                  IT provider conversations, insurers, clients, and follow-up work.
+                  insurers, clients, and external conversations.
                 </p>
               </div>
 
@@ -330,8 +373,8 @@ export default function HomePage() {
               <div className="sectionEyebrow">Who it’s for</div>
               <h2>Built for smaller businesses that need clarity, not jargon.</h2>
               <p>
-                Resiliscore is designed for owner-led SMEs that want a practical view of
-                resilience before spending more heavily on tools, audits, consultants,
+                Resiliscore is designed for SMEs that want a practical view of
+                resilience before spending more heavily on audits, consultants,
                 or larger cyber programmes.
               </p>
             </div>
@@ -353,7 +396,8 @@ export default function HomePage() {
             <h2 className="rsFinalCtaTitle">
               You do not need more cyber jargon.
               <br />
-              You need to know what would break first — and what to fix next.
+              You need to know whether what you already have would actually hold
+              up under pressure.
             </h2>
           </div>
 
@@ -370,40 +414,42 @@ export default function HomePage() {
 
       <style jsx>{`
         .rsHeroWrap {
-          padding: 44px 0 38px;
+          padding: 56px 0 48px;
         }
 
         .rsHeroBackdrop {
-          background-image: url("/hero-landing.png");
-          background-size: cover;
-          background-position: 74% center;
-          opacity: 0.96;
-          transform: scale(1.01);
-        }
+  background-image: url("/hero-landing.png");
+  background-size: cover;
+  background-position: 74% center;
+
+  opacity: 0.96;
+
+  transform: scale(1.01);
+}
 
         .rsHeroOverlay {
-          background:
-            linear-gradient(
-              90deg,
-              rgba(3, 12, 18, 0.82) 0%,
-              rgba(3, 12, 18, 0.52) 38%,
-              rgba(3, 12, 18, 0.08) 100%
-            ),
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 12, 18, 0.82) 0%,
+      rgba(3, 12, 18, 0.52) 38%,
+      rgba(3, 12, 18, 0.08) 100%
+    ),
 
-            linear-gradient(
-              180deg,
-              rgba(3, 12, 18, 0.10) 0%,
-              rgba(3, 12, 18, 0.30) 100%
-            ),
+    linear-gradient(
+      180deg,
+      rgba(3, 12, 18, 0.10) 0%,
+      rgba(3, 12, 18, 0.30) 100%
+    ),
 
-            radial-gradient(
-              900px 420px at 16% 10%,
-              rgba(34, 211, 238, 0.08),
-              transparent 58%
-            );
-        }
+    radial-gradient(
+      900px 420px at 16% 10%,
+      rgba(34, 211, 238, 0.08),
+      transparent 58%
+    );
+}
 
-        .rsHeroSingle {
+.rsHeroSingle {
           min-height: calc(100vh - 220px);
           display: flex;
           align-items: center;
@@ -414,38 +460,38 @@ export default function HomePage() {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          max-width: 760px;
+          max-width: 700px;
         }
 
         .rsHeroTitle {
-          margin: 18px 0 0;
+  margin: 18px 0 0;
 
-          color: rgba(255,255,255,0.96);
+  color: rgba(255,255,255,0.96);
 
-          font-family: Inter, sans-serif;
-          font-weight: 300;
+  font-family: Inter, sans-serif;
+  font-weight: 300;
 
-          font-size: clamp(3.1rem, 5vw, 5rem);
+  font-size: clamp(3.1rem, 5vw, 5rem);
 
-          line-height: 1.02;
-          letter-spacing: -0.045em;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 
-          max-width: 18ch;
-        }
+  max-width: 18ch;
+}
 
         .rsHeroLead {
-          margin: 22px 0 0;
-          max-width: 37rem;
-          color: rgba(255, 255, 255, 0.74);
+          margin: 20px 0 0;
+          max-width: 34rem;
+          color: var(--muted-on-dark);
           font-size: 18px;
-          line-height: 1.72;
+          line-height: 1.7;
         }
 
         .rsHeroMeta {
-          margin-top: 20px;
+          margin-top: 18px;
           display: flex;
           flex-wrap: wrap;
-          gap: 10px;
+          gap: 12px;
           color: rgba(255, 255, 255, 0.78);
           font-size: 13px;
         }
@@ -455,9 +501,148 @@ export default function HomePage() {
           align-items: center;
           gap: 8px;
           padding: 8px 12px;
-          background: rgba(255, 255, 255, 0.055);
-          border: 1px solid rgba(34, 211, 238, 0.14);
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(34, 211, 238, 0.16);
           border-radius: 999px;
+        }
+
+        .rsHeroCard {
+          align-self: end;
+          border-radius: 18px;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: linear-gradient(180deg, rgba(8, 14, 30, 0.8), rgba(11, 18, 36, 0.84));
+          padding: 24px;
+          box-shadow: var(--shadow-md);
+          backdrop-filter: blur(14px);
+        }
+
+        .rsHeroCardLabel {
+          color: rgba(255, 255, 255, 0.76);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .rsHeroCard h2 {
+          margin: 12px 0 0;
+          color: var(--text-on-dark);
+          font-family: "Space Grotesk", Inter, sans-serif;
+          font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+          line-height: 1.08;
+          letter-spacing: -0.03em;
+        }
+
+        .rsHeroCard p {
+          margin: 14px 0 0;
+          color: var(--muted-on-dark);
+          line-height: 1.7;
+          font-size: 15px;
+        }
+
+        .rsHeroMiniPoints {
+          margin-top: 18px;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+        }
+
+        .rsHeroMiniPoint {
+          border-radius: 12px;
+          padding: 12px 14px;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+
+        .rsWhyNowSection {
+          display: grid;
+          gap: 22px;
+          background:
+            radial-gradient(860px 340px at 0% 0%, rgba(34, 211, 238, 0.14), transparent 58%),
+            radial-gradient(680px 320px at 100% 0%, rgba(14, 165, 164, 0.10), transparent 60%),
+            linear-gradient(180deg, rgba(6, 27, 34, 0.97), rgba(5, 13, 22, 0.98));
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow: var(--shadow-md);
+        }
+
+        .rsWhyNowHeader {
+          max-width: 900px;
+        }
+
+        .rsWhyNowHeader h2 {
+          margin: 12px 0 0;
+          color: rgba(255, 255, 255, 0.98);
+          font-family: Inter, sans-serif;
+          font-weight: 300;
+          font-size: clamp(2.05rem, 3.3vw, 3.35rem);
+          line-height: 1.05;
+          letter-spacing: -0.045em;
+          max-width: 24ch;
+        }
+
+        .rsWhyNowHeader p {
+          margin: 16px 0 0;
+          max-width: 72ch;
+          color: rgba(255, 255, 255, 0.72);
+          font-size: 16px;
+          line-height: 1.75;
+        }
+
+        .rsWhyNowGrid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 14px;
+        }
+
+        .rsWhyNowCard {
+          border-radius: var(--radius-md);
+          border: 1px solid rgba(255, 255, 255, 0.10);
+          background: rgba(255, 255, 255, 0.055);
+          padding: 18px;
+        }
+
+        .rsWhyNowCard h3 {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.94);
+          font-family: Inter, sans-serif;
+          font-weight: 500;
+          font-size: 1.05rem;
+          line-height: 1.22;
+          letter-spacing: -0.025em;
+        }
+
+        .rsWhyNowCard p {
+          margin: 10px 0 0;
+          color: rgba(255, 255, 255, 0.68);
+          font-size: 14.5px;
+          line-height: 1.7;
+        }
+
+        .rsWhyNowNote {
+          border-radius: var(--radius-lg);
+          border: 1px solid rgba(34, 211, 238, 0.18);
+          background: rgba(34, 211, 238, 0.075);
+          padding: 18px 20px;
+        }
+
+        .rsWhyNowNote span {
+          display: inline-flex;
+          color: rgba(34, 211, 238, 0.96);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .rsWhyNowNote p {
+          margin: 8px 0 0;
+          color: rgba(255, 255, 255, 0.74);
+          line-height: 1.72;
+          font-size: 15px;
         }
 
         .rsIndustrySection {
@@ -518,11 +703,10 @@ export default function HomePage() {
         .rsIndustryResult h3 {
           margin: 10px 0 0;
           color: var(--text-main);
-          font-family: Inter, sans-serif;
-          font-weight: 500;
-          font-size: clamp(1.3rem, 1.85vw, 1.85rem);
-          line-height: 1.18;
-          letter-spacing: -0.035em;
+          font-family: "Space Grotesk", Inter, sans-serif;
+          font-size: clamp(1.35rem, 2vw, 2rem);
+          line-height: 1.15;
+          letter-spacing: -0.025em;
         }
 
         .rsIndustryResult p {
@@ -673,17 +857,17 @@ export default function HomePage() {
         .rsFinalCtaTitle {
           margin: 12px 0 0;
           color: rgba(255, 255, 255, 0.98);
-          font-family: Inter, sans-serif;
-          font-weight: 300;
-          font-size: clamp(2.05rem, 3.4vw, 3.35rem);
-          line-height: 1.04;
-          letter-spacing: -0.045em;
-          max-width: 27ch;
+          font-family: "Space Grotesk", Inter, sans-serif;
+          font-size: clamp(2rem, 3vw, 3rem);
+          line-height: 1.08;
+          letter-spacing: -0.035em;
+          max-width: 26ch;
         }
 
         @media (max-width: 1080px) {
           .rsSectionGrid,
-          .rsSectionGridReverse {
+          .rsSectionGridReverse,
+          .rsWhyNowGrid {
             grid-template-columns: 1fr;
           }
 
@@ -703,10 +887,12 @@ export default function HomePage() {
           }
 
           .rsHeroSingle {
-            padding: 30px 0 18px;
+            padding: 28px 0 18px;
           }
 
-          .rsBulletCard {
+          .rsBulletCard,
+          .rsWhyNowCard,
+          .rsWhyNowNote {
             padding: 18px;
           }
 
@@ -715,12 +901,10 @@ export default function HomePage() {
           }
         }
 
-	@media (max-width: 640px) {
-  	.rsHeroTitle {
-    	font-size: 2.25rem;
-    	line-height: 1.05;
-    	max-width: none;
-  	}
+        @media (max-width: 640px) {
+          .rsHeroTitle {
+            font-size: 2.7rem;
+          }
 
           .rsHeroLead {
             font-size: 16px;
@@ -741,7 +925,7 @@ export default function HomePage() {
           }
 
           .rsFinalCtaTitle {
-            font-size: 2rem;
+            font-size: 1.9rem;
             max-width: none;
           }
         }
