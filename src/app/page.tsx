@@ -304,36 +304,39 @@ export default function HomePage() {
         <section className="sectionCard sectionCardDark">
           <div className="rsSectionGrid rsSectionGridCenter">
             <div className="sectionHeading sectionHeadingDark">
-              <div className="sectionEyebrow">Sample report</div>
-              <h2>See the structure before you commit.</h2>
+              <div className="sectionEyebrow">Free insight report</div>
+              <h2>AI is now part of the SME resilience picture.</h2>
               <p>
-                Review the sample report to see the tone, layout, priorities,
-                and level of clarity before taking the assessment.
+                Download the free Resiliscore insight report on AI and emerging
+                technology risk. It explains where everyday AI usage creates new
+                data, supplier, people, operational, and incident response risks
+                for SMEs.
               </p>
             </div>
 
             <div className="samplePanel rsSamplePanel">
               <div>
-                <div className="samplePanelLabel">Preview</div>
-                <h3>Executive-ready. Plain English. No technical fluff.</h3>
+                <div className="samplePanelLabel">AI & emerging technology risk</div>
+                <h3>Plain-English guidance before the risk becomes invisible.</h3>
                 <p>
-                  Built to be useful for leadership, internal planning,
-                  insurers, clients, and external conversations.
+                  A practical SME briefing covering common AI exposure, six AI
+                  resilience questions, and a simple 30-day starting plan.
                 </p>
               </div>
 
               <div className="samplePanelActions">
                 <Link
-                  href="/sample-report.pdf"
+                  href="/Resiliscore_AI_Emerging_Technology_Risk_Report_final.pdf"
                   className="btn btnGhost"
                   target="_blank"
                 >
-                  Open sample PDF
+                  Download free report
                 </Link>
               </div>
             </div>
           </div>
         </section>
+
 
         <section className="sectionCard sectionCardLight">
           <div className="rsSectionGrid rsSectionGridReverse">
