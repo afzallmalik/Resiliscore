@@ -1218,7 +1218,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
         <section className="rs-mainGrid">
           <div className="rs-column">
-            <div className="rs-panel rs-panelLight">
+            <div className="rs-panel rs-panelLight rr-actionPanelFocus">
               <div className="rr-sectionHead">
                 <div className="rr-sectionTitle">
                   {isPremium ? "3. What to fix first (next 90 days)" : "3. Initial actions you can take"}
@@ -1227,6 +1227,12 @@ export default function ResultsClient({ id }: { id: string }) {
                   {isPremium ? "Focused actions to reduce your most likely points of failure." : "A small preview of the practical action plan included in the full report."}
                 </div>
               </div>
+
+              {isPremium ? (
+                <div className="rr-actionBridge">
+                  The full 30/60/90 roadmap continues in the downloadable report.
+                </div>
+              ) : null}
 
               <div className="rr-actionStack">
                 {previewActions.map((action, i) => (
@@ -1268,7 +1274,7 @@ export default function ResultsClient({ id }: { id: string }) {
           </div>
 
           <div className="rs-column">
-            <div className="rs-panel rs-panelLight">
+            <div className="rs-panel rs-panelLight rr-domainPanelCompact">
               <div className="rr-sectionHead">
                 <div className="rr-sectionTitle">4. Where resilience is weakest</div>
                 <div className="rr-sectionSub">
@@ -1290,7 +1296,7 @@ export default function ResultsClient({ id }: { id: string }) {
               ) : null}
             </div>
 
-            <div className="rs-panel rs-panelLight">
+            <div className="rs-panel rs-panelLight rr-benchmarkPanelCompact">
               <div className="rr-sectionHead">
                 <div className="rr-sectionTitle">5. Benchmark view</div>
                 <div className="rr-sectionSub">
@@ -2068,6 +2074,93 @@ export default function ResultsClient({ id }: { id: string }) {
           font-size: 13px;
           font-weight: 500;
         }
+
+        /* Targeted results-page tightening: keeps the same structure, but improves pacing. */
+        .rr-actionPanelFocus {
+          box-shadow: 0 14px 34px rgba(3,16,22,0.10);
+        }
+
+        .rr-actionBridge {
+          margin-top: 12px;
+          color: #0a8d62;
+          font-size: 13px;
+          font-weight: 500;
+        }
+
+        .rr-domainPanelCompact .rr-sectionHead {
+          gap: 3px;
+        }
+
+        .rr-domainPanelCompact .rr-sectionSub {
+          line-height: 1.35;
+          font-size: 14px;
+        }
+
+        .rr-domainPanelCompact .rs-domainGrid {
+          margin-top: 10px;
+          gap: 7px;
+        }
+
+        .rr-domainPanelCompact .rs-domainCard {
+          border-radius: 14px;
+          padding: 8px 10px;
+        }
+
+        .rr-domainPanelCompact .rs-domainTop {
+          align-items: center;
+          gap: 10px;
+        }
+
+        .rr-domainPanelCompact .rs-domainName {
+          font-size: 14px;
+          line-height: 1.15;
+        }
+
+        .rr-domainPanelCompact .rs-domainLabel {
+          margin-top: 1px;
+          font-size: 12px;
+          line-height: 1.15;
+        }
+
+        .rr-domainPanelCompact .rs-domainBadge {
+          min-width: 46px;
+          height: 24px;
+          padding: 0 9px;
+          font-size: 12px;
+        }
+
+        .rr-domainPanelCompact .rs-domainTrack {
+          margin-top: 7px;
+          height: 7px;
+        }
+
+        .rr-benchmarkPanelCompact .rr-sectionHead {
+          gap: 4px;
+        }
+
+        .rr-benchmarkPanelCompact .rr-sectionSub {
+          line-height: 1.35;
+          font-size: 14px;
+        }
+
+        .rr-benchmarkPanelCompact .rr-benchmarkWrap {
+          margin-top: 10px;
+          gap: 8px;
+        }
+
+        .rr-benchmarkPanelCompact .rr-benchmarkValue {
+          font-size: 15px;
+          line-height: 1.45;
+        }
+
+        .rr-benchmarkPanelCompact .rr-benchmarkTrack {
+          height: 10px;
+        }
+
+        .rr-benchmarkPanelCompact .rr-benchmarkScale {
+          font-size: 12px;
+        }
+
 
         .rr-assuranceStack {
           margin-top: 14px;
