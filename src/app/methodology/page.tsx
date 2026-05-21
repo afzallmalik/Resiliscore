@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 const methodologyPoints = [
@@ -37,9 +39,9 @@ const expectations = [
 
 export default function MethodologyPage() {
   return (
-    <main className="homePage">
-      <div className="homeShell siteSections" style={{ paddingTop: 32 }}>
-        <section className="sectionCard sectionCardLight">
+    <main className="homePage rsMethodologyPage">
+      <div className="homeShell siteSections rsMethodologySections">
+        <section className="sectionCard sectionCardLight rsMethodologyHero rsMethodologyOpen">
           <div className="sectionHeading">
             <div className="sectionEyebrow">Methodology</div>
             <h2>How Resiliscore works for SMEs</h2>
@@ -49,7 +51,7 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsMethodologyOpen rsMethodologyLayerSection">
           <div className="sectionHeading">
             <div className="sectionEyebrow">Three-layer model</div>
             <h2>From assessment to action</h2>
@@ -60,7 +62,7 @@ export default function MethodologyPage() {
             </p>
           </div>
 
-          <div className="trustGrid">
+          <div className="trustGrid rsMethodologyLineList">
             {[
               {
                 title: "1. Assessment",
@@ -83,7 +85,7 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsMethodologyOpen rsMethodologyStatement">
           <div className="sectionHeading">
             <div className="sectionEyebrow">Core idea</div>
             <h2>The resilience visibility gap</h2>
@@ -99,13 +101,13 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsMethodologyOpen">
           <div className="sectionHeading">
             <div className="sectionEyebrow">What the assessment is based on</div>
             <h2>A practical resilience structure for smaller businesses</h2>
           </div>
 
-          <div className="trustGrid">
+          <div className="trustGrid rsMethodologyLineList">
             {methodologyPoints.map((item) => (
               <article key={item.title} className="trustCard">
                 <div className="trustLabel">{item.title}</div>
@@ -115,7 +117,7 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsMethodologyOpen">
           <div className="sectionHeading">
             <div className="sectionEyebrow">Assessment scope</div>
             <h2>The resilience areas covered by Resiliscore</h2>
@@ -125,7 +127,7 @@ export default function MethodologyPage() {
             </p>
           </div>
 
-          <div className="featureGrid">
+          <div className="featureGrid rsMethodologyPillGrid">
             {domains.map((item) => (
               <article key={item} className="featureCard">
                 <div className="featureDot" />
@@ -135,7 +137,7 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsMethodologyOpen">
           <div className="sectionHeading">
             <div className="sectionEyebrow">What the report is designed to show</div>
             <h2>More than a score or checklist</h2>
@@ -144,7 +146,7 @@ export default function MethodologyPage() {
             </p>
           </div>
 
-          <div className="featureGrid">
+          <div className="featureGrid rsMethodologyLineList rsMethodologyExpectationList">
             {expectations.map((item) => (
               <article key={item} className="featureCard">
                 <div className="featureDot" />
@@ -154,7 +156,7 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardDark">
+        <section className="sectionCard sectionCardDark rsMethodologyBand">
           <div className="sectionHeading sectionHeadingDark">
             <div className="sectionEyebrow">What Resiliscore is not</div>
             <h2>Important boundaries</h2>
@@ -166,7 +168,7 @@ export default function MethodologyPage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight ctaSection">
+        <section className="sectionCard sectionCardLight ctaSection rsMethodologyCta">
           <div>
             <div className="sectionEyebrow">Start now</div>
             <h2>Check your resilience before pressure exposes the gap</h2>
@@ -186,6 +188,182 @@ export default function MethodologyPage() {
           </div>
         </section>
       </div>
+
+      <style jsx>{`
+        .rsMethodologySections {
+          gap: 0;
+          padding-top: 34px;
+          padding-bottom: 72px;
+        }
+
+        .rsMethodologyOpen {
+          border-radius: 0;
+          border: 0;
+          box-shadow: none;
+          background: transparent;
+          padding: 66px 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .rsMethodologyHero {
+          padding-top: 44px;
+          border-top: 0;
+        }
+
+        .rsMethodologyOpen .sectionHeading h2,
+        .rsMethodologyOpen h2 {
+          color: rgba(255, 255, 255, 0.96) !important;
+          font-family: Inter, sans-serif;
+          font-weight: 300;
+          letter-spacing: -0.045em;
+        }
+
+        .rsMethodologyOpen .sectionHeading p,
+        .rsMethodologyOpen p {
+          color: rgba(255, 255, 255, 0.68) !important;
+        }
+
+        .rsMethodologyOpen .sectionEyebrow {
+          color: rgba(255, 255, 255, 0.74) !important;
+        }
+
+        .rsMethodologyStatement {
+          padding-top: 78px;
+          padding-bottom: 78px;
+        }
+
+        .rsMethodologyStatement .sectionHeading {
+          max-width: 920px;
+        }
+
+        .rsMethodologyLineList {
+          grid-template-columns: 1fr;
+          gap: 0;
+          margin-top: 28px;
+          border-top: 1px solid rgba(255, 255, 255, 0.11);
+        }
+
+        .rsMethodologyLineList .trustCard,
+        .rsMethodologyLineList .featureCard {
+          border-radius: 0;
+          border: 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+          background: transparent;
+          box-shadow: none;
+          padding: 20px 0;
+          transition: none;
+        }
+
+        .rsMethodologyLineList .trustCard:hover,
+        .rsMethodologyLineList .featureCard:hover {
+          transform: none;
+        }
+
+        .rsMethodologyLineList .trustLabel {
+          color: rgba(34, 211, 238, 0.86) !important;
+        }
+
+        .rsMethodologyLineList .trustCard p,
+        .rsMethodologyLineList .featureText {
+          color: rgba(255, 255, 255, 0.68) !important;
+        }
+
+        .rsMethodologyPillGrid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 28px;
+        }
+
+        .rsMethodologyPillGrid .featureCard {
+          width: auto;
+          border-radius: 999px;
+          padding: 10px 14px;
+          background: rgba(255, 255, 255, 0.055);
+          border: 1px solid rgba(255, 255, 255, 0.11);
+          box-shadow: none;
+          transition: none;
+        }
+
+        .rsMethodologyPillGrid .featureCard:hover {
+          transform: none;
+        }
+
+        .rsMethodologyPillGrid .featureDot {
+          width: 7px;
+          height: 7px;
+          margin-top: 9px;
+          background: #25c7bd;
+        }
+
+        .rsMethodologyPillGrid .featureText {
+          color: rgba(255, 255, 255, 0.78) !important;
+        }
+
+        .rsMethodologyBand {
+          margin: 26px 0;
+          border-radius: 28px;
+          padding: 34px;
+          background:
+            radial-gradient(760px 340px at 0% 0%, rgba(34, 211, 238, 0.14), transparent 58%),
+            radial-gradient(700px 320px at 100% 0%, rgba(28, 115, 242, 0.12), transparent 60%),
+            linear-gradient(180deg, rgba(6, 27, 34, 0.94), rgba(5, 13, 22, 0.98));
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          box-shadow: var(--shadow-md);
+        }
+
+        .rsMethodologyCta {
+          margin-top: 28px;
+          border-radius: 28px;
+          padding: 34px;
+          background:
+            radial-gradient(760px 340px at 0% 0%, rgba(34, 211, 238, 0.12), transparent 58%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 249, 252, 0.98));
+          border: 1px solid rgba(255, 255, 255, 0.62);
+          box-shadow: var(--shadow-sm);
+        }
+
+        .rsMethodologyCta .sectionEyebrow {
+          color: rgba(6, 27, 34, 0.62) !important;
+        }
+
+        .rsMethodologyCta h2 {
+          color: #061b22 !important;
+          font-weight: 300;
+          letter-spacing: -0.04em;
+        }
+
+        .rsMethodologyCta p {
+          color: rgba(6, 27, 34, 0.72) !important;
+        }
+
+        @media (max-width: 840px) {
+          .rsMethodologySections {
+            padding-top: 18px;
+            padding-bottom: 44px;
+          }
+
+          .rsMethodologyOpen {
+            padding: 44px 0;
+          }
+
+          .rsMethodologyStatement {
+            padding-top: 52px;
+            padding-bottom: 52px;
+          }
+
+          .rsMethodologyPillGrid .featureCard {
+            width: 100%;
+            border-radius: 16px;
+          }
+
+          .rsMethodologyBand,
+          .rsMethodologyCta {
+            padding: 24px;
+          }
+        }
+      `}</style>
+
     </main>
   );
 }

@@ -926,7 +926,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
   if (loading) {
     return (
-      <main>
+      <main className="rs-resultsPageDark">
         <div className="rs-loadingWrap">
           <div className="rs-loadingCard">
             <div className="rs-loadingText">Loading your risk report…</div>
@@ -938,7 +938,7 @@ export default function ResultsClient({ id }: { id: string }) {
 
   if (err || !data) {
     return (
-      <main>
+      <main className="rs-resultsPageDark">
         <div className="rs-loadingWrap">
           <div className="rs-loadingCard">
             <h2 style={{ marginTop: 0 }}>Risk report</h2>
@@ -977,7 +977,7 @@ export default function ResultsClient({ id }: { id: string }) {
   const previewActions = actions.slice(0, 2);
 
   return (
-    <main>
+    <main className="rs-resultsPageDark">
       <div className="rs-shell">
         <section className="rs-hero">
           <div className="rs-heroCopy">
@@ -2402,12 +2402,267 @@ export default function ResultsClient({ id }: { id: string }) {
           background: linear-gradient(90deg, #14b8a6, #22d3ee, #f59e0b, #ef4444);
         }
 
+
+        /* ===== Results page dark editorial continuity ===== */
+        .rs-resultsPageDark {
+          min-height: 100vh;
+          background:
+            radial-gradient(900px 460px at 5% 0%, rgba(34,211,238,0.08), transparent 58%),
+            radial-gradient(900px 460px at 100% 0%, rgba(28,115,242,0.10), transparent 58%),
+            linear-gradient(180deg, #050913 0%, #070d18 48%, #050913 100%);
+        }
+
+        .rs-resultsPageDark .rs-shell {
+          max-width: 1220px;
+          padding-top: 34px;
+          padding-bottom: 72px;
+          gap: 28px;
+        }
+
+        .rs-resultsPageDark .rs-hero {
+          border-radius: 0;
+          padding: 54px 0 44px;
+          background: transparent;
+          border: 0;
+          box-shadow: none;
+          border-bottom: 1px solid rgba(255,255,255,0.09);
+        }
+
+        .rs-resultsPageDark .rs-hero h1 {
+          font-weight: 300;
+          color: rgba(255,255,255,0.96);
+        }
+
+        .rs-resultsPageDark .rs-heroLead {
+          color: rgba(255,255,255,0.68);
+        }
+
+        .rs-resultsPageDark .rs-pill {
+          background: rgba(255,255,255,0.055);
+          border-color: rgba(255,255,255,0.11);
+          color: rgba(255,255,255,0.70);
+        }
+
+        .rs-resultsPageDark .rs-pill span {
+          color: rgba(255,255,255,0.94);
+        }
+
+        .rs-resultsPageDark .rs-kpiGrid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 0;
+          border-top: 1px solid rgba(255,255,255,0.10);
+          border-bottom: 1px solid rgba(255,255,255,0.10);
+        }
+
+        .rs-resultsPageDark .rs-kpiCard {
+          border-radius: 0;
+          border: 0;
+          border-right: 1px solid rgba(255,255,255,0.10);
+          background: transparent;
+          box-shadow: none;
+          padding: 22px 24px;
+        }
+
+        .rs-resultsPageDark .rs-kpiCard:last-child {
+          border-right: 0;
+        }
+
+        .rs-resultsPageDark .rs-kpiLabel {
+          color: rgba(255,255,255,0.58);
+        }
+
+        .rs-resultsPageDark .rs-kpiValue,
+        .rs-resultsPageDark .rs-kpiText {
+          color: rgba(255,255,255,0.96);
+        }
+
+        .rs-resultsPageDark .rs-kpiSub {
+          color: rgba(255,255,255,0.62);
+        }
+
+        .rs-resultsPageDark .rs-panel {
+          box-shadow: none;
+        }
+
+        .rs-resultsPageDark .rs-panelLight {
+          border-radius: 0;
+          border: 0;
+          border-top: 1px solid rgba(255,255,255,0.10);
+          background: transparent;
+          box-shadow: none;
+          padding: 30px 0;
+        }
+
+        .rs-resultsPageDark .rr-sectionGrid,
+        .rs-resultsPageDark .rs-mainGrid {
+          gap: 34px;
+          border-top: 1px solid rgba(255,255,255,0.10);
+          padding-top: 32px;
+        }
+
+        .rs-resultsPageDark .rs-column {
+          gap: 0;
+        }
+
+        .rs-resultsPageDark .rr-sectionTitle,
+        .rs-resultsPageDark .rs-panelTitle,
+        .rs-resultsPageDark .rs-deliverablesTitle {
+          color: rgba(255,255,255,0.96);
+          font-weight: 400;
+        }
+
+        .rs-resultsPageDark .rr-sectionSub,
+        .rs-resultsPageDark .rs-panelSub,
+        .rs-resultsPageDark .rs-deliverablesText,
+        .rs-resultsPageDark .rs-deliverablesFoot {
+          color: rgba(255,255,255,0.66);
+        }
+
+        .rs-resultsPageDark .rr-riskGrid,
+        .rs-resultsPageDark .rr-actionStack,
+        .rs-resultsPageDark .rr-assuranceStack,
+        .rs-resultsPageDark .rs-domainGrid {
+          gap: 0;
+          border-top: 1px solid rgba(255,255,255,0.10);
+        }
+
+        .rs-resultsPageDark .rr-riskCard,
+        .rs-resultsPageDark .rr-actionCard,
+        .rs-resultsPageDark .rr-assuranceItem,
+        .rs-resultsPageDark .rs-domainCard {
+          border-radius: 0;
+          border: 0;
+          border-bottom: 1px solid rgba(255,255,255,0.10);
+          background: transparent;
+          box-shadow: none;
+          padding: 17px 0;
+        }
+
+        .rs-resultsPageDark .rr-riskCardTitle,
+        .rs-resultsPageDark .rr-actionTitle,
+        .rs-resultsPageDark .rr-assuranceLabel,
+        .rs-resultsPageDark .rs-domainName {
+          color: rgba(255,255,255,0.92);
+        }
+
+        .rs-resultsPageDark .rr-riskCardDetail,
+        .rs-resultsPageDark .rr-actionWhy,
+        .rs-resultsPageDark .rs-domainLabel {
+          color: rgba(255,255,255,0.64);
+        }
+
+        .rs-resultsPageDark .rr-moneyCard {
+          border-radius: 22px;
+          background:
+            radial-gradient(440px 220px at 0% 0%, rgba(34,211,238,0.11), transparent 66%),
+            linear-gradient(180deg, rgba(255,255,255,0.065), rgba(255,255,255,0.04));
+          border: 1px solid rgba(255,255,255,0.11);
+          box-shadow: none;
+        }
+
+        .rs-resultsPageDark .rr-moneyLabel,
+        .rs-resultsPageDark .rr-benchmarkScale,
+        .rs-resultsPageDark .rs-support {
+          color: rgba(255,255,255,0.60);
+        }
+
+        .rs-resultsPageDark .rr-moneyValue,
+        .rs-resultsPageDark .rr-benchmarkValue {
+          color: rgba(255,255,255,0.94);
+        }
+
+        .rs-resultsPageDark .rr-costRow {
+          border-color: rgba(255,255,255,0.10);
+        }
+
+        .rs-resultsPageDark .rr-costRow span {
+          color: rgba(255,255,255,0.70);
+        }
+
+        .rs-resultsPageDark .rr-costRow strong {
+          color: rgba(255,255,255,0.92);
+        }
+
+        .rs-resultsPageDark .rr-actionNo {
+          background: rgba(34,211,238,0.12);
+          border: 1px solid rgba(34,211,238,0.20);
+          color: rgba(255,255,255,0.92);
+        }
+
+        .rs-resultsPageDark .rr-actionBridge {
+          color: rgba(34,211,238,0.86);
+        }
+
+        .rs-resultsPageDark .rs-domainTrack,
+        .rs-resultsPageDark .rr-benchmarkTrack {
+          background: rgba(255,255,255,0.08);
+          border-color: rgba(255,255,255,0.10);
+        }
+
+        .rs-resultsPageDark .rr-benchmarkWrap {
+          border-top: 1px solid rgba(255,255,255,0.10);
+          padding-top: 16px;
+        }
+
+        .rs-resultsPageDark .rr-assuranceItem.ready {
+          background: rgba(13,177,123,0.08);
+          border-bottom-color: rgba(13,177,123,0.22);
+        }
+
+        .rs-resultsPageDark .rr-assuranceItem.needs {
+          background: rgba(245,158,11,0.08);
+          border-bottom-color: rgba(245,158,11,0.22);
+        }
+
+        .rs-resultsPageDark .rr-assuranceStatus {
+          color: rgba(255,255,255,0.86);
+        }
+
+        .rs-resultsPageDark .rr-miniLocked {
+          margin-top: 16px;
+          color: rgba(255,255,255,0.66);
+          border-color: rgba(255,255,255,0.10);
+          background: rgba(255,255,255,0.045);
+        }
+
+        .rs-resultsPageDark .rs-upsell {
+          margin-top: 28px;
+          border-radius: 26px;
+        }
+
+        .rs-resultsPageDark .rs-deliverablesActions {
+          margin-top: 16px;
+        }
+
+        .rs-resultsPageDark .rs-loadingWrap {
+          min-height: 70vh;
+          display: grid;
+          place-items: center;
+        }
+
+        .rs-resultsPageDark .rs-loadingCard {
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.11);
+          color: rgba(255,255,255,0.92);
+        }
+
+
         @media (max-width: 1080px) {
           .rs-hero,
           .rs-kpiGrid,
           .rr-sectionGrid,
           .rs-mainGrid {
             grid-template-columns: 1fr;
+          }
+
+          .rs-resultsPageDark .rs-kpiCard {
+            border-right: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+          }
+
+          .rs-resultsPageDark .rs-kpiCard:last-child {
+            border-bottom: 0;
           }
         }
 

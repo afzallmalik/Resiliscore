@@ -176,7 +176,7 @@ export default function HomePage() {
       </section>
 
       <div className="homeShell siteSections rsLandingSections">
-        <section className="sectionCard sectionCardDark rsWhyNowSection">
+        <section className="sectionCard sectionCardDark rsWhyNowSection rsOpenSection rsDarkEditorial">
           <div className="rsWhyNowHeader">
             <div className="sectionEyebrow">Why this matters now</div>
             <h2>SMEs are being asked to prove resilience before pressure exposes the gaps.</h2>
@@ -208,7 +208,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsOpenSection rsDarkEditorial rsProblemSection">
           <div className="rsSectionGrid">
             <div className="sectionHeading">
               <div className="sectionEyebrow">The problem</div>
@@ -231,7 +231,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight rsIndustrySection">
+        <section className="sectionCard sectionCardLight rsOpenSection rsDarkEditorial rsIndustrySection">
           <div className="rsSectionGrid">
             <div className="sectionHeading">
               <div className="sectionEyebrow">Industry view</div>
@@ -268,7 +268,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsOpenSection rsDarkEditorial rsReportSection">
           <div className="rsSectionGrid rsSectionGridReverse">
             <div className="sectionHeading">
               <div className="sectionEyebrow">What you get</div>
@@ -301,7 +301,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardDark">
+        <section className="sectionCard sectionCardDark rsFeatureBand rsAiBand">
           <div className="rsSectionGrid rsSectionGridCenter">
             <div className="sectionHeading sectionHeadingDark">
               <div className="sectionEyebrow">Free insight report</div>
@@ -338,7 +338,7 @@ export default function HomePage() {
         </section>
 
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsOpenSection rsDarkEditorial rsProcessSection">
           <div className="rsSectionGrid rsSectionGridReverse">
             <div className="sectionHeading">
               <div className="sectionEyebrow">How it works</div>
@@ -370,7 +370,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardLight">
+        <section className="sectionCard sectionCardLight rsOpenSection rsDarkEditorial rsAudienceSection">
           <div className="rsSectionGrid">
             <div className="sectionHeading">
               <div className="sectionEyebrow">Who it’s for</div>
@@ -393,7 +393,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sectionCard sectionCardDark ctaSection rsFinalCta">
+        <section className="sectionCard sectionCardDark ctaSection rsFinalCta rsFeatureBand">
           <div className="rsFinalCtaCopy">
             <div className="rsFinalCtaEyebrow">Final step</div>
             <h2 className="rsFinalCtaTitle">
@@ -867,11 +867,277 @@ export default function HomePage() {
           max-width: 26ch;
         }
 
+
+        /* ===== Dark editorial continuity pass ===== */
+        .rsLandingSections {
+          gap: 0;
+          padding-bottom: 72px;
+        }
+
+        .rsLandingSections > section {
+          position: relative;
+        }
+
+        .rsOpenSection {
+          border-radius: 0;
+          border: 0;
+          box-shadow: none;
+          background: transparent;
+          padding: 74px 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .rsOpenSection:first-child {
+          border-top: 0;
+        }
+
+        .rsDarkEditorial .sectionHeading h2,
+        .rsDarkEditorial h2 {
+          color: rgba(255, 255, 255, 0.96) !important;
+          font-weight: 300;
+          letter-spacing: -0.045em;
+        }
+
+        .rsDarkEditorial .sectionHeading p,
+        .rsDarkEditorial p {
+          color: rgba(255, 255, 255, 0.68) !important;
+        }
+
+        .rsDarkEditorial .sectionEyebrow {
+          color: rgba(255, 255, 255, 0.74) !important;
+        }
+
+        .rsDarkEditorial .rsSectionGrid {
+          gap: 56px;
+        }
+
+        .rsWhyNowSection {
+          padding: 66px 0;
+          border-radius: 0;
+          border: 0;
+          box-shadow: none;
+          background:
+            radial-gradient(760px 340px at 0% 0%, rgba(34, 211, 238, 0.12), transparent 58%),
+            radial-gradient(600px 260px at 100% 0%, rgba(28, 115, 242, 0.10), transparent 60%);
+        }
+
+        .rsWhyNowGrid {
+          gap: 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.11);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+        }
+
+        .rsWhyNowCard {
+          border-radius: 0;
+          border: 0;
+          border-right: 1px solid rgba(255, 255, 255, 0.11);
+          background: transparent;
+          padding: 22px 22px 22px 0;
+        }
+
+        .rsWhyNowCard:nth-child(2) {
+          padding-left: 22px;
+        }
+
+        .rsWhyNowCard:last-child {
+          border-right: 0;
+          padding-left: 22px;
+          padding-right: 0;
+        }
+
+        .rsWhyNowCard h3 {
+          color: rgba(255, 255, 255, 0.94);
+        }
+
+        .rsWhyNowCard p {
+          color: rgba(255, 255, 255, 0.66) !important;
+        }
+
+        .rsWhyNowNote {
+          border-radius: 18px;
+          background: rgba(34, 211, 238, 0.075);
+          border: 1px solid rgba(34, 211, 238, 0.18);
+          box-shadow: none;
+        }
+
+        .rsBulletCard {
+          border-radius: 0;
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+          padding: 0;
+          gap: 0;
+        }
+
+        .rsBulletCardInline {
+          margin-top: 26px;
+        }
+
+        .rsBulletItem {
+          padding: 15px 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+          color: rgba(255, 255, 255, 0.74) !important;
+        }
+
+        .rsBulletItem:first-child {
+          border-top: 1px solid rgba(255, 255, 255, 0.11);
+        }
+
+        .rsBulletDot {
+          background: #25c7bd;
+        }
+
+        .rsIndustryPanel {
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 249, 252, 0.97));
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          box-shadow: 0 26px 70px rgba(0, 0, 0, 0.24);
+        }
+
+        .rsIndustryPanel p,
+        .rsIndustryResult p {
+          color: rgba(6, 27, 34, 0.70) !important;
+        }
+
+        .rsIndustryPanel h3,
+        .rsIndustryResult h3 {
+          color: #061b22 !important;
+        }
+
+        .rsIndustryLabel {
+          color: rgba(6, 27, 34, 0.68) !important;
+        }
+
+        .rsImageFrame {
+          border-color: rgba(255, 255, 255, 0.12);
+          box-shadow: 0 26px 70px rgba(0, 0, 0, 0.26);
+        }
+
+        .rsFeatureBand {
+          margin: 26px 0;
+          border-radius: 28px;
+          padding: 34px;
+          background:
+            radial-gradient(760px 340px at 0% 0%, rgba(34, 211, 238, 0.14), transparent 58%),
+            radial-gradient(700px 320px at 100% 0%, rgba(28, 115, 242, 0.12), transparent 60%),
+            linear-gradient(180deg, rgba(6, 27, 34, 0.94), rgba(5, 13, 22, 0.98));
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          box-shadow: var(--shadow-md);
+        }
+
+        .rsSamplePanel {
+          border-radius: 0;
+          border: 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
+          background: transparent;
+          padding: 22px 0 0;
+          margin-top: 20px;
+        }
+
+        .rsSamplePanel h3 {
+          color: rgba(255, 255, 255, 0.96) !important;
+        }
+
+        .rsSamplePanel p {
+          color: rgba(255, 255, 255, 0.70) !important;
+        }
+
+        .rsSamplePanel .samplePanelLabel {
+          color: rgba(255, 255, 255, 0.76) !important;
+        }
+
+        .rsStepsGrid {
+          grid-template-columns: 1fr;
+          gap: 0;
+          margin-top: 30px;
+          border-top: 1px solid rgba(255, 255, 255, 0.11);
+        }
+
+        .rsStepsGrid .stepCard {
+          border-radius: 0;
+          border: 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+          background: transparent;
+          box-shadow: none;
+          padding: 22px 0;
+          grid-template-columns: 72px 1fr;
+          transition: none;
+        }
+
+        .rsStepsGrid .stepCard:hover {
+          transform: none;
+        }
+
+        .rsStepsGrid .stepNumber {
+          border-radius: 999px;
+          background: rgba(34, 211, 238, 0.10);
+          border: 1px solid rgba(34, 211, 238, 0.20);
+          color: rgba(255, 255, 255, 0.92);
+          box-shadow: none;
+        }
+
+        .rsStepsGrid .stepCard h3 {
+          color: rgba(255, 255, 255, 0.94) !important;
+        }
+
+        .rsStepsGrid .stepCard p {
+          color: rgba(255, 255, 255, 0.66) !important;
+        }
+
+        .rsTrustGrid {
+          grid-template-columns: 1fr;
+          gap: 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.11);
+          margin-top: 0;
+        }
+
+        .rsTrustGrid .trustCard {
+          border-radius: 0;
+          border: 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+          background: transparent;
+          box-shadow: none;
+          padding: 19px 0;
+          transition: none;
+        }
+
+        .rsTrustGrid .trustCard:hover {
+          transform: none;
+        }
+
+        .rsTrustGrid .trustLabel {
+          color: rgba(34, 211, 238, 0.86) !important;
+        }
+
+        .rsTrustGrid .trustCard p {
+          color: rgba(255, 255, 255, 0.66) !important;
+        }
+
+        .rsFinalCta {
+          margin-top: 28px;
+        }
+
+
         @media (max-width: 1080px) {
           .rsSectionGrid,
           .rsSectionGridReverse,
           .rsWhyNowGrid {
             grid-template-columns: 1fr;
+          }
+
+          .rsDarkEditorial .rsSectionGrid {
+            gap: 28px;
+          }
+
+          .rsWhyNowGrid {
+            border-bottom: 0;
+          }
+
+          .rsWhyNowCard,
+          .rsWhyNowCard:nth-child(2),
+          .rsWhyNowCard:last-child {
+            border-right: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+            padding: 18px 0;
           }
 
           .rsHeroSingle {
@@ -919,6 +1185,19 @@ export default function HomePage() {
 
           .rsBulletItem {
             font-size: 15px;
+          }
+
+          .rsOpenSection {
+            padding: 46px 0;
+          }
+
+          .rsFeatureBand {
+            padding: 24px;
+          }
+
+          .rsStepsGrid .stepCard {
+            grid-template-columns: 1fr;
+            gap: 12px;
           }
 
           .rsImageFrame,
